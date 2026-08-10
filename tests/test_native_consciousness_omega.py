@@ -5,6 +5,8 @@ import importlib.util
 import numpy as np
 import pytest
 
+from psyfi_core import ABXRuntime
+from psyfi_core.abx_core.errors import SimulationCancelled
 from psyfi_core.engines.consciousness_omega import (
     ConsciousnessOmegaParams,
     _evolve_consciousness_omega_reference,
@@ -59,6 +61,63 @@ def test_auto_remains_reference_and_cancellation_is_preserved() -> None:
     params = ConsciousnessOmegaParams(steps=2)
     expected = _evolve_consciousness_omega_reference(values, params)
     np.testing.assert_array_equal(evolve_consciousness_omega(values, params), expected)
+
+
+def test_explicit_native_with_cancellation_fails_clearly() -> None:
+    with pytest.raises(ValueError, match="cannot preserve per-step cancellation"):
+        evolve_consciousness_omega(
+            field(1, (4, 4)),
+            ConsciousnessOmegaParams(),
+            should_cancel=lambda: False,
+            backend="native",
+        )
+
+
+def test_reference_cancellation_preserves_completed_step_metrics() -> None:
+    runtime = ABXRuntime(deterministic=True, seed=1)
+    checks = 0
+
+    def should_cancel() -> bool:
+        nonlocal checks
+        checks += 1
+        return checks == 3
+
+    with pytest.raises(SimulationCancelled):
+        evolve_consciousness_omega(
+            field(1, (4, 4)),
+            ConsciousnessOmegaParams(steps=10),
+            runtime=runtime,
+            should_cancel=should_cancel,
+        )
+    assert runtime.metrics.compute_steps == 2
+
+
+def test_native_rejects_invalid_boundary_inputs() -> None:
+    import psyfi_native
+
+    values = field(1, (2, 2))
+    args = (values, "symmetric", 0.5, 1.0, 0.5, 0.1, 1, 0.1)
+    with pytest.raises(ValueError, match="coupling_type"):
+        psyfi_native.consciousness_omega(values, "invalid", *args[2:])
+    with pytest.raises(ValueError, match="range"):
+        psyfi_native.consciousness_omega(values, "symmetric", 3.0, *args[3:])
+    with pytest.raises(ValueError, match="steps"):
+        psyfi_native.consciousness_omega(values, "symmetric", 0.5, 1.0, 0.5, 0.1, 1001, 0.1)
+    with pytest.raises((OverflowError, ValueError)):
+        psyfi_native.consciousness_omega(values, "symmetric", 0.5, 1.0, 0.5, 0.1, -1, 0.1)
+    with pytest.raises(ValueError, match="EmptyField"):
+        psyfi_native.consciousness_omega(
+            np.empty((0, 0), dtype=np.complex64), "symmetric", 0.5, 1.0, 0.5, 0.1, 1, 0.1
+        )
+    with pytest.raises(TypeError):
+        psyfi_native.consciousness_omega(
+            np.ones((2, 2, 2), dtype=np.complex64), "symmetric", 0.5, 1.0, 0.5, 0.1, 1, 0.1
+        )
+    oversized = np.ones((1025, 1024), dtype=np.complex64)
+    with pytest.raises(ValueError, match="AllocationTooLarge"):
+        psyfi_native.consciousness_omega(
+            oversized, "symmetric", 0.5, 1.0, 0.5, 0.1, 1, 0.1
+        )
 
 
 def test_native_is_available_in_native_test_environment() -> None:

@@ -57,13 +57,22 @@ def evolve_consciousness_omega(
     Returns:
         Evolved field
     """
-    if backend != "reference" and should_cancel is not None:
-        # The Python reference checks cancellation every step. Native execution
-        # is never selected when doing so would weaken that observable behavior.
+    if backend not in {"auto", "reference", "native"}:
+        raise ValueError(f"Unsupported consciousness_omega backend: {backend}")
+    if backend == "native" and should_cancel is not None:
+        raise ValueError(
+            "backend='native' cannot preserve per-step cancellation; use 'reference' or 'auto'"
+        )
+    if backend == "auto" and should_cancel is not None:
         backend = "reference"
 
     def reference() -> np.ndarray:
-        return _evolve_consciousness_omega_reference(field, params, should_cancel)
+        return _evolve_consciousness_omega_reference(
+            field,
+            params,
+            should_cancel,
+            on_step=(runtime.metrics.increment_steps if runtime is not None else None),
+        )
 
     result = run_omega_backend(
         field,
@@ -79,7 +88,8 @@ def evolve_consciousness_omega(
     )
 
     if runtime is not None:
-        runtime.metrics.increment_steps(params.steps)
+        if backend == "native":
+            runtime.metrics.increment_steps(params.steps)
         runtime.provenance.add_module("consciousness_omega")
         runtime.provenance.add_parameter("coupling_strength", params.coupling_strength)
         runtime.provenance.add_parameter("steps", params.steps)
@@ -90,6 +100,7 @@ def _evolve_consciousness_omega_reference(
     field: np.ndarray,
     params: ConsciousnessOmegaParams,
     should_cancel: Callable[[], bool] | None = None,
+    on_step: Callable[[], None] | None = None,
 ) -> np.ndarray:
     """Canonical semantic reference for the pure numerical evolution."""
     height, width = field.shape
@@ -157,6 +168,9 @@ def _evolve_consciousness_omega_reference(
         # Update phases: dθ/dt = ω + K * coupling
         phase_update = natural_freq + params.coupling_strength * coupling
         current_phases += params.dt * phase_update
+
+        if on_step is not None:
+            on_step()
 
     # Wrap phases to [-π, π]
     current_phases = np.angle(np.exp(1j * current_phases))

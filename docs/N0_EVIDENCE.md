@@ -46,7 +46,7 @@ The end-to-end benchmark includes the Python/Rust boundary and result allocation
 ## Security and migration audit
 
 - No unsafe Rust, threads, network access, filesystem access, persistent state, or credentials.
-- Allocation is capped at 16,777,216 elements and dimension multiplication is checked.
+- Allocation is capped at the existing Psy-Fi limit of 1,048,576 elements, steps are capped at the public API/session limit of 1,000, and dimension multiplication is checked.
 - Panics are not used for caller-controlled validation paths; errors map to Python exceptions.
 - Rust knows only complex arrays, dimensions, coupling mode, and scalar evolution parameters.
 - FastAPI, Pydantic, phenomenology, `SafetyPass`, scene snapshots, MIDI, telemetry, PWA, R3F, WebGPU, and WGSL ownership are unchanged.

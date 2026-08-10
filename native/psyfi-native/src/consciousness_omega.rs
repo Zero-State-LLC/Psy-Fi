@@ -2,7 +2,8 @@ use num_complex::Complex32;
 
 use crate::error::KernelError;
 
-pub const MAX_ELEMENTS: usize = 16_777_216;
+pub const MAX_ELEMENTS: usize = 1_048_576;
+const MAX_STEPS: usize = 1_000;
 const EPSILON: f32 = 1.0e-8;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -43,7 +44,7 @@ fn validate(
     {
         return Err(KernelError::NonFiniteInput);
     }
-    if params.steps == 0 {
+    if params.steps == 0 || params.steps > MAX_STEPS {
         return Err(KernelError::InvalidParameter("steps"));
     }
     for (name, value) in [
