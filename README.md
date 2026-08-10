@@ -207,3 +207,10 @@ python3 scripts/sync_frozen_contracts.py
 ## License
 
 [MIT](LICENSE) © Applied Alchemy Labs.
+
+
+## License
+
+Copyright © 2026 Zero State LLC. All Rights Reserved. Licensed under the Zero State Proprietary License v1.0. See [`LICENSE`](LICENSE).
+
+Third-party components remain subject to their respective licenses.
