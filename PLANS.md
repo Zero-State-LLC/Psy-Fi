@@ -1,7 +1,7 @@
 # PsyFi Plans
 
 Status: active
-Canonical product sequence: web application → installable PWA → validated mobile web experience. Native iPhone work is a separate later track (parked; see Phase 5).
+Canonical product sequence: web application → installable PWA → validated mobile web experience. Native computational acceleration is a bounded, optional engineering track; native iPhone work is a separate later track (parked; see Phase 5).
 
 ## Product Direction
 
@@ -15,6 +15,7 @@ PsyFi is web-first. The existing deterministic Python engine and FastAPI service
 4. Design tokens, schemas, presets, terminology, and asset formats should stay platform-neutral (portable later; not an iOS deliverable now).
 5. Browser capability failures must degrade explicitly rather than silently changing behavior.
 6. Claims about consciousness or psychedelic states must be presented as modeled outputs, not medical findings.
+7. Python remains the domain and simulation authority. Rust may execute only parity-proven, deterministic numerical kernels behind an internal Python boundary.
 
 ## Delivery Phases
 
@@ -79,6 +80,34 @@ Exit gate: PsyFi is dependable as an installable mobile web application without 
 - [x] Simulated Ultra desktop QA stand-in (`docs/SIMULATED_ULTRA_QA.md`); hardware fps optional.
 
 Exit gate: the web product is validated enough to freeze contracts; native work remains optional and separate. **Met 2026-07-25.**
+
+### N0 — Native Computational Kernel (planned, bounded engineering track)
+
+Status: **planned; promotion is not assumed.** Detailed execution plan: [`docs/N0_NATIVE_COMPUTE_PLAN.md`](docs/N0_NATIVE_COMPUTE_PLAN.md).
+
+N0 proves or rejects one small Rust computational seam using PyO3 + maturin. It is not a Rust rewrite and does not alter the web-first product sequence.
+
+- [ ] Inspect deterministic `psyfi_core` hot paths and select exactly one pure numerical kernel, or record `N0_RESULT = NOT_COMPUTABLE / NO_JUSTIFIED_NATIVE_KERNEL`.
+- [ ] Establish the full Python, OpenAPI, frontend, GPU, determinism, and golden baseline before edits.
+- [ ] Add one `psyfi-native` Rust crate and a minimal internal Python adapter while retaining the existing Python implementation as the semantic reference.
+- [ ] Prove fixed-fixture, boundary, randomized, non-finite/error, and repeated-execution parity.
+- [ ] Benchmark end-to-end Python calls at small, representative, and large/batch sizes, including FFI conversion and copy costs.
+- [ ] Extend CI minimally with stable Rust, maturin, Rust checks, bridge build, and Python parity tests without weakening existing gates.
+- [ ] Confirm `/api/v1`, scene snapshots, deterministic outputs, and all existing goldens remain unchanged.
+- [ ] Promote native execution for `auto` only when parity, determinism, contracts, goldens, maintenance cost, and measured performance pass the documented gate.
+
+Ownership boundary:
+
+```text
+Python      domain semantics, simulation authority, orchestration, API models
+Rust        optional pure deterministic numerical kernels proven against Python
+TypeScript  browser application and presentation
+WGSL        GPU rendering computation
+```
+
+Exit gate: one kernel demonstrates unchanged observable behavior and meaningful measured benefit, normally at least 2x on a representative workload, or the candidate is explicitly rejected with retained evidence. Either result completes the investigation; rejection must not enable native execution by default.
+
+Future native-compute phases are documentation-only until N0 passes: N1 replay/state receipts, N2 additional field kernels, N3 batch sweeps, N4 deterministic parallel experiments, N5 a headless native runner, and N6 a WASM reassessment.
 
 ### Phase 5 — Native iPhone Application (deferred / separate track)
 

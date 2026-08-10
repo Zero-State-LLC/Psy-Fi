@@ -45,6 +45,18 @@ Full plan: [`INSTRUMENT_GROUNDING_PLAN.md`](INSTRUMENT_GROUNDING_PLAN.md).
 - [x] Doc + schema drift sync (planner/journey schemas, freeze route list, SW cites)
 - [x] Viz helper numeric invariant tests (`tests/js/run_viz_helper_tests.mjs`)
 
+## N0 native computational kernel
+
+N0 is the next bounded core-engine investigation after the landed web/GPU and instrument-grounding work. It does not replace living QA. See [`N0_NATIVE_COMPUTE_PLAN.md`](N0_NATIVE_COMPUTE_PLAN.md).
+
+- Select exactly one pure deterministic `psyfi_core` kernel after profiling and FFI suitability review.
+- Retain Python as the semantic reference and simulation authority.
+- Build one `psyfi-native` PyO3/maturin crate behind an internal Python adapter.
+- Require parity, determinism, unchanged API/scene/goldens, realistic end-to-end benchmarks, and CI evidence.
+- Enable native execution for `auto` only if the promotion gate passes, normally including at least 2x representative-workload speedup.
+- Treat `NO_JUSTIFIED_NATIVE_KERNEL` or `N0_PROMOTION = REJECTED` as valid evidence-based outcomes.
+- Do not implement N1 replay receipts, N2 additional kernels, N3 sweeps, N4 parallel execution, N5 a native runner, or N6 WASM reassessment in N0.
+
 ## Next recommended
 
 1. Living QA / hardware capture as needed (`PRODUCTION_READINESS.md`, `HARDWARE_ULTRA_FPS.md`).

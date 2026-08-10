@@ -4,7 +4,7 @@ Navigable map of the Psy-Fi monorepo for contributors and agents. Prefer this fi
 
 **Product:** deterministic consciousness-field simulation (Python) + web visualization instrument (browser). Research/visualization only — not medical advice.  
 **Freeze:** `/api/v1` hard-frozen as `psyfi-api-v1-hard-2026-07-25` — see [`docs/contracts/frozen/API_V1_FREEZE.md`](docs/contracts/frozen/API_V1_FREEZE.md).  
-**Status board:** [`docs/PRODUCTION_READINESS.md`](docs/PRODUCTION_READINESS.md) · next work: [`docs/CONTINUATION_PLAN.md`](docs/CONTINUATION_PLAN.md) · phases: [`PLANS.md`](PLANS.md).
+**Status board:** [`docs/PRODUCTION_READINESS.md`](docs/PRODUCTION_READINESS.md) · next work: [`docs/CONTINUATION_PLAN.md`](docs/CONTINUATION_PLAN.md) · phases: [`PLANS.md`](PLANS.md) · N0 native-compute plan: [`docs/N0_NATIVE_COMPUTE_PLAN.md`](docs/N0_NATIVE_COMPUTE_PLAN.md).
 
 ### Codebase Memory (graph index)
 
@@ -47,6 +47,7 @@ psyfi_core (ABX-Core v1.3 + engines + presets + visualization)
 1. Simulation truth stays in Python; UI never becomes authoritative.
 2. Visual authority is the immutable `PsyFiParameterField` / `scene_snapshot`, then a mandatory safety pass.
 3. Public browser API is `/api/v1`; legacy `/api/*` and `/simulate/` are mirrors.
+4. Rust may only execute optional, parity-proven deterministic numerical kernels; Python retains semantic authority.
 
 Details: [`docs/WEB_ARCHITECTURE.md`](docs/WEB_ARCHITECTURE.md), [`docs/FRONTEND_BOUNDARY.md`](docs/FRONTEND_BOUNDARY.md).
 
