@@ -69,6 +69,20 @@ npm install
 
 Optional MIDI extras are already included in the default install (`mido`, `python-rtmidi`).
 
+Optional N0 native-kernel development keeps Python authoritative and requires no manual shared-library copying:
+
+```bash
+python -m pip install maturin
+cd native/psyfi-native
+maturin develop --release
+cargo test
+cd ../..
+python -m pytest tests/test_native_consciousness_omega.py -q
+python scripts/benchmark_native_kernel.py
+```
+
+The Rust kernel is research-only in N0. Normal `auto` execution remains on the Python reference because representative and large benchmarks did not pass the promotion gate; see [`docs/N0_EVIDENCE.md`](docs/N0_EVIDENCE.md).
+
 ## Usage
 
 ```bash
@@ -143,7 +157,7 @@ mandatory SafetyPass
 quiet chrome + provenance
 ```
 
-Simulation metrics remain Python-authoritative. UI never becomes the source of truth.
+Simulation metrics and semantics remain Python-authoritative. Rust optionally executes explicitly selected numerical kernels; TypeScript owns browser application/presentation and WGSL owns rendering computation. UI and Rust never become independent sources of simulation truth.
 
 ## API
 
@@ -161,6 +175,7 @@ Canonical browser API is **`/api/v1`** (**hard-frozen**). Legacy `/api/*` and `/
 | [`.agents/skills/codebase-memory/`](.agents/skills/codebase-memory/)               | Codebase Memory graph skill     |
 | [`docs/PRODUCTION_READINESS.md`](docs/PRODUCTION_READINESS.md)                     | Production readiness board      |
 | [`docs/CONTINUATION_PLAN.md`](docs/CONTINUATION_PLAN.md)                           | Web-track next steps            |
+| [`docs/N0_EVIDENCE.md`](docs/N0_EVIDENCE.md)                                       | Native-kernel parity and promotion evidence |
 | [`docs/INSTRUMENT_GROUNDING_PLAN.md`](docs/INSTRUMENT_GROUNDING_PLAN.md)           | Instrument + spatiotemporal grounding plan (I1–I5) |
 | [`docs/rendering/ROADMAP.md`](docs/rendering/ROADMAP.md)                           | GPU G0–G5 roadmap               |
 | [`docs/rendering/G4_CUTOVER.md`](docs/rendering/G4_CUTOVER.md)                     | G4 cutover checklist            |

@@ -45,9 +45,9 @@ Full plan: [`INSTRUMENT_GROUNDING_PLAN.md`](INSTRUMENT_GROUNDING_PLAN.md).
 - [x] Doc + schema drift sync (planner/journey schemas, freeze route list, SW cites)
 - [x] Viz helper numeric invariant tests (`tests/js/run_viz_helper_tests.mjs`)
 
-## N0 native computational kernel
+## N0 native computational kernel — completed, promotion rejected
 
-N0 is the next bounded core-engine investigation after the landed web/GPU and instrument-grounding work. It does not replace living QA. See [`N0_NATIVE_COMPUTE_PLAN.md`](N0_NATIVE_COMPUTE_PLAN.md).
+N0 established a bounded research-only PyO3 seam, but representative and large workloads were slower than NumPy, so `auto` remains on Python. See [`N0_NATIVE_COMPUTE_PLAN.md`](N0_NATIVE_COMPUTE_PLAN.md) and [`N0_EVIDENCE.md`](N0_EVIDENCE.md).
 
 - Select exactly one pure deterministic `psyfi_core` kernel after profiling and FFI suitability review.
 - Retain Python as the semantic reference and simulation authority.

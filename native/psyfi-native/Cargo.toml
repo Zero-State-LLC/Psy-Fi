@@ -1,0 +1,18 @@
+[package]
+name = "psyfi-native"
+version = "0.1.0"
+edition = "2021"
+description = "Optional deterministic numerical kernels for Psy-Fi"
+license = "MIT"
+
+[lib]
+name = "psyfi_native"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+num-complex = "0.4"
+numpy = "0.23"
+pyo3 = { version = "0.23", features = ["extension-module"] }
+
+[dev-dependencies]
+approx = "0.5"

@@ -58,6 +58,7 @@ Details: [`docs/WEB_ARCHITECTURE.md`](docs/WEB_ARCHITECTURE.md), [`docs/FRONTEND
 | Path | Role |
 | --- | --- |
 | [`psyfi_core/`](psyfi_core/) | Deterministic simulation authority (ABX runtime, engines, models, presets, viz schemas) |
+| [`native/psyfi-native/`](native/psyfi-native/) | Optional PyO3 numerical kernel; Python remains semantic authority |
 | [`psyfi_api/`](psyfi_api/) | FastAPI app, routers, Jinja shell, static PWA assets |
 | [`packages/psyfi-gpu-renderer/`](packages/psyfi-gpu-renderer/) | Optional Vite + React + R3F WebGPU client → served at `/gpu/` |
 | [`data/phenomenology/`](data/phenomenology/) | Source phenomenology → catalog / overlays (build scripts) |

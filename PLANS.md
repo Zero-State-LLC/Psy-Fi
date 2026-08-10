@@ -83,18 +83,18 @@ Exit gate: the web product is validated enough to freeze contracts; native work 
 
 ### N0 — Native Computational Kernel (planned, bounded engineering track)
 
-Status: **planned; promotion is not assumed.** Detailed execution plan: [`docs/N0_NATIVE_COMPUTE_PLAN.md`](docs/N0_NATIVE_COMPUTE_PLAN.md).
+Status: **completed; promotion rejected.** Execution plan: [`docs/N0_NATIVE_COMPUTE_PLAN.md`](docs/N0_NATIVE_COMPUTE_PLAN.md). Evidence: [`docs/N0_EVIDENCE.md`](docs/N0_EVIDENCE.md).
 
 N0 proves or rejects one small Rust computational seam using PyO3 + maturin. It is not a Rust rewrite and does not alter the web-first product sequence.
 
-- [ ] Inspect deterministic `psyfi_core` hot paths and select exactly one pure numerical kernel, or record `N0_RESULT = NOT_COMPUTABLE / NO_JUSTIFIED_NATIVE_KERNEL`.
-- [ ] Establish the full Python, OpenAPI, frontend, GPU, determinism, and golden baseline before edits.
-- [ ] Add one `psyfi-native` Rust crate and a minimal internal Python adapter while retaining the existing Python implementation as the semantic reference.
-- [ ] Prove fixed-fixture, boundary, randomized, non-finite/error, and repeated-execution parity.
-- [ ] Benchmark end-to-end Python calls at small, representative, and large/batch sizes, including FFI conversion and copy costs.
-- [ ] Extend CI minimally with stable Rust, maturin, Rust checks, bridge build, and Python parity tests without weakening existing gates.
-- [ ] Confirm `/api/v1`, scene snapshots, deterministic outputs, and all existing goldens remain unchanged.
-- [ ] Promote native execution for `auto` only when parity, determinism, contracts, goldens, maintenance cost, and measured performance pass the documented gate.
+- [x] Inspect deterministic `psyfi_core` hot paths and select exactly one pure numerical kernel: Consciousness Omega's numeric evolution loop.
+- [x] Establish the full Python, OpenAPI, frontend, GPU, determinism, and golden baseline before edits.
+- [x] Add one `psyfi-native` Rust crate and a minimal internal Python adapter while retaining the existing Python implementation as the semantic reference.
+- [x] Prove fixed-fixture, boundary, randomized, non-finite/error, and repeated-execution parity.
+- [x] Benchmark end-to-end Python calls at small, representative, and large/batch sizes, including FFI conversion and copy costs.
+- [x] Extend CI minimally with stable Rust, maturin, Rust checks, bridge build, and Python parity tests without weakening existing gates.
+- [x] Confirm `/api/v1`, scene snapshots, deterministic outputs, and all existing goldens remain unchanged.
+- [x] Apply the promotion gate: rejected because representative and large workloads are slower than NumPy; `auto` remains Python.
 
 Ownership boundary:
 

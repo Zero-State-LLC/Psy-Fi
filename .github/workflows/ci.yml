@@ -6,6 +6,34 @@ on:
   pull_request:
 
 jobs:
+  native:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - name: Install Python and maturin
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]" maturin
+      - name: Rust quality gates
+        working-directory: native/psyfi-native
+        run: |
+          cargo fmt --check
+          cargo clippy --all-targets --all-features -- -D warnings
+          cargo test
+      - name: Build and install native extension
+        working-directory: native/psyfi-native
+        run: |
+          maturin build --release --out dist
+          pip install dist/*.whl
+      - name: Native parity tests
+        run: python -m pytest tests/test_native_consciousness_omega.py tests/test_native_backend_absence.py -q
+
   test:
     runs-on: ubuntu-latest
     steps:

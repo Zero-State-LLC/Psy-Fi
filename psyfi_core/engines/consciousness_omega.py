@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 
 from psyfi_core.abx_core import ABXRuntime
 from psyfi_core.abx_core.errors import SimulationCancelled
+from psyfi_core.native.backend import Backend, consciousness_omega as run_omega_backend
 
 
 class ConsciousnessOmegaParams(BaseModel):
@@ -38,6 +39,7 @@ def evolve_consciousness_omega(
     params: ConsciousnessOmegaParams,
     runtime: ABXRuntime | None = None,
     should_cancel: Callable[[], bool] | None = None,
+    backend: Backend = "auto",
 ) -> np.ndarray:
     """Evolve consciousness field using Kuramoto-like coupling.
 
@@ -55,6 +57,41 @@ def evolve_consciousness_omega(
     Returns:
         Evolved field
     """
+    if backend != "reference" and should_cancel is not None:
+        # The Python reference checks cancellation every step. Native execution
+        # is never selected when doing so would weaken that observable behavior.
+        backend = "reference"
+
+    def reference() -> np.ndarray:
+        return _evolve_consciousness_omega_reference(field, params, should_cancel)
+
+    result = run_omega_backend(
+        field,
+        coupling_type=params.coupling_type,
+        coupling_strength=params.coupling_strength,
+        natural_freq_base=params.natural_freq_base,
+        freq_depth_scale=params.freq_depth_scale,
+        freq_brightness_scale=params.freq_brightness_scale,
+        steps=params.steps,
+        dt=params.dt,
+        reference=reference,
+        backend=backend,
+    )
+
+    if runtime is not None:
+        runtime.metrics.increment_steps(params.steps)
+        runtime.provenance.add_module("consciousness_omega")
+        runtime.provenance.add_parameter("coupling_strength", params.coupling_strength)
+        runtime.provenance.add_parameter("steps", params.steps)
+    return result
+
+
+def _evolve_consciousness_omega_reference(
+    field: np.ndarray,
+    params: ConsciousnessOmegaParams,
+    should_cancel: Callable[[], bool] | None = None,
+) -> np.ndarray:
+    """Canonical semantic reference for the pure numerical evolution."""
     height, width = field.shape
 
     # Extract initial phases and magnitudes
@@ -121,20 +158,10 @@ def evolve_consciousness_omega(
         phase_update = natural_freq + params.coupling_strength * coupling
         current_phases += params.dt * phase_update
 
-        # Track metrics
-        if runtime is not None:
-            runtime.metrics.increment_steps()
-
     # Wrap phases to [-π, π]
     current_phases = np.angle(np.exp(1j * current_phases))
 
     # Reconstruct complex field
     result = magnitudes * np.exp(1j * current_phases)
-
-    # Update runtime provenance
-    if runtime is not None:
-        runtime.provenance.add_module("consciousness_omega")
-        runtime.provenance.add_parameter("coupling_strength", params.coupling_strength)
-        runtime.provenance.add_parameter("steps", params.steps)
 
     return result.astype(np.complex64)
