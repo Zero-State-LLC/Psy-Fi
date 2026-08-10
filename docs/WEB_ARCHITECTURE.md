@@ -146,3 +146,7 @@ No unsupported API may block the core simulation workflow.
 - Reproducible builds and locked dependencies.
 - CI gates for tests, type checks, linting, OpenAPI drift, accessibility smoke tests, and bundle budgets.
 - Rollback-safe database and cache migrations.
+
+## Headless experiment boundary
+
+The browser does not own experiment truth. `psyfi_core.experiments` invokes the same Python simulation used by FastAPI, measures a closed versioned observable registry, and emits deterministic receipts and datasets. Experiment correctness excludes Canvas, R3F, WebGPU, WGSL, and scene snapshots. Presentation continues to consume existing contracts without changing `/api/v1`.

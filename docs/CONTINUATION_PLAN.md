@@ -77,3 +77,7 @@ python3 scripts/run_dev_server.py
 ## Non-claims
 
 Modeled phenomenology for research/visualization only. Not medical advice.
+
+## Post-E0 continuation
+
+E0 establishes deterministic experiment identity, export, and replay without changing Python simulation authority. The next candidate phase is E1 observable framework expansion, but it should begin only after E0 datasets and replay remain stable in routine use. Do not expand N0 Rust scope as part of E1.

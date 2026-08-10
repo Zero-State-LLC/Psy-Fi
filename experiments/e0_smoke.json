@@ -1,0 +1,1 @@
+{"schema_version":"psyfi.experiment.v1","experiment_id":"e0-smoke-v1","seeds":[1,2],"parameters":{"coupling_strength":{"values":[0.25,0.5]},"height":{"values":[8]},"width":{"values":[8]}},"steps":4,"observables":["coherence","valence"],"metadata":{"purpose":"E0 deterministic smoke fixture"}}

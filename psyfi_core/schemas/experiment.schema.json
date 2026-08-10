@@ -1,0 +1,96 @@
+{
+  "$defs": {
+    "SweepValues": {
+      "properties": {
+        "values": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "title": "Values",
+          "type": "array"
+        }
+      },
+      "required": [
+        "values"
+      ],
+      "title": "SweepValues",
+      "type": "object"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "experiment_id": {
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Experiment Id",
+      "type": "string"
+    },
+    "metadata": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Metadata",
+      "type": "object"
+    },
+    "observables": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 3,
+      "minItems": 1,
+      "title": "Observables",
+      "type": "array"
+    },
+    "parameters": {
+      "additionalProperties": {
+        "$ref": "#/$defs/SweepValues"
+      },
+      "title": "Parameters",
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "psyfi.experiment.v1",
+      "default": "psyfi.experiment.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "seeds": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "title": "Seeds",
+      "type": "array"
+    },
+    "steps": {
+      "maximum": 1000,
+      "minimum": 1,
+      "title": "Steps",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "experiment_id",
+    "seeds",
+    "steps",
+    "observables"
+  ],
+  "title": "ExperimentSpec",
+  "type": "object"
+}

@@ -280,3 +280,11 @@ Phenomenology rebuild: `python3 scripts/build_experience_catalog.py` (sources un
 - Do not add medical/healing claims.
 - Native iOS is out of the web track.
 - Keep root README hallmark-clean: `npx hallmark fix README.md`.
+
+## E0 deterministic experiment engine
+
+- `psyfi_core/simulation.py`: HTTP-independent Python-authoritative simulation entry point.
+- `psyfi_core/experiments/`: deterministic specs, expansion, observables, receipts, replay, and export.
+- `experiments/e0_smoke.json`: small runnable example.
+- `tests/fixtures/experiments/e0_smoke/`: reviewed deterministic golden dataset.
+- `docs/EXPERIMENT_ENGINE.md`: schemas, identity, limits, CLI, and ownership boundary.

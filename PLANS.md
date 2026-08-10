@@ -176,3 +176,14 @@ All slices preserve ParameterField authority, SafetyPass, Python simulation trut
 ## Definition of Done
 
 A work item is complete only when implementation, tests, user-facing states, documentation, accessibility behavior, performance impact, and migration implications are addressed. Placeholder UI and undocumented platform-specific coupling do not satisfy completion.
+
+## Experiment roadmap
+
+- **E0 complete:** deterministic headless specs, sweeps, receipts, canonical hashes, JSONL export, and replay.
+- **E1:** observable framework expansion.
+- **E2:** regime and attractor analysis.
+- **E3:** cross-experiment comparison.
+- **E4:** scalable sweep execution.
+- **E5:** external dataset and Noema interchange.
+
+E1 through E5 are documentation-only roadmap items. N0 remains a bounded research kernel with native auto-promotion rejected.

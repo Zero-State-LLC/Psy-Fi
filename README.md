@@ -222,3 +222,7 @@ python3 scripts/sync_frozen_contracts.py
 ## License
 
 [MIT](LICENSE) © Applied Alchemy Labs.
+
+## Deterministic experiments
+
+E0 provides a headless experiment engine in `psyfi_core.experiments`. Python remains simulation and semantic authority while the experiment layer performs deterministic sweeps, versioned measurement, SHA-256 receipts, JSONL export, and replay verification. See [docs/EXPERIMENT_ENGINE.md](docs/EXPERIMENT_ENGINE.md) and run `python -m psyfi_core.experiments run experiments/e0_smoke.json`.
