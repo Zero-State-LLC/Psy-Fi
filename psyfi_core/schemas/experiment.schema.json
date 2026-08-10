@@ -37,28 +37,51 @@
     "experiment_id": {
       "maxLength": 80,
       "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9._-]*$",
       "title": "Experiment Id",
       "type": "string"
     },
     "metadata": {
       "additionalProperties": {
+        "maxLength": 500,
         "type": "string"
+      },
+      "maxProperties": 32,
+      "propertyNames": {
+        "maxLength": 80
       },
       "title": "Metadata",
       "type": "object"
     },
     "observables": {
       "items": {
+        "enum": [
+          "coherence",
+          "roughness",
+          "valence"
+        ],
         "type": "string"
       },
       "maxItems": 3,
       "minItems": 1,
       "title": "Observables",
-      "type": "array"
+      "type": "array",
+      "uniqueItems": true
     },
     "parameters": {
       "additionalProperties": {
         "$ref": "#/$defs/SweepValues"
+      },
+      "maxProperties": 8,
+      "propertyNames": {
+        "enum": [
+          "coupling_strength",
+          "dt",
+          "height",
+          "normalization_P",
+          "normalization_V",
+          "width"
+        ]
       },
       "title": "Parameters",
       "type": "object"
@@ -71,12 +94,15 @@
     },
     "seeds": {
       "items": {
+        "maximum": 4294967295,
+        "minimum": 0,
         "type": "integer"
       },
       "maxItems": 64,
       "minItems": 1,
       "title": "Seeds",
-      "type": "array"
+      "type": "array",
+      "uniqueItems": true
     },
     "steps": {
       "maximum": 1000,

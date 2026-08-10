@@ -1,1 +1,1 @@
-{"aggregates":{"coherence":{"maximum":0.10326167941093445,"mean":0.07964356429874897,"minimum":0.05831597000360489},"valence":{"maximum":-0.382165789604187,"mean":-0.4057009220123291,"minimum":-0.43030858039855957}},"failure_count":0,"observable_names":["coherence","valence"],"run_count":4,"success_count":4}
+{"aggregates":{"coherence":{"maximum":0.103262,"mean":0.07964375,"minimum":0.058316},"valence":{"maximum":-0.382166,"mean":-0.405701,"minimum":-0.430309}},"failure_count":0,"observable_names":["coherence","valence"],"run_count":4,"success_count":4}

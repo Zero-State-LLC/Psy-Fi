@@ -1,4 +1,6 @@
 from psyfi_core.experiments.replay import replay_run
+import pytest
+
 from psyfi_core.experiments.hashing import sha256_digest
 from psyfi_core.experiments.models import ExperimentRunReceipt
 from psyfi_core.experiments.runner import receipt_output_content, run_experiment
@@ -32,6 +34,24 @@ def test_changed_input_is_invalid():
     spec = valid()
     raw = run_experiment(spec).receipts[0].model_dump()
     raw["input_hash"] = "0" * 64
+    assert replay_run(raw, spec).status == "INVALID_RECEIPT"
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [("experiment_id", "forged"), ("seed", 2), ("steps", 3)],
+)
+def test_forged_receipt_identity_is_invalid(field, value):
+    spec = valid()
+    raw = run_experiment(spec).receipts[0].model_dump()
+    raw[field] = value
+    assert replay_run(raw, spec).status == "INVALID_RECEIPT"
+
+
+def test_forged_receipt_parameters_are_invalid():
+    spec = valid()
+    raw = run_experiment(spec).receipts[0].model_dump()
+    raw["parameters"]["width"] = 9
     assert replay_run(raw, spec).status == "INVALID_RECEIPT"
 
 

@@ -6,7 +6,7 @@ E0 adds headless orchestration and measurement around the existing Python simula
 
 - Python simulation code owns state evolution and domain semantics.
 - `psyfi_core.experiments` owns deterministic sweep expansion, measurement, receipts, hashing, replay, and export.
-- The observable registry exposes only established scalar outputs: `coherence`, `valence`, and `roughness`, each at version `1`.
+- The observable registry exposes only established scalar outputs: `coherence`, `valence`, and `roughness`, each at version `1` and recorded to six decimal places so supported NumPy/SciPy builds do not create false drift from insignificant reduction noise.
 - TypeScript and WGSL remain presentation and rendering computation authorities.
 
 ## Identity and hashing
@@ -18,6 +18,8 @@ Specs use `psyfi.experiment.v1`. Expansion is seed-major, then parameter names i
 ## Limits and failures
 
 E0 permits at most 64 unique uint32 seeds, eight parameter dimensions, 32 values per dimension, 1,024 total runs, and 1,000 simulation steps. Width and height retain the existing 8 through 512 bounds. Unknown parameters and observables fail validation. Execution is fail-fast. Cancellation is checked at run boundaries and by the Python simulation. Replay returns `PASS`, `DRIFT`, `INVALID_RECEIPT`, or `UNSUPPORTED_VERSION` and never normalizes drift.
+
+The exported JSON Schema encodes identifier, collection, seed, observable, parameter-name, and metadata bounds. Parameter-specific numeric bounds and the Cartesian total-run limit are enforced by `ExperimentSpec` because those cross-field rules are not represented as standalone JSON Schema expressions.
 
 ## Run and replay
 

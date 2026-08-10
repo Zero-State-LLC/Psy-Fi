@@ -19,7 +19,10 @@ class ObservableDefinition:
 
 def _metric(name: str) -> Callable[[dict[str, Any]], float]:
     def compute(payload: dict[str, Any]) -> float:
-        return float(payload[name])
+        # Measurement precision is part of observable v1. Six decimal places
+        # absorb harmless NumPy/SciPy reduction noise across supported builds
+        # without changing the Python simulation result itself.
+        return round(float(payload[name]), 6)
 
     return compute
 
@@ -29,7 +32,7 @@ OBSERVABLES = {
         name,
         "1",
         "psyfi_core.simulation.run_simulation result",
-        "finite float",
+        "finite float rounded to 6 decimal places",
         True,
         _metric(name),
     )

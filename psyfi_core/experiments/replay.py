@@ -44,7 +44,14 @@ def replay_run(receipt: ExperimentRunReceipt | dict, spec: ExperimentSpec) -> Re
             reason="receipt output hash does not cover its stored output",
         )
     expanded = next((run for run in expand_runs(spec) if run.run_id == expected.run_id), None)
-    if expanded is None or expanded.input_hash != expected.input_hash:
+    if (
+        expanded is None
+        or expanded.input_hash != expected.input_hash
+        or expected.experiment_id != expanded.experiment_id
+        or expected.seed != expanded.seed
+        or expected.parameters != expanded.parameters
+        or expected.steps != expanded.steps
+    ):
         return ReplayResult(
             status="INVALID_RECEIPT",
             run_id=run_id,

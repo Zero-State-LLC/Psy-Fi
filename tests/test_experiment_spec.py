@@ -42,3 +42,15 @@ def test_run_count_overflow():
 def test_non_finite_rejected():
     with pytest.raises(ValidationError):
         valid(parameters={"dt": {"values": [float("nan")]}})
+
+
+@pytest.mark.parametrize(
+    "parameters",
+    [
+        {"normalization_P": {"values": [0.0]}},
+        {"normalization_V": {"values": [-0.1]}},
+    ],
+)
+def test_invalid_normalization_parameters_are_rejected_in_spec(parameters):
+    with pytest.raises(ValidationError):
+        valid(parameters=parameters)

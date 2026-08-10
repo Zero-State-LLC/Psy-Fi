@@ -79,6 +79,10 @@ class ExperimentSpec(BaseModel):
                     raise ValueError("coupling_strength values must be from 0.0 through 2.0")
                 if name == "dt" and not 0.0 < value <= 1.0:
                     raise ValueError("dt values must be greater than 0.0 and at most 1.0")
+                if name == "normalization_P" and value <= 0.0:
+                    raise ValueError("normalization_P values must be greater than 0.0")
+                if name == "normalization_V" and value < 0.0:
+                    raise ValueError("normalization_V values must be at least 0.0")
         return values
 
     @field_validator("observables")
