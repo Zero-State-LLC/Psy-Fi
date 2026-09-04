@@ -2,6 +2,8 @@
 
 Authorized contributors and agents only.
 
+Agent contract: [`AGENTS.md`](AGENTS.md). Non-trivial work starts as intent → spec/plan → code ([`intent/`](intent/)). Team handoff lives in [`Zero-State-LLC/agent-context`](https://github.com/Zero-State-LLC/agent-context), not here.
+
 
 ## Licensing and contributions
 
