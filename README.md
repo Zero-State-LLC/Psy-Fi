@@ -157,6 +157,8 @@ Canonical browser API is **`/api/v1`** (**hard-frozen**). Legacy `/api/*` and `/
 
 | Doc                                                                                | Purpose                         |
 | ---------------------------------------------------------------------------------- | ------------------------------- |
+| [`AGENTS.md`](AGENTS.md)                                                           | Agent contract (intent → spec/plan → code) |
+| [`intent/`](intent/)                                                               | Stage-0 intent blanks — no product invent |
 | [`PROJECT_INDEX.md`](PROJECT_INDEX.md)                                             | Codebase map & ownership index  |
 | [`.agents/skills/codebase-memory/`](.agents/skills/codebase-memory/)               | Codebase Memory graph skill     |
 | [`docs/PRODUCTION_READINESS.md`](docs/PRODUCTION_READINESS.md)                     | Production readiness board      |

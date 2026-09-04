@@ -61,6 +61,8 @@ Details: [`docs/WEB_ARCHITECTURE.md`](docs/WEB_ARCHITECTURE.md), [`docs/FRONTEND
 | [`packages/psyfi-gpu-renderer/`](packages/psyfi-gpu-renderer/) | Optional Vite + React + R3F WebGPU client → served at `/gpu/` |
 | [`data/phenomenology/`](data/phenomenology/) | Source phenomenology → catalog / overlays (build scripts) |
 | [`docs/`](docs/) | Architecture, contracts, rendering, QA, design |
+| [`AGENTS.md`](AGENTS.md) | Agent contract (intent → spec/plan → code; Escalation) |
+| [`intent/`](intent/) | Stage-0 intent blanks — no product invent |
 | [`scripts/`](scripts/) | Dev server, catalog build, OpenAPI/schema/freeze sync, deploy |
 | [`tests/`](tests/) | Pytest suite (API, determinism, freeze, overlays, shell) |
 | [`examples/`](examples/) | Sample usage |
@@ -240,6 +242,8 @@ python3 scripts/sync_frozen_contracts.py
 | [`docs/IOS_MIGRATION.md`](docs/IOS_MIGRATION.md) | Deferred native track |
 | [`design.md`](design.md) · [`docs/FIGMA_GUIDE.md`](docs/FIGMA_GUIDE.md) | Design notes |
 | [`MEMORIES.md`](MEMORIES.md) | Open/rejected automation bug ledger |
+| [`AGENTS.md`](AGENTS.md) · [`intent/`](intent/) | Agent contract + intent blanks |
+| [`CLAUDE.md`](CLAUDE.md) | Thin adapter → `AGENTS.md` only |
 
 ---
 
@@ -272,6 +276,7 @@ Phenomenology rebuild: `python3 scripts/build_experience_catalog.py` (sources un
 
 ## Contribution quick rules
 
+- Non-trivial work: intent → spec/plan → code ([`AGENTS.md`](AGENTS.md), [`intent/`](intent/)).
 - Keep outputs deterministic for fixed seeds/params.
 - Prefer `/api/v1`; after contract changes run freeze resync scripts.
 - Do not bypass the visual safety pass.
