@@ -1,3 +1,7 @@
+## Current next milestone — living hardware and GPU evidence
+
+The web/PWA/API ship gates are complete and the instrument track I1–I5 is landed. The next milestone is living QA: collect hardware Ultra performance evidence as available and, separately, lock full R3F WebGPU still SHAs on a GPU CI runner if that environment becomes available. These are evidence tasks, not permission to weaken the mandatory SafetyPass or Python-authoritative simulation; native iOS remains deferred. No calendar ship date is claimed.
+
 # PsyFi Web Continuation Plan
 
 Status: active — **production-ready Docker web ship**; G0–G4 ship gates met; living QA continues  
