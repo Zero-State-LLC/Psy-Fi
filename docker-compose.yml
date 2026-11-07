@@ -12,12 +12,6 @@ services:
     environment:
       - ENVIRONMENT=production
       - LOG_LEVEL=info
-      - WORKERS=4
-    volumes:
-      # Mount for development (comment out for production)
-      - ./psyfi_api:/app/psyfi_api
-      - ./psyfi_core:/app/psyfi_core
-      - ./docs:/app/docs
     restart: unless-stopped
     healthcheck:
       # Match Dockerfile — python:slim has no curl
@@ -47,14 +41,9 @@ services:
     environment:
       - ENVIRONMENT=production
       - LOG_LEVEL=info
-      - WORKERS=4
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics
       - PSYFI_GPU_VENDOR=nvidia
-    volumes:
-      - ./psyfi_api:/app/psyfi_api
-      - ./psyfi_core:/app/psyfi_core
-      - ./docs:/app/docs
     restart: unless-stopped
     gpus: all
     profiles:

@@ -7,11 +7,11 @@
 > Deterministic consciousness-field simulation workspace and phenomenology visualization instrument.\
 > Web-first · ABX-Core v1.3 · research/visualization only — _not medical advice_.
 
-[![CI](https://img.shields.io/github/actions/workflow/status/scrimshawlife-ctrl/Psy-Fi/ci.yml?branch=main\&label=CI)](https://github.com/scrimshawlife-ctrl/Psy-Fi/actions/workflows/ci.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/Zero-State-LLC/Psy-Fi/ci.yml?branch=main\&label=CI)](https://github.com/Zero-State-LLC/Psy-Fi/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10+-3776AB?logo=python\&logoColor=white)](https://www.python.org/downloads/)
 [![ABX-Core](https://img.shields.io/badge/ABX--Core-v1.3-3EE7F2)](psyfi_core/abx_core)
 [![API](https://img.shields.io/badge/api-/api/v1-3EE7F2)](docs/contracts/frozen/API_V1_FREEZE.md)
-[![License: MIT](https://img.shields.io/badge/license-MIT-informational)](LICENSE)
+[![License: Zero State Proprietary](https://img.shields.io/badge/license-Zero%20State%20Proprietary-informational)](LICENSE)
 [![PWA](https://img.shields.io/badge/PWA-installable-3EE7F2)](MOBILE_PWA_GUIDE.md)
 [![Markdown Style Guide](https://img.shields.io/badge/hallmark-informational?logo=markdown)](https://github.com/vweevers/hallmark)
 
@@ -60,7 +60,7 @@ Ship checklist: `pytest` → `npm test && npm run gpu:test && npm run gpu:build`
 ## Install
 
 ```bash
-git clone https://github.com/scrimshawlife-ctrl/Psy-Fi.git
+git clone https://github.com/Zero-State-LLC/Psy-Fi.git
 cd Psy-Fi
 pip install -e ".[dev]"
 
@@ -209,11 +209,6 @@ python3 scripts/export_openapi.py
 python3 scripts/build_experience_catalog.py
 python3 scripts/sync_frozen_contracts.py
 ```
-
-## License
-
-[MIT](LICENSE) © Applied Alchemy Labs.
-
 
 ## License
 
