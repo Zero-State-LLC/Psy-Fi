@@ -96,3 +96,50 @@ def test_field_displacement_uses_mode_steps_as_the_ruler() -> None:
     assert moved["within_mode_step"] is (
         moved["field_displacement"] <= min(moved["mode_steps"].values())
     )
+
+
+from psyfi_core.visualization.vision_bench import catalog_metrics, positive_lsd_candidates
+
+
+def _pair() -> list[dict]:
+    return [
+        {
+            "id": "exp_void",
+            "title": "Void Soft",
+            "modes": ["void"],
+            "visual_recipe": {
+                "mode_default": "void",
+                "primary_engines": ["void_expansion"],
+                "parameter_bias": {"void_bias": 0.9, "pattern_complexity": 0.1},
+                "palette": {"energy": 0.15},
+            },
+        },
+        {
+            "id": "exp_attractor",
+            "title": "Attractor",
+            "modes": ["attractor"],
+            "visual_recipe": {
+                "mode_default": "attractor",
+                "primary_engines": ["kaleidoscope"],
+                "parameter_bias": {"pattern_complexity": 0.7, "attractor_bias": 0.8},
+                "palette": {"energy": 0.7},
+            },
+        },
+    ]
+
+
+def test_catalog_switch_follows_the_mode() -> None:
+    features = analyze_features(dict(build_corpus())["void"])
+    same = catalog_metrics(features, "void", "void", _pair())
+    assert same["catalog_switch"] is False
+    assert same["catalog_oracle_id"] == same["catalog_model_id"] == "exp_void"
+    swapped = catalog_metrics(features, "void", "attractor", _pair())
+    assert swapped["catalog_oracle_id"] == "exp_void"
+    assert swapped["catalog_model_id"] == "exp_attractor"
+    assert swapped["catalog_switch"] is True
+
+
+def test_positive_lsd_catalog_is_loaded() -> None:
+    recipes = positive_lsd_candidates()
+    assert recipes
+    assert all(recipe.get("id") for recipe in recipes)

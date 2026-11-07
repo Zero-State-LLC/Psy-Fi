@@ -136,3 +136,38 @@ def field_metrics(
         "mode_steps": steps,
         "within_mode_step": distance <= min(steps.values()),
     }
+
+
+from psyfi_core.experiences.catalog import load_catalog
+from psyfi_core.visualization.image_seed import rank_experiences
+
+
+def positive_lsd_candidates() -> list[dict]:
+    recipes = load_catalog().list(substance="lsd", valence="positive")
+    if not recipes:
+        raise ValueError("positive LSD catalog is empty")
+    return list(recipes)
+
+
+def _top(features: dict, mode: str, candidates: list[dict]) -> tuple[str, float]:
+    ranked = rank_experiences(candidates, features, mode, top_n=1)
+    if not ranked:
+        raise ValueError("catalog rank is empty")
+    return str(ranked[0]["experience_id"]), float(ranked[0]["score"])
+
+
+def catalog_metrics(
+    features: dict,
+    oracle_mode: str,
+    model_mode: str,
+    candidates: list[dict],
+) -> dict[str, object]:
+    oracle_id, oracle_score = _top(features, oracle_mode, candidates)
+    model_id, model_score = _top(features, model_mode, candidates)
+    return {
+        "catalog_oracle_id": oracle_id,
+        "catalog_oracle_score": oracle_score,
+        "catalog_model_id": model_id,
+        "catalog_model_score": model_score,
+        "catalog_switch": oracle_id != model_id,
+    }
