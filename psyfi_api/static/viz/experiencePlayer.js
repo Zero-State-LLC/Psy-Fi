@@ -1042,15 +1042,26 @@
       if (!this.provenanceEl) return;
       const frame = (data.frames && data.frames[0]) || data.frame || {};
       const tier = frame.quality_tier || (this.loadContext && this.loadContext.quality_tier) || 'balanced';
-      this.provenanceEl.innerHTML = `
-        <div><strong>Timeline</strong> ${data.timeline_hash || frame.hash || '—'}</div>
-        <div><strong>Seed</strong> ${data.seed ?? frame.master_seed ?? '—'}</div>
-        <div><strong>Experience</strong> ${data.experience_id || frame.experience_id || '—'}</div>
-        <div><strong>Backend</strong> ${this.backend}</div>
-        <div><strong>Quality</strong> ${tier}</div>
-        <div><strong>Authority</strong> parameters INFERRED · motifs INFERRED · sources OBSERVED</div>
-        <div class="muted">Modeled phenomenology for research/visualization only. Not medical advice.</div>
-      `;
+      const line = (label, value) => {
+        const div = document.createElement('div');
+        const strong = document.createElement('strong');
+        strong.textContent = label;
+        div.append(strong, document.createTextNode(` ${value}`));
+        return div;
+      };
+      const disclaimer = document.createElement('div');
+      disclaimer.className = 'muted';
+      disclaimer.textContent =
+        'Modeled phenomenology for research/visualization only. Not medical advice.';
+      this.provenanceEl.replaceChildren(
+        line('Timeline', data.timeline_hash || frame.hash || '—'),
+        line('Seed', data.seed ?? frame.master_seed ?? '—'),
+        line('Experience', data.experience_id || frame.experience_id || '—'),
+        line('Backend', this.backend),
+        line('Quality', tier),
+        line('Authority', 'parameters INFERRED · motifs INFERRED · sources OBSERVED'),
+        disclaimer,
+      );
     }
   }
 
