@@ -70,6 +70,7 @@ def read_image(data: bytes) -> dict[str, str]:
         {
             "model": model,
             "max_tokens": 256,
+            "reasoning_effort": "none",
             "messages": [
                 {
                     "role": "user",
