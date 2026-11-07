@@ -180,6 +180,8 @@ Canonical browser API is **`/api/v1`** (**hard-frozen**). Legacy `/api/*` and `/
 | [`docs/PHENOMENOLOGY_PIPELINE.md`](docs/PHENOMENOLOGY_PIPELINE.md)                 | Scraped → overlays              |
 | [`docs/BROWSER_CAPABILITY_MATRIX.md`](docs/BROWSER_CAPABILITY_MATRIX.md)           | Device QA (filled)              |
 | [`docs/contracts/frozen/API_V1_FREEZE.md`](docs/contracts/frozen/API_V1_FREEZE.md) | Contract hard freeze            |
+| [`docs/VERSIONING.md`](docs/VERSIONING.md)                                         | Product version and git tags    |
+| [`CHANGELOG.md`](CHANGELOG.md)                                                     | Retroactive version notes       |
 | [`docs/PHASE4_USABILITY.md`](docs/PHASE4_USABILITY.md)                             | Usability checklist             |
 | [`MOBILE_PWA_GUIDE.md`](MOBILE_PWA_GUIDE.md)                                       | PWA guidance                    |
 | [`docs/IOS_MIGRATION.md`](docs/IOS_MIGRATION.md)                                   | Deferred native notes           |

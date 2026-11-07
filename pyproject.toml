@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "psyfi"
-version = "0.1.0"
+dynamic = ["version"]
 description = "PsyFi Consciousness Field Engine - Modular consciousness simulation with ABX-Core v1.3"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -44,9 +44,15 @@ dev = [
     "jsonschema>=4.20.0",
 ]
 
+[tool.setuptools.dynamic]
+version = {file = "psyfi_core/VERSION"}
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["psyfi_core*", "psyfi_api*"]
+
+[tool.setuptools.package-data]
+psyfi_core = ["VERSION"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
