@@ -30,7 +30,7 @@ Raw uploads are never stored. Conditioned PNG may travel as an ephemeral data-UR
 
 Module: `psyfi_core/visualization/image_seed.py`
 
-1. Decode PNG/JPEG → RGBA, downscale (max edge 384).
+1. Decode PNG/JPEG → RGBA, downscale (max edge 384). An empty upload is a client error. A body over 12 MB, or a raster over 25 million pixels, is rejected before the float32 working image is built. Multipart and JSON use that same ceiling. Raw bytes stay in memory and are not written to disk.
 2. Measure features (mean RGB, contrast, edge density, warm/cool, energy).
 3. Recommend mode/intensity and best-matching catalog `experience_id` from features.
 4. Apply recipe/overlay biases as pixel ops (saturation, void crush, symmetry fold, mild turbulence) scaled by `influence`.

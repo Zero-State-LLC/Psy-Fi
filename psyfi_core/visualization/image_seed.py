@@ -22,6 +22,9 @@ from psyfi_core.visualization.spatiotemporal import (
 
 IMAGE_SEED_SCHEMA = "psyfi.image_seed.v1"
 _MAX_EDGE = 384
+_MAX_BYTES = 12_000_000
+# Above this, the decoded RGBA raster is huge next to the 384-edge working image.
+_MAX_PIXELS = 25_000_000
 _PREVIEW_EDGE = 128
 _TEXTURE_EDGE = 256
 _SOURCE_EDGE = 64
@@ -49,9 +52,15 @@ def decode_image_bytes(data: bytes) -> np.ndarray:
 
     if not data:
         raise ValueError("empty image")
-    if len(data) > 12_000_000:
+    if len(data) > _MAX_BYTES:
         raise ValueError("image too large (max ~12MB)")
-    img = Image.open(io.BytesIO(data))
+    try:
+        img = Image.open(io.BytesIO(data))
+    except Image.DecompressionBombError as exc:
+        raise ValueError("image dimensions too large") from exc
+    width, height = img.size
+    if width < 1 or height < 1 or width * height > _MAX_PIXELS:
+        raise ValueError("image dimensions too large")
     img = img.convert("RGBA")
     arr = np.asarray(img, dtype=np.float32) / 255.0
     return arr
