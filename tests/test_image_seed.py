@@ -37,6 +37,114 @@ def _png_bytes(color=(40, 120, 200, 255), size=(64, 48)) -> bytes:
     return buf.getvalue()
 
 
+def _claim_png_size(png: bytes, width: int, height: int) -> bytes:
+    """Rewrite a real PNG header so Pillow can see huge dimensions without a raster."""
+    import struct
+    import zlib
+
+    length = struct.unpack(">I", png[8:12])[0]
+    data = png[16 : 16 + length]
+    rewritten = struct.pack(">II", width, height) + data[8:]
+    crc = zlib.crc32(b"IHDR" + rewritten) & 0xFFFFFFFF
+    chunk = struct.pack(">I", len(rewritten)) + b"IHDR" + rewritten + struct.pack(">I", crc)
+    return png[:8] + chunk + png[16 + length + 4 :]
+
+
+def test_tiny_fixture_keeps_master_seed_hints_and_rank() -> None:
+    catalog = get_default_catalog()
+    listed = catalog.list(substance="lsd") or catalog.list(valence=None)
+    experience = catalog.get(listed[0]["id"]) if listed else None
+    out = build_image_seed(
+        image=_png_bytes(),
+        experience=experience,
+        substance_overlay=catalog.overlay("lsd"),
+        substance="lsd",
+        mode="open",
+        influence=0.7,
+        recipe_candidates=listed,
+    )
+    assert out["master_seed"] == 3135075483
+    assert out["parameter_hints"] == {
+        "palette_energy": 0.1048,
+        "edge_gain": 0.0061,
+        "turbulence": 0.0119,
+        "pattern_complexity": 0.0546,
+        "void_bias": 0.0,
+        "attractor_bias": 0.0,
+        "depth_distortion": 0.0038,
+        "bloom": 0.0354,
+    }
+    assert [row["experience_id"] for row in out["recommended_alternatives"][:5]] == [
+        "exp_lsd_cosmic_geometry",
+        "exp_lsd_soft_room",
+        "exp_src_lsd_98dbf01e",
+        "exp_src_lsd_d0e6ffd7",
+        "exp_src_lsd_d223a056",
+    ]
+
+
+def test_decode_rejects_oversize_and_huge_dimensions_before_float32() -> None:
+    from psyfi_core.visualization.image_seed import decode_image_base64, decode_image_bytes
+
+    calls = {"asarray": 0}
+    real = np.asarray
+
+    def counting_asarray(*args, **kwargs):
+        calls["asarray"] += 1
+        return real(*args, **kwargs)
+
+    np.asarray = counting_asarray  # type: ignore[assignment]
+    try:
+        try:
+            decode_image_bytes(b"x" * (12_000_000 + 1))
+            assert False, "expected oversize rejection"
+        except ValueError as exc:
+            assert "12MB" in str(exc)
+        huge = _claim_png_size(_png_bytes(), 10_000, 10_000)
+        try:
+            decode_image_bytes(huge)
+            assert False, "expected dimension rejection"
+        except ValueError as exc:
+            assert "dimensions" in str(exc)
+        encoded = base64.b64encode(huge).decode("ascii")
+        try:
+            decode_image_base64(encoded)
+            assert False, "expected json ceiling to share the decoder"
+        except ValueError as exc:
+            assert "dimensions" in str(exc)
+    finally:
+        np.asarray = real  # type: ignore[assignment]
+    assert calls["asarray"] == 0
+
+
+def test_image_seed_routes_reject_empty_and_huge_dimensions() -> None:
+    huge = _claim_png_size(_png_bytes(), 10_000, 10_000)
+    empty = client.post(
+        "/api/v1/visualize/image-seed",
+        files={"file": ("empty.png", b"", "image/png")},
+        data={"substance": "lsd"},
+    )
+    assert empty.status_code == 400
+    multipart = client.post(
+        "/api/v1/visualize/image-seed",
+        files={"file": ("huge.png", huge, "image/png")},
+        data={"substance": "lsd"},
+    )
+    assert multipart.status_code == 400
+    assert "dimensions" in multipart.json()["detail"]
+    json_huge = client.post(
+        "/api/v1/visualize/image-seed/json",
+        json={"image_base64": base64.b64encode(huge).decode("ascii"), "substance": "lsd"},
+    )
+    assert json_huge.status_code == 400
+    assert "dimensions" in json_huge.json()["detail"]
+    json_empty = client.post(
+        "/api/v1/visualize/image-seed/json",
+        json={"image_base64": "", "substance": "lsd"},
+    )
+    assert json_empty.status_code == 400
+
+
 def test_build_image_seed_deterministic() -> None:
     catalog = get_default_catalog()
     listed = catalog.list(substance="lsd") or catalog.list(valence=None)
