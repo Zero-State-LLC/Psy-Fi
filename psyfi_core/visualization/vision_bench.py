@@ -90,3 +90,49 @@ def parse_model_content(text: str) -> dict[str, object]:
     if value < 0.0 or value > 1.0:
         return _parse_failure()
     return {"parse_ok": True, "mode": mode, "intensity": value, "error": None}
+
+
+from psyfi_core.experiences.parameter_mapper import map_parameters
+
+FIELD_MODES = ("open", "attractor", "void", "power")
+
+
+def _parameters(mode: str, intensity: float) -> dict[str, float]:
+    field = map_parameters(
+        substance="lsd",
+        mode=mode,
+        intensity=float(intensity),
+        seed=42,
+        phase_t=0.4,
+        quality_tier="balanced",
+    )
+    return dict(field.parameters)
+
+
+def _displacement(left: dict[str, float], right: dict[str, float]) -> float:
+    keys = set(left) | set(right)
+    total = 0.0
+    for key in keys:
+        total += abs(float(left.get(key, 0.0)) - float(right.get(key, 0.0)))
+    return round(total, 4)
+
+
+def field_metrics(
+    oracle_mode: str,
+    oracle_intensity: float,
+    model_mode: str,
+    model_intensity: float,
+) -> dict[str, object]:
+    oracle_field = _parameters(oracle_mode, oracle_intensity)
+    model_field = _parameters(model_mode, model_intensity)
+    steps = {
+        mode: _displacement(oracle_field, _parameters(mode, oracle_intensity))
+        for mode in FIELD_MODES
+        if mode != oracle_mode
+    }
+    distance = _displacement(oracle_field, model_field)
+    return {
+        "field_displacement": distance,
+        "mode_steps": steps,
+        "within_mode_step": distance <= min(steps.values()),
+    }

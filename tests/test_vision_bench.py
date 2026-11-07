@@ -68,3 +68,31 @@ def test_parse_accepts_only_the_four_modes_and_a_unit_interval() -> None:
         assert parsed["mode"] is None
         assert parsed["intensity"] is None
         assert parsed["error"] == "parse"
+
+
+from psyfi_core.visualization.vision_bench import field_metrics
+
+
+def test_field_displacement_uses_mode_steps_as_the_ruler() -> None:
+    rgba = dict(build_corpus())["void"]
+    oracle = oracle_for(rgba)
+    same = field_metrics(
+        str(oracle["mode"]),
+        float(oracle["intensity"]),
+        str(oracle["mode"]),
+        float(oracle["intensity"]),
+    )
+    assert same["field_displacement"] == 0.0
+    assert same["within_mode_step"] is True
+    assert set(same["mode_steps"]) == {"open", "attractor", "power"}
+    moved = field_metrics(
+        str(oracle["mode"]),
+        float(oracle["intensity"]),
+        "power",
+        float(oracle["intensity"]),
+    )
+    assert moved["field_displacement"] == moved["mode_steps"]["power"]
+    assert moved["field_displacement"] > 0.0
+    assert moved["within_mode_step"] is (
+        moved["field_displacement"] <= min(moved["mode_steps"].values())
+    )
