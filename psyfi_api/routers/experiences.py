@@ -7,6 +7,7 @@ from typing import Any, Literal
 from fastapi import APIRouter, File, Form, HTTPException, Query, UploadFile
 from pydantic import BaseModel, Field
 
+from psyfi_api.image_reading import VisionConfigError, VisionProviderError, read_image
 from psyfi_api.simulation_service import PresetNotFoundError, run_simulation
 from psyfi_core.experiences.catalog import get_default_catalog, load_catalog
 from psyfi_core.experiences.parameter_mapper import (
@@ -562,6 +563,26 @@ def _run_image_seed(
         result["applied_experience_id"] = experience_id or applied_exp_id
     result["kind"] = "image_seed_recommend" if recommend_only else "image_seed"
     return result
+
+
+@router.post("/visualize/image-reading")
+async def image_reading(file: UploadFile = File(...)) -> dict[str, Any]:
+    """Inferred caption of the upload. Does not condition the field or write presets."""
+    data = await file.read()
+    try:
+        return read_image(data)
+    except VisionConfigError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail={"error": "vision_unconfigured", "detail": exc.detail},
+        ) from exc
+    except VisionProviderError as exc:
+        raise HTTPException(
+            status_code=502,
+            detail={"error": "vision_provider", "detail": exc.detail},
+        ) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @router.post("/visualize/image-seed")
