@@ -589,6 +589,19 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    function textEl(tag, className, text) {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text != null) node.textContent = String(text);
+        return node;
+    }
+
+    function provenanceLabeled(label, value) {
+        const div = textEl('div');
+        div.append(textEl('strong', '', label), document.createTextNode(` ${value == null ? '' : value}`));
+        return div;
+    }
+
     async function refreshHistory() {
         const records = await listHistory();
         historyList.innerHTML = '';
@@ -596,21 +609,32 @@ document.addEventListener('DOMContentLoaded', () => {
         records.forEach((record) => {
             const item = document.createElement('li');
             item.className = 'history-item';
-            item.innerHTML = `
-                <div class="history-title">
-                    <span class="pf-icon pf-icon-console" aria-hidden="true"></span>
-                    <strong>${record.width}×${record.height}</strong>
-                    · seed <code>${record.seed}</code>
-                    · ${record.preset || 'no preset'}
-                </div>
-                <div class="history-meta">${record.id} · valence ${Number(record.metrics?.valence || 0).toFixed(3)}</div>
-                <button type="button" class="btn-secondary history-restore">Restore</button>
-            `;
-            item.querySelector('.history-restore').addEventListener('click', async () => {
+            const title = textEl('div', 'history-title');
+            const icon = textEl('span', 'pf-icon pf-icon-console');
+            icon.setAttribute('aria-hidden', 'true');
+            title.append(
+                icon,
+                textEl('strong', '', `${record.width}×${record.height}`),
+                document.createTextNode(' · seed '),
+                textEl('code', '', record.seed),
+                document.createTextNode(` · ${record.preset || 'no preset'}`),
+            );
+            const restore = textEl('button', 'btn-secondary history-restore', 'Restore');
+            restore.type = 'button';
+            restore.addEventListener('click', async () => {
                 applyRecordToForm(record);
                 await showResults(recordToPayload(record));
                 hideError();
             });
+            item.append(
+                title,
+                textEl(
+                    'div',
+                    'history-meta',
+                    `${record.id} · valence ${Number(record.metrics?.valence || 0).toFixed(3)}`,
+                ),
+                restore,
+            );
             historyList.appendChild(item);
         });
     }
@@ -628,21 +652,30 @@ document.addEventListener('DOMContentLoaded', () => {
             item.className = 'history-item';
             const pinHash = String(record.pinned?.hash || '—').slice(0, 8);
             const liveHash = String(record.live?.hash || '—').slice(0, 8);
-            item.innerHTML = `
-                <div class="history-title">
-                    <strong>${record.mode || 'off'}</strong>
-                    · ${record.substance || 'field'}
-                    · pin <code>${pinHash}</code>
-                    · live <code>${liveHash}</code>
-                </div>
-                <div class="history-meta">${record.id} · ${record.claim || 'INFERRED'} · ${record.updated_at || ''}</div>
-                <button type="button" class="btn-secondary compare-restore">Restore</button>
-            `;
-            item.querySelector('.compare-restore').addEventListener('click', () => {
+            const title = textEl('div', 'history-title');
+            title.append(
+                textEl('strong', '', record.mode || 'off'),
+                document.createTextNode(` · ${record.substance || 'field'} · pin `),
+                textEl('code', '', pinHash),
+                document.createTextNode(' · live '),
+                textEl('code', '', liveHash),
+            );
+            const restore = textEl('button', 'btn-secondary compare-restore', 'Restore');
+            restore.type = 'button';
+            restore.addEventListener('click', () => {
                 window.dispatchEvent(new CustomEvent('psyfi:restore-comparison', { detail: record }));
                 const panel = document.getElementById('experiencePanel');
                 if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
+            item.append(
+                title,
+                textEl(
+                    'div',
+                    'history-meta',
+                    `${record.id} · ${record.claim || 'INFERRED'} · ${record.updated_at || ''}`,
+                ),
+                restore,
+            );
             compareList.appendChild(item);
         });
     }
@@ -666,20 +699,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const item = document.createElement('li');
             item.className = 'history-item';
             const motifs = (record.planner?.motifs || []).slice(0, 2).join(', ') || '—';
-            item.innerHTML = `
-                <div class="history-title">
-                    <strong>${record.title || record.substance || 'journey'}</strong>
-                    · ${record.mode || 'open'}
-                    · seed <code>${record.seed ?? '—'}</code>
-                </div>
-                <div class="history-meta">${record.id} · ${motifs} · ${record.updated_at || ''}</div>
-                <button type="button" class="btn-secondary journey-restore">Restore</button>
-            `;
-            item.querySelector('.journey-restore').addEventListener('click', () => {
+            const title = textEl('div', 'history-title');
+            title.append(
+                textEl('strong', '', record.title || record.substance || 'journey'),
+                document.createTextNode(` · ${record.mode || 'open'} · seed `),
+                textEl('code', '', record.seed ?? '—'),
+            );
+            const restore = textEl('button', 'btn-secondary journey-restore', 'Restore');
+            restore.type = 'button';
+            restore.addEventListener('click', () => {
                 window.dispatchEvent(new CustomEvent('psyfi:restore-journey', { detail: record }));
                 const panel = document.getElementById('experiencePanel');
                 if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
+            item.append(
+                title,
+                textEl('div', 'history-meta', `${record.id} · ${motifs} · ${record.updated_at || ''}`),
+                restore,
+            );
             journeyList.appendChild(item);
         });
     }
@@ -719,10 +756,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const card = document.createElement('button');
                 card.type = 'button';
                 card.className = 'substance-card';
-                card.innerHTML = `
-                    <span class="preset-name">${preset.name}</span>
-                    <span class="preset-desc">· ${preset.substance_class}</span>
-                `;
+                card.append(
+                    textEl('span', 'preset-name', preset.name),
+                    textEl('span', 'preset-desc', `· ${preset.substance_class}`),
+                );
                 card.addEventListener('click', () => {
                     substanceSelect.value = preset.id;
                     document.querySelectorAll('.substance-card').forEach((el) => el.classList.remove('active'));
@@ -2462,7 +2499,7 @@ document.addEventListener('DOMContentLoaded', () => {
             );
             statusEl.textContent = `Planner · ${body.hash || 'ok'}`;
             if (provenanceEl && body.planner_text) {
-                provenanceEl.innerHTML = `<div class="muted">${body.planner_text}</div>`;
+                provenanceEl.replaceChildren(textEl('div', 'muted', body.planner_text));
             }
         } catch (err) {
             console.error(err);
@@ -2544,7 +2581,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (record.planner?.planner_text) {
             setPlannerStatus(record.planner.planner_text, true);
             if (provenanceEl) {
-                provenanceEl.innerHTML = `<div class="muted">${record.planner.planner_text}</div>`;
+                provenanceEl.replaceChildren(textEl('div', 'muted', record.planner.planner_text));
             }
         }
         if (record.comparison_id) lastComparisonId = record.comparison_id;
@@ -2895,13 +2932,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 sourcePlaneChk.checked = true;
             }
             syncSourcePlaneUI();
-            provenanceEl.innerHTML = `
-              <div><strong>Bridge</strong> simulation → ParameterField</div>
-              <div><strong>Provenance</strong> ${data.simulation?.provenance_id || '—'}</div>
-              <div><strong>Field hash</strong> ${data.parameter_field?.hash || '—'}</div>
-              <div><strong>Source plane</strong> ${lastBridgeField && sourcePlaneChk?.checked ? 'on' : 'off'}</div>
-              <div class="muted">${data.note || ''}</div>
-            `;
+            const bridgeNote = textEl('div', 'muted', data.note || '');
+            provenanceEl.replaceChildren(
+                provenanceLabeled('Bridge', 'simulation → ParameterField'),
+                provenanceLabeled('Provenance', data.simulation?.provenance_id || '—'),
+                provenanceLabeled('Field hash', data.parameter_field?.hash || '—'),
+                provenanceLabeled(
+                    'Source plane',
+                    lastBridgeField && sourcePlaneChk?.checked ? 'on' : 'off',
+                ),
+                bridgeNote,
+            );
             statusEl.textContent = lastBridgeField && sourcePlaneChk?.checked
                 ? 'Simulation bridge loaded · source plane active'
                 : 'Simulation bridge loaded';
