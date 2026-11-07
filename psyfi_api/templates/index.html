@@ -45,7 +45,7 @@
                 <button type="button" class="btn-primary" id="launchEnterBtn" disabled>Enter workspace</button>
                 <button type="button" class="btn-secondary" id="launchSkipBtn">Skip scan</button>
             </div>
-            <details class="control-drawer launch-scan-drawer" open>
+            <details class="control-drawer launch-scan-drawer">
                 <summary>Device scan &amp; resolution</summary>
                 <div class="launch-resolution input-group">
                     <label for="launchResolutionSelect">Field resolution</label>
@@ -66,6 +66,7 @@
     </div>
 
     <div class="container" id="appShell" aria-hidden="true">
+        <div class="masthead">
         <header class="header">
             <div class="brand-row">
                 <div class="sigil" aria-hidden="true">
@@ -97,6 +98,7 @@
             </details>
             <button type="button" class="nav-link" id="installButton" hidden>Install app</button>
         </nav>
+        </div>
 
         <div class="recovery-banner" id="recoveryBanner" hidden role="status" aria-live="polite">
             <p id="recoveryText">A previous session is available to restore.</p>
@@ -606,7 +608,7 @@
             <div class="footer-links">
                 <a href="/docs" target="_blank">API Docs</a>
                 <span class="separator" aria-hidden="true">·</span>
-                <a href="https://github.com/scrimshawlife-ctrl/Psy-Fi" target="_blank">GitHub</a>
+                <a href="https://github.com/Zero-State-LLC/Psy-Fi" target="_blank">GitHub</a>
                 <span class="separator" aria-hidden="true">·</span>
                 <span class="abx-credit"><span class="pf-icon pf-icon-ethics" aria-hidden="true"></span>ABX-Core v1.3</span>
             </div>

@@ -2,6 +2,20 @@
   "version": 1,
   "runs": [
     {
+      "date": "2026-11-07",
+      "target": "public shell entry + workbench stage",
+      "verb": "redesign",
+      "genre": "atmospheric",
+      "macrostructure": "Photographic\u2192Workbench",
+      "theme": "design.md",
+      "nav": "N9",
+      "footer": "Ft2",
+      "designed_as_app": true,
+      "scope": "app",
+      "tone": "technical",
+      "notes": "Type on the field plate; scan starts closed; masthead shares one hairline; field stage is unboxed. SW v42."
+    },
+    {
       "date": "2026-07-25",
       "target": "Live Experience image-seed control (index.html + style.css + app.js)",
       "verb": "component",
