@@ -40,9 +40,9 @@ The kanban is Zero-State-LLC project **#7**: https://github.com/orgs/Zero-State-
 | #10 | Backlog | Hardware Ultra evidence. Not an agent ticket. |
 | #16 | In review | [Deploy and CI](deploy-and-ci.md). [Pull request #31](https://github.com/Zero-State-LLC/Psy-Fi/pull/31). |
 | #17 | In review | [Image seed](image-seed.md). [Pull request #28](https://github.com/Zero-State-LLC/Psy-Fi/pull/28). |
-| #18 | In review | [Simulation and jobs](simulation-and-jobs.md). [Pull request #27](https://github.com/Zero-State-LLC/Psy-Fi/pull/27). |
+| #18 | Done | [Simulation and jobs](simulation-and-jobs.md). [Pull request #27](https://github.com/Zero-State-LLC/Psy-Fi/pull/27) is merged. |
 | #19 | In review | [Live Experience](live-experience.md). [Pull request #29](https://github.com/Zero-State-LLC/Psy-Fi/pull/29). |
 | #20 | In review | [Public API](api-v1.md). [Pull request #30](https://github.com/Zero-State-LLC/Psy-Fi/pull/30). |
-| #21 | In review | [MIDI](midi.md). [Pull request #26](https://github.com/Zero-State-LLC/Psy-Fi/pull/26). |
-| #22 | In review | [GPU Lab](gpu-lab.md). [Pull request #25](https://github.com/Zero-State-LLC/Psy-Fi/pull/25). |
+| #21 | Done | [MIDI](midi.md). [Pull request #26](https://github.com/Zero-State-LLC/Psy-Fi/pull/26) is merged. |
+| #22 | Done | [GPU Lab](gpu-lab.md). [Pull request #25](https://github.com/Zero-State-LLC/Psy-Fi/pull/25) is merged. |
 | #23 | Done | [Cloudflare and NVIDIA](cloudflare-nvidia.md). Closed. [Pull request #24](https://github.com/Zero-State-LLC/Psy-Fi/pull/24) is in review and is not merged. |

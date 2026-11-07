@@ -1,6 +1,6 @@
 # Spec: GPU Lab
 
-Status: in review. Pull request #25 implements issue #22. This file stays the decision record. Do not rewrite the present path.
+Status: implemented. Pull request #25 is merged. This file stays the decision record. Do not rewrite the present path.
 Seam: a `psyfi.scene_snapshot.v1` document in, the present pipeline out.
 
 ## Problem Statement

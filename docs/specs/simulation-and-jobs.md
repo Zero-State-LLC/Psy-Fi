@@ -1,6 +1,6 @@
 # Spec: Simulation and jobs
 
-Status: in review. Pull request #27 implements issue #18. This file stays the decision record. Do not rebuild the field solver.
+Status: implemented. Pull request #27 is merged. This file stays the decision record. Do not rebuild the field solver.
 Seam: `run_simulation` and the in-process job store, observed through the simulate and job routes.
 
 ## Problem Statement

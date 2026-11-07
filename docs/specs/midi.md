@@ -1,6 +1,6 @@
 # Spec: MIDI
 
-Status: in review. Pull request #26 implements issue #21. This file stays the decision record. Do not add a login.
+Status: implemented. Pull request #26 is merged. This file stays the decision record. Do not add a login.
 Seam: the MIDI HTTP routes and `MIDIService`.
 
 ## Problem Statement
