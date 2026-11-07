@@ -18,7 +18,7 @@ Board: [`PRODUCTION_READINESS.md`](PRODUCTION_READINESS.md)
 | ParameterField + SafetyPass | Done |
 | Image-seed pipeline | Done + anchors + planner notes |
 | Export-journey | Done + anchors + planner |
-| PWA + service worker | Done (root `/sw.js`, shell cache **v41**) |
+| PWA + service worker | Done (root `/sw.js`, shell cache **v42**, field plate) |
 | GPU Lab route | Done |
 | Docker production | Done |
 
