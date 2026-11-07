@@ -17,13 +17,7 @@ PsyFi includes comprehensive MIDI integration for real-time control of conscious
 
 ## Installation
 
-MIDI support requires additional dependencies:
-
-```bash
-pip install mido python-rtmidi
-```
-
-Or reinstall PsyFi with MIDI support:
+`mido` and `python-rtmidi` are part of the default install. They are listed in the package dependencies, not as an extra. Installing Psy-Fi installs them:
 
 ```bash
 pip install -e .
@@ -510,11 +504,12 @@ Metrics are mapped to CC:
 
 ### "MIDI not available" Error
 
-**Cause**: `mido` or `python-rtmidi` not installed
+**Cause**: the process is running from an environment that does not have the default dependencies. `mido` and `python-rtmidi` are not an optional extra.
 
-**Solution**:
+**Solution**: reinstall Psy-Fi so those default dependencies are present.
+
 ```bash
-pip install mido python-rtmidi
+pip install -e .
 ```
 
 ### "No MIDI devices found"
