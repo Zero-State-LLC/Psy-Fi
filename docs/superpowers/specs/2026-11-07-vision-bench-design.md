@@ -3,15 +3,15 @@
 Status: design. Not implemented.
 Date: 2026-11-07.
 
-The first bench scores one configured vision model against the field recommendation. GPU frame time is a later spec. The two benches do not share a score, a corpus, or a pass rule.
+The first bench measures how far one configured vision model's reading would move the consciousness field. GPU frame time is a later spec. The two benches do not share a score, a corpus, or a pass rule.
 
 ## Problem
 
-The only vision-model call asks for one short paragraph and stores it as a caption. That caption stays off the field, the seed, and the presets. The field recommendation is `recommend_mode_intensity` in `psyfi_core/visualization/image_seed.py`. It reads pixel features and returns a mode and an intensity. Nothing measures whether a vision model returns that same recommendation.
+Psy-Fi is a deterministic consciousness-field instrument. Python keeps the simulation truth. A phenomenology catalog becomes visual overlays. An immutable `ParameterField` is what the browser draws. The only vision-model call asks for one short paragraph and stores it as a caption. That caption stays off the field, the seed, and the presets. A mode label and an intensity gap do not say whether the picture would change. The useful distance is inside the field the instrument already builds.
 
 ## Goal
 
-A person runs a local capture against the configured model. The capture stores the model's mode, intensity, and latency for four fixed images. CI rebuilds those images, runs the analyzer, and scores the stored answers. CI does not call the provider. A disagreement is a bench result. It does not fail the build.
+A person runs a local capture against the configured model. The capture stores the model's mode, intensity, and latency for four fixed images. CI rebuilds those images, runs the analyzer, and scores the stored answers in field units. The headline number is how far the model's mode and intensity move a `ParameterField` from the oracle's. Beside it, the report says whether that mode would offer a different catalog experience. CI does not call the provider. A large displacement is a bench result. It does not fail the build.
 
 ## Non-goals
 
@@ -26,12 +26,12 @@ A person runs a local capture against the configured model. The capture stores t
 
 ## Locked decisions
 
-- The score is mode and intensity. The analyzer keeps the five pixel numbers.
-- Caller inputs are frozen at mode `open` and intensity `0.7`.
+- The headline metric is `field_displacement`. `catalog_switch` is printed beside it. `mode_match` is a diagnostic.
+- The analyzer keeps the five pixel numbers. Image hints stay out of the distance, because they come from those pixels and do not depend on the model.
+- Caller inputs are frozen at mode `open` and intensity `0.7`. Substance is frozen at `lsd`. Field seed is frozen at `42`. Phase is frozen at `0.4`.
 - The corpus is four generated images, one per branch of the recommendation.
 - The bench prompt names the four modes in perceptual language. It does not include the numeric cutoffs or the intensity formula.
-- Mode match is exact. Intensity match is a gap of at most `0.05`, owned by the scorer.
-- The receipt stores raw answers. The scorer recomputes the match.
+- The receipt stores raw answers. The scorer recomputes the field metrics. There is no intensity band.
 - One configured model per run. Comparing models means a second capture and a diff of the two receipts.
 - The public worker and the frozen API stay as they are.
 
@@ -42,7 +42,7 @@ A person runs a local capture against the configured model. The capture stores t
 | Corpus | Builds the four images. | Nothing. |
 | Oracle | Runs the existing analyzer and recommendation. | Corpus. `analyze_features`, `recommend_mode_intensity`. |
 | Capture | Posts once per image and writes the receipt. | Corpus, oracle lock, the existing one-shot client. |
-| Scorer | Compares a receipt to a fresh oracle run and prints a report. | Corpus, oracle, receipt. No network. |
+| Scorer | Builds two fields and two catalog ranks, then prints a report. | Corpus, oracle, `map_parameters`, the committed catalog, receipt. No network. |
 
 The corpus, the parse rules, the receipt check, and the scorer live in `psyfi_core/visualization/vision_bench.py`. The capture script is `scripts/capture_vision_bench.py`. It calls the existing one-shot client and the existing `nvidia/` model-id check. It does not call `read_image`.
 
@@ -113,20 +113,57 @@ Schema `psyfi.vision_bench_capture.v1`:
 
 `date` is the UTC calendar date of the capture. `model` is the environment id from that run. The example uses `nvidia/bench-test`, which is the fake id for tests, not a production model. `latency_ms` is the elapsed time of that one post, including a failed post. A failed row uses `"mode": null`, `"intensity": null`, `"parse_ok": false`, and `"error": "provider"` or `"parse"`, plus `"detail"`. The example shows one row and uses sample numbers. A real receipt has four rows, in the order above, and those numbers are not a measured run. The file has no match field.
 
+## Metrics
+
+Both fields come from `map_parameters` with the same frozen inputs: substance `lsd`, seed `42`, `experience` omitted, `phase_t` `0.4`, quality tier `balanced`, no modulators, and no image hints. One field uses the oracle mode and intensity. The other uses the model's mode and intensity. `field_displacement` is the sum of absolute differences across every key in `parameters`, rounded to 4 decimals. A key present on only one field counts as its full absolute value. Palette, engines, safety, and the field hash are not in the sum.
+
+On the same image the scorer also builds three reference fields. Each keeps the oracle intensity and replaces the mode with one of the other three modes. Those three sums are `mode_steps`. `within_mode_step` is true when `field_displacement` is less than or equal to the smallest of those three steps. The label is derived from `MODE_BIASES` and the intensity scale. It is not a budget written by hand. The same mode and the same intensity produce a displacement of `0`.
+
+Catalog candidates are `load_catalog().list(substance="lsd", valence="positive")`, with no mode filter. That is the positive LSD list the instrument already uses. `rank_experiences` runs twice on the analyzer's features: once with the oracle mode, once with the model's mode. `catalog_switch` is true when the top `experience_id` differs. The report includes both ids and both scores. The scorer accepts an injected candidate list so a test can force a switch. The printed report and the committed-receipt test use the real catalog.
+
+A failed parse leaves `field_displacement`, `mode_steps`, and the catalog ids null, and sets `within_mode_step` and `catalog_switch` to false. These numbers describe the visual field. They are not a clinical score.
+
 ## Report
 
-The scorer prints schema `psyfi.vision_bench_report.v1`. The report is not committed.
+The scorer prints schema `psyfi.vision_bench_report.v1`. The report is not committed. The first number on each row is `field_displacement`, then `within_mode_step`, then `catalog_switch`. `mode_match` is exact string equality and is printed as a diagnostic.
 
-For each image the report carries the oracle mode and intensity, the model's mode and intensity, `mode_match`, `intensity_match`, and `ok`. `mode_match` is exact string equality. `intensity_match` is an absolute gap of at most `0.05`. `ok` requires both, and requires `parse_ok`. The report is ok only when all four rows are ok. Latency is copied through and has no pass rule.
+```json
+{
+  "schema": "psyfi.vision_bench_report.v1",
+  "complete": true,
+  "images": [
+    {
+      "id": "void",
+      "oracle_mode": "void",
+      "oracle_intensity": 0.5,
+      "model_mode": "power",
+      "model_intensity": 0.5,
+      "mode_match": false,
+      "field_displacement": 1.0,
+      "mode_steps": { "open": 0.4, "attractor": 0.8, "power": 1.0 },
+      "within_mode_step": false,
+      "catalog_oracle_id": "example-oracle",
+      "catalog_oracle_score": 1.0,
+      "catalog_model_id": "example-model",
+      "catalog_model_score": 1.0,
+      "catalog_switch": true,
+      "latency_ms": 0,
+      "parse_ok": true
+    }
+  ]
+}
+```
 
-The scorer raises on a machinery failure: the schema is wrong, an id is missing or repeated, the caller mode is not `open`, the caller intensity is not `0.7` within `1e-9`, or `prompt_revision` is not `1`. A disagreement and a well-formed `parse_ok: false` do not raise.
+The numbers and the example ids are the shape, not a measured run. A real row uses the oracle's intensity and catalog ids from the committed catalog. `complete` is true only when all four rows parsed and each has a numeric `field_displacement`. `complete` does not mean the model agreed with the field.
+
+The scorer raises on a machinery failure: the schema is wrong, an id is missing or repeated, the caller mode is not `open`, the caller intensity is not `0.7` within `1e-9`, `prompt_revision` is not `1`, or the real catalog's positive LSD list is empty. A large displacement, a catalog switch, and a well-formed `parse_ok: false` do not raise.
 
 ## Testing
 
 CI runs the new tests in the existing pytest job. No test opens a socket. No workflow is added.
 
 1. Oracle lock. The four constructions return the four modes at caller `open` / `0.7`, and each image sits on the correct side of the cutoffs. Intensities are not pinned.
-2. Scorer, using an in-memory receipt whose model id is `nvidia/bench-test`. A gap of `0.05` matches. A gap of `0.06` does not. A wrong mode does not match. `parse_ok: false` does not match and does not raise. The report is ok only when all four rows match. Bad schema, wrong caller, wrong revision, or a missing id raises.
+2. Scorer, using an in-memory receipt whose model id is `nvidia/bench-test`. Identical mode and intensity yield `field_displacement` `0` and `within_mode_step` true. A different mode at the oracle intensity yields a displacement equal to that mode's `mode_steps` entry. An injected two-recipe catalog, one `mode_default` of `void` and one of `attractor`, yields `catalog_switch` true when the modes differ and false when they match. `parse_ok: false` leaves the distances null and does not raise. `complete` is true only when all four rows parsed. Bad schema, wrong caller, wrong revision, a missing id, or an empty positive LSD catalog raises.
 3. Parse. A JSON object with one of the four names and a number from `0` to `1` is accepted. Prose, a percent, an unknown mode, `Open`, and a missing field are `parse_ok: false`. A provider detail that contains the key is redacted.
 4. Preflight. An unset key, a non-`nvidia/` id, an `@cf/` id, or a broken oracle lock performs no post and does not replace an existing receipt.
 5. Write. A finished run replaces the receipt, keeps failed rows, and exits non-zero when a row failed. A clean run exits zero. The file has no key, no image bytes, and no match field.
@@ -137,4 +174,4 @@ No shell change, no service-worker bump, and no GPU fixture.
 
 ## Success
 
-A person with `NVIDIA_API_KEY` and `NVIDIA_VISION_MODEL` set can run `scripts/capture_vision_bench.py` and read a receipt plus a printed report. CI is green with no key and with no receipt file. A later change to the recommendation formula fails the oracle-lock test until the corpus or the formula is updated on purpose.
+A person with `NVIDIA_API_KEY` and `NVIDIA_VISION_MODEL` set can run `scripts/capture_vision_bench.py` and read, for each image, how far the field moved and whether the offered experience changed. The mode step beside that distance is the ruler. CI is green with no key and with no receipt file. A later change to the recommendation formula fails the oracle-lock test until the corpus or the formula is updated on purpose.
