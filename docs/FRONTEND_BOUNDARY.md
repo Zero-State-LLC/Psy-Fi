@@ -1,6 +1,6 @@
 # Frontend Boundary Decision
 
-Status: updated 2026-07-25  
+Status: updated 2026-11-07  
 Related: [`PLANS.md`](../PLANS.md), [`docs/WEB_ARCHITECTURE.md`](WEB_ARCHITECTURE.md), [`docs/rendering/`](rendering/)
 
 ## Decision
@@ -30,8 +30,14 @@ Both consume the same authoritative `/api/v1` contracts. The GPU client’s sole
 - Icons: `docs/icons` served at `/assets/icons`
 - Contracts: Pydantic models, OpenAPI, freeze pack under `docs/contracts/frozen/`
 
-## Deferred / out of scope for GPU G0
+## Present path
+
+The `/gpu/` picture is the TypeScript post graph in `packages/psyfi-gpu-renderer` (`PresentPipeline`). When the tier enables a pass, the order is ambient occlusion, reflections, bloom, depth of field, motion blur, chroma, temporal accumulate, then grade. A safety attenuator follows on every presented frame. Neutral collapses that stack: exposure and the attenuator drop, bloom strength is zero, and temporal history is off.
+
+The WGSL files under `packages/psyfi-gpu-renderer/shaders/` are not that path. Bloom, ambient occlusion, reflections, and the material shaders are stubs that return black. The safety-clamp sketch is not the attenuator `PresentPipeline` runs. Do not implement those files as the picture.
+
+## Still deferred
 
 - Hard cutover of `/` to the GPU shell
-- Full Ultra post stack (SSAO/SSR/TAA/…) production passes — scaffolded in render graph + WGSL stubs
 - Native iOS (`docs/IOS_MIGRATION.md`)
+- Hardware Ultra capture. This document does not record measured frame times.

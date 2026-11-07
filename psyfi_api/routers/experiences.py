@@ -9,6 +9,7 @@ from fastapi import APIRouter, File, Form, HTTPException, Query, UploadFile
 from pydantic import BaseModel, Field
 
 from psyfi_api.image_reading import VisionConfigError, VisionProviderError, read_image
+from psyfi_api.jobs import SimulationSlotUnavailable, simulation_slot
 from psyfi_api.simulation_service import PresetNotFoundError, run_simulation
 from psyfi_core.experiences.catalog import get_default_catalog, load_catalog
 from psyfi_core.experiences.parameter_mapper import (
@@ -793,13 +794,16 @@ async def scene_snapshot(body: SceneSnapshotRequest) -> dict[str, Any]:
     simulation = None
     if body.include_simulation:
         try:
-            sim = run_simulation(
-                width=body.width,
-                height=body.height,
-                steps=body.sim_steps,
-                seed=body.seed,
-                preset=substance if substance != "baseline" else None,
-            )
+            with simulation_slot():
+                sim = run_simulation(
+                    width=body.width,
+                    height=body.height,
+                    steps=body.sim_steps,
+                    seed=body.seed,
+                    preset=substance if substance != "baseline" else None,
+                )
+        except SimulationSlotUnavailable as exc:
+            raise HTTPException(status_code=429, detail=str(exc)) from exc
         except PresetNotFoundError as exc:
             raise HTTPException(status_code=404, detail=str(exc)) from exc
         simulation = {

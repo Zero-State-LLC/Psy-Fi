@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import threading
 import uuid
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Literal
-
 
 JobStatus = Literal["queued", "running", "completed", "cancelled", "failed"]
 
@@ -15,6 +15,7 @@ JobStatus = Literal["queued", "running", "completed", "cancelled", "failed"]
 MAX_JOBS_RETAINED = 64
 MAX_CONCURRENT_JOBS = 4
 TERMINAL_STATUSES = frozenset({"completed", "cancelled", "failed"})
+CONCURRENT_LIMIT_DETAIL = "Too many concurrent simulation jobs; retry after one completes"
 
 
 def _utc_now() -> str:
@@ -123,3 +124,18 @@ class JobStore:
 
 
 job_store = JobStore()
+
+
+class SimulationSlotUnavailable(Exception):
+    """The shared four simulation slots are already held."""
+
+
+@contextmanager
+def simulation_slot():
+    """Take one shared simulation slot and release it when the run ends."""
+    if not job_store.try_acquire_slot():
+        raise SimulationSlotUnavailable(CONCURRENT_LIMIT_DETAIL)
+    try:
+        yield
+    finally:
+        job_store.release_slot()
