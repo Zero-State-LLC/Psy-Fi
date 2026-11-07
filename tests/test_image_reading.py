@@ -142,6 +142,8 @@ def test_reading_sends_resized_source_and_returns_inferred_caption() -> None:
     decoded = Image.open(io.BytesIO(base64.b64decode(raw)))
     assert max(decoded.size) <= 384
     assert stub.bodies[0]["model"] == "nvidia/test-vl"
+    assert stub.bodies[0]["reasoning_effort"] == "none"
+    assert stub.bodies[0]["max_tokens"] == 256
 
 
 def test_reading_rejects_missing_key_without_calling_out() -> None:
