@@ -358,3 +358,25 @@ def test_broken_oracle_lock_does_not_post(tmp_path: Path, monkeypatch: pytest.Mo
     assert calls["n"] == 0
     assert dest.read_text(encoding="utf-8") == "keep"
     assert text.startswith("oracle lock failed:")
+
+
+from psyfi_api.main import app
+
+
+def test_caption_route_is_unchanged() -> None:
+    assert BENCH_PROMPT != CAPTION_PROMPT
+    # FastAPI 0.162 keeps included routers as _IncludedRouter; app.routes
+    # does not flatten them. OpenAPI paths are the public route list.
+    paths = [getattr(route, "path", "") for route in app.routes]
+    paths.extend(app.openapi()["paths"])
+    assert "/api/v1/visualize/image-reading" in paths
+    assert not any("vision-bench" in path or "vision_bench" in path for path in paths)
+
+
+def test_committed_receipt_is_optional() -> None:
+    path = Path("fixtures/qa/vision_bench_capture.v1.json")
+    if not path.exists():
+        pytest.skip("no measured vision bench receipt")
+    receipt = json.loads(path.read_text(encoding="utf-8"))
+    report = score_receipt(receipt)
+    assert report["schema"] == REPORT_SCHEMA
