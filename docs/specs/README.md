@@ -33,7 +33,7 @@ The issue tracker is GitHub. `docs/agents/` maps the Pocock roles. A spec whose 
 
 ## Tickets
 
-The kanban is Zero-State-LLC project **#16**. New issues land in **Todo**. Columns are Backlog, Todo, Ready, In Progress, In review, and Done.
+The kanban is Zero-State-LLC project **#7**: https://github.com/orgs/Zero-State-LLC/projects/7. New issues land in **Todo**. Columns are Backlog, Todo, Ready, In Progress, In review, and Done. Project **#16** is the Noema board.
 
 | Issue | Column | Spec |
 | --- | --- | --- |

@@ -2,7 +2,7 @@
 
 Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all operations.
 
-The kanban is Zero-State-LLC project **#16**. `.github/workflows/project-collaboration.yml` adds a new issue or pull request and sets Status to **Todo**. Move agent-ready gaps to **Ready**, open pull requests to **In review**, and merged or closed work to **Done**. **Backlog** is for open work that is not ready for an agent.
+The kanban is Zero-State-LLC project **#7** (titled Psy-Fi): https://github.com/orgs/Zero-State-LLC/projects/7. Project **#16** is the Noema board. `.github/workflows/project-collaboration.yml` adds a new issue or pull request and sets Status to **Todo**. Move agent-ready gaps to **Ready**, open pull requests to **In review**, and merged or closed work to **Done**. **Backlog** is for open work that is not ready for an agent.
 
 ## Conventions
 
