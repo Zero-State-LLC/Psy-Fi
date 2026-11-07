@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import threading
 import time
 
@@ -146,4 +147,50 @@ def test_full_slots_refuse_sync_snapshot_and_job() -> None:
     with TestClient(app) as client:
         opened = client.post("/api/v1/visualize/scene-snapshot", json=_SNAP)
     assert opened.status_code == 200
+    assert _free_slots() == 4
+
+
+def test_cancelled_sync_request_keeps_the_slot_until_the_worker_exits() -> None:
+    entered = threading.Event()
+    release = threading.Event()
+    saw_cancel: list[bool] = []
+
+    def blocking(**kwargs):
+        entered.set()
+        assert release.wait(timeout=5)
+        saw_cancel.append(bool(kwargs["should_cancel"]()))
+        return run_simulation(**kwargs)
+
+    import psyfi_api.routers.simulate as simulate_router
+
+    original = simulate_router.run_simulation
+    simulate_router.run_simulation = blocking  # type: ignore[assignment]
+    try:
+
+        async def _cancel_while_running() -> None:
+            transport = ASGITransport(app=app)
+            async with AsyncClient(transport=transport, base_url="http://test") as client:
+                task = asyncio.create_task(client.post("/api/v1/simulate/", json=_SIM))
+                for _ in range(100):
+                    if entered.is_set():
+                        break
+                    await asyncio.sleep(0.02)
+                assert entered.is_set()
+                assert _free_slots() == 3
+                task.cancel()
+                with contextlib.suppress(asyncio.CancelledError):
+                    await task
+                assert _free_slots() == 3
+                release.set()
+                for _ in range(100):
+                    if saw_cancel:
+                        break
+                    await asyncio.sleep(0.02)
+
+        anyio.run(_cancel_while_running)
+    finally:
+        simulate_router.run_simulation = original
+        release.set()
+
+    assert saw_cancel == [True]
     assert _free_slots() == 4

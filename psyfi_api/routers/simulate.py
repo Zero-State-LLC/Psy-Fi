@@ -8,7 +8,7 @@ import contextlib
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
 
-from psyfi_api.jobs import SimulationSlotUnavailable, simulation_slot
+from psyfi_api.jobs import CONCURRENT_LIMIT_DETAIL, SimulationSlotUnavailable, job_store
 from psyfi_api.simulation_service import PresetNotFoundError, run_simulation
 from psyfi_api.telemetry import telemetry
 from psyfi_core.abx_core.errors import SimulationCancelled
@@ -19,6 +19,14 @@ from psyfi_core.models.session import (
 )
 
 router = APIRouter(prefix="/simulate", tags=["simulation"])
+
+
+def _run_sync_simulation(**kwargs):
+    """Run one simulation and release its slot only after that call returns."""
+    try:
+        return run_simulation(**kwargs)
+    finally:
+        job_store.release_slot()
 
 
 class SimulateRequest(BaseModel):
@@ -73,16 +81,17 @@ async def simulate_consciousness_field(
     watch_task = asyncio.create_task(_watch_disconnect())
     try:
         try:
-            with simulation_slot():
-                payload = await asyncio.to_thread(
-                    run_simulation,
-                    width=body.width,
-                    height=body.height,
-                    steps=body.steps,
-                    seed=body.seed,
-                    preset=body.preset,
-                    should_cancel=lambda: cancelled["flag"],
-                )
+            if not job_store.try_acquire_slot():
+                raise SimulationSlotUnavailable(CONCURRENT_LIMIT_DETAIL)
+            payload = await asyncio.to_thread(
+                _run_sync_simulation,
+                width=body.width,
+                height=body.height,
+                steps=body.steps,
+                seed=body.seed,
+                preset=body.preset,
+                should_cancel=lambda: cancelled["flag"],
+            )
         except SimulationSlotUnavailable as exc:
             raise HTTPException(status_code=429, detail=str(exc)) from exc
     except PresetNotFoundError as exc:
@@ -91,6 +100,7 @@ async def simulate_consciousness_field(
         telemetry.emit("simulate_cancelled", mode="sync", reason=str(exc))
         raise HTTPException(status_code=409, detail=str(exc)) from exc
     finally:
+        cancelled["flag"] = True
         cancelled["done"] = True
         watch_task.cancel()
         with contextlib.suppress(asyncio.CancelledError):
