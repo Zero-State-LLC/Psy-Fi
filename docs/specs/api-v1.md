@@ -1,6 +1,6 @@
 # Spec: Public API v1
 
-Status: in review. Pull request #30 implements issue #20. This file stays the decision record. Do not reopen the freeze.
+Status: implemented. Pull request #30 is merged. This file stays the decision record. Do not reopen the freeze.
 Seam: the FastAPI app, its OpenAPI path set, and the freeze pack.
 
 ## Problem Statement

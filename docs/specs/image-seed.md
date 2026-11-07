@@ -1,6 +1,6 @@
 # Spec: Image seed
 
-Status: in review. Pull request #28 implements issue #17. This file stays the decision record. Do not rebuild Pass 1.
+Status: implemented. Pull request #28 is merged. This file stays the decision record. Do not rebuild Pass 1.
 Seam: `build_image_seed` and the image-seed HTTP routes.
 
 ## Problem Statement

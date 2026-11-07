@@ -1,6 +1,6 @@
 # Spec: Deploy and CI
 
-Status: in review. Pull request #31 implements issue #16. This file stays the decision record. Do not rebuild the image from scratch.
+Status: implemented. Pull request #31 is merged. This file stays the decision record. Do not rebuild the image from scratch.
 Seam: the image, Compose, and the CI workflow. This seam is files and commands, not the simulation API.
 
 ## Problem Statement
@@ -54,4 +54,4 @@ Prior art today is the production-readiness document tests. They are the wrong s
 
 ## Further Notes
 
-This spec states the ship the README and the readiness board claim. Pull request #31 is the file change: CI runs the tests, the license metadata matches the license file, and the local image is what Compose runs. The audit of `main` stays the record of the old tree. Do not edit the readiness board's required phrases just to make the document tests pass.
+This spec states the ship the README and the readiness board claim. Pull request #31 is merged: CI runs the tests, the license metadata matches the license file, and the local image is what Compose runs. The audit file stays the record of the tree it names. Do not edit the readiness board's required phrases just to make the document tests pass.

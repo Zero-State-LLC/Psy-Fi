@@ -63,4 +63,4 @@ npx wrangler deploy
 
 Set `NVIDIA_VISION_MODEL` in the Worker configuration before the deploy you want to serve traffic. Leave it unset and the reading route stays closed.
 
-Pull request #31 deletes the foreign Noema workflow. This host document does not.
+The foreign Noema workflow is not in this repo. This host document does not deploy another product.
