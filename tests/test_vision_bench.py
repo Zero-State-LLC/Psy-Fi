@@ -143,3 +143,77 @@ def test_positive_lsd_catalog_is_loaded() -> None:
     recipes = positive_lsd_candidates()
     assert recipes
     assert all(recipe.get("id") for recipe in recipes)
+
+
+import pytest
+
+from psyfi_core.visualization.vision_bench import CAPTURE_SCHEMA, REPORT_SCHEMA, score_receipt
+
+
+def _receipt(images: list[dict]) -> dict:
+    return {
+        "schema": CAPTURE_SCHEMA,
+        "date": "2026-11-07",
+        "model": "nvidia/bench-test",
+        "caller": {"mode": "open", "intensity": 0.7},
+        "prompt_revision": 1,
+        "images": images,
+    }
+
+
+def _matched_images() -> list[dict]:
+    rows = []
+    for image_id, rgba in build_corpus():
+        oracle = oracle_for(rgba)
+        rows.append(
+            {
+                "id": image_id,
+                "mode": oracle["mode"],
+                "intensity": oracle["intensity"],
+                "latency_ms": 3,
+                "parse_ok": True,
+            }
+        )
+    return rows
+
+
+def test_score_receipt_reports_zero_distance_for_the_oracle() -> None:
+    report = score_receipt(_receipt(_matched_images()), candidates=_pair())
+    assert report["schema"] == REPORT_SCHEMA
+    assert report["complete"] is True
+    assert [row["id"] for row in report["images"]] == list(IMAGE_ORDER)
+    assert all(row["field_displacement"] == 0.0 for row in report["images"])
+    assert all(row["mode_match"] is True for row in report["images"])
+
+
+def test_score_receipt_keeps_a_parse_failure_as_a_result() -> None:
+    rows = _matched_images()
+    rows[0] = {
+        "id": "void",
+        "mode": None,
+        "intensity": None,
+        "latency_ms": 3,
+        "parse_ok": False,
+        "error": "parse",
+    }
+    report = score_receipt(_receipt(rows), candidates=_pair())
+    assert report["complete"] is False
+    failed = report["images"][0]
+    assert failed["field_displacement"] is None
+    assert failed["catalog_oracle_id"] is None
+    assert failed["within_mode_step"] is False
+    assert failed["catalog_switch"] is False
+
+
+def test_score_receipt_rejects_machinery_errors() -> None:
+    good = _receipt(_matched_images())
+    bad_schema = dict(good, schema="other")
+    bad_caller = dict(good, caller={"mode": "void", "intensity": 0.7})
+    bad_intensity = dict(good, caller={"mode": "open", "intensity": 0.7 + 1e-6})
+    bad_revision = dict(good, prompt_revision=2)
+    bad_ids = _receipt(list(reversed(_matched_images())))
+    for receipt in (bad_schema, bad_caller, bad_intensity, bad_revision, bad_ids):
+        with pytest.raises(ValueError):
+            score_receipt(receipt, candidates=_pair())
+    with pytest.raises(ValueError, match="positive LSD catalog is empty"):
+        score_receipt(good, candidates=[])

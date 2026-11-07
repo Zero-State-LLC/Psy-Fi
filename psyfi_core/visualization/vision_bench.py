@@ -171,3 +171,100 @@ def catalog_metrics(
         "catalog_model_score": model_score,
         "catalog_switch": oracle_id != model_id,
     }
+
+
+CAPTURE_SCHEMA = "psyfi.vision_bench_capture.v1"
+REPORT_SCHEMA = "psyfi.vision_bench_report.v1"
+
+
+def _require(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
+
+
+def _check_receipt(receipt: dict) -> list[dict]:
+    _require(isinstance(receipt, dict), "receipt must be an object")
+    _require(receipt.get("schema") == CAPTURE_SCHEMA, "bad schema")
+    caller = receipt.get("caller")
+    _require(isinstance(caller, dict), "bad caller")
+    _require(caller.get("mode") == CALLER_MODE, "bad caller mode")
+    intensity = caller.get("intensity")
+    _require(isinstance(intensity, (int, float)) and not isinstance(intensity, bool), "bad caller intensity")
+    _require(abs(float(intensity) - CALLER_INTENSITY) < 1e-9, "bad caller intensity")
+    _require(receipt.get("prompt_revision") == PROMPT_REVISION, "bad prompt revision")
+    images = receipt.get("images")
+    _require(isinstance(images, list), "bad images")
+    ids = [row.get("id") for row in images if isinstance(row, dict)]
+    _require(ids == list(IMAGE_ORDER), "bad image ids")
+    return images
+
+
+def _blank_failure(image_id: str, latency_ms: object) -> dict[str, object]:
+    return {
+        "id": image_id,
+        "oracle_mode": None,
+        "oracle_intensity": None,
+        "model_mode": None,
+        "model_intensity": None,
+        "mode_match": False,
+        "field_displacement": None,
+        "mode_steps": None,
+        "within_mode_step": False,
+        "catalog_oracle_id": None,
+        "catalog_oracle_score": None,
+        "catalog_model_id": None,
+        "catalog_model_score": None,
+        "catalog_switch": False,
+        "latency_ms": latency_ms,
+        "parse_ok": False,
+    }
+
+
+def score_receipt(receipt: dict, *, candidates: list[dict] | None = None) -> dict:
+    images = _check_receipt(receipt)
+    if candidates is None:
+        candidates = positive_lsd_candidates()
+    elif len(candidates) == 0:
+        raise ValueError("positive LSD catalog is empty")
+    by_id = dict(build_corpus())
+    rows: list[dict[str, object]] = []
+    for row in images:
+        image_id = str(row["id"])
+        latency_ms = row.get("latency_ms")
+        if row.get("parse_ok") is not True:
+            rows.append(_blank_failure(image_id, latency_ms))
+            continue
+        oracle = oracle_for(by_id[image_id])
+        model_mode = str(row["mode"])
+        model_intensity = float(row["intensity"])
+        distance = field_metrics(
+            str(oracle["mode"]),
+            float(oracle["intensity"]),
+            model_mode,
+            model_intensity,
+        )
+        catalog = catalog_metrics(
+            analyze_features(by_id[image_id]),
+            str(oracle["mode"]),
+            model_mode,
+            candidates,
+        )
+        rows.append(
+            {
+                "id": image_id,
+                "oracle_mode": oracle["mode"],
+                "oracle_intensity": oracle["intensity"],
+                "model_mode": model_mode,
+                "model_intensity": model_intensity,
+                "mode_match": model_mode == oracle["mode"],
+                "latency_ms": latency_ms,
+                "parse_ok": True,
+                **distance,
+                **catalog,
+            }
+        )
+    complete = all(
+        row["parse_ok"] is True and isinstance(row["field_displacement"], float)
+        for row in rows
+    )
+    return {"schema": REPORT_SCHEMA, "complete": complete, "images": rows}
