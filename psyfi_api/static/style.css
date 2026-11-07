@@ -1,6 +1,7 @@
 /* Hallmark · genre: atmospheric · macrostructure: Photographic→Workbench · design-system: design.md · designed-as-app · nav: N9 · footer: Ft2
-   Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V4 · honest: pass · chrome: pass · tokens: pass · responsive: pass · icons: pass
-   PsyFi shell — calm chrome, expressive field. Field viewport leads; chrome stays quiet. */
+   Hallmark · tone: technical · audience: field operators · use: enter the workspace
+   Hallmark · pre-emit critique: P5 H4 E4 S5 R5 V4 · honest: pass · chrome: pass · tokens: pass · responsive: pass · icons: pass
+   PsyFi shell — type on the field plate, then a workbench. The field viewport leads; chrome stays quiet. */
 
 :root {
     /* Surfaces — tinted void, not pure black (maps design.md --color-paper*) */
@@ -160,9 +161,19 @@ body {
 
 /* ===== Header / brand ===== */
 
+.masthead {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--pf-border-subtle);
+    min-width: 0;
+}
+
 .header {
     text-align: left;
-    margin-bottom: var(--space-5);
+    margin-bottom: 0;
     display: grid;
     gap: var(--space-3);
 }
@@ -251,13 +262,15 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-1) var(--space-4);
-    margin: 0 0 var(--space-5);
+    margin: 0;
+    min-width: 0;
+    max-width: 100%;
     padding:
         0
         env(safe-area-inset-right)
-        var(--space-3)
+        0
         env(safe-area-inset-left);
-    border-bottom: 1px solid var(--pf-border-subtle);
+    border-bottom: 0;
 }
 
 .workspace-nav .nav-link {
@@ -537,14 +550,18 @@ body {
     justify-content: center;
     gap: var(--space-2);
     min-height: 44px;
-    transition: background var(--duration-fast) ease, border-color var(--duration-fast) ease, opacity var(--duration-fast) ease;
+    transition: background var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out), opacity var(--duration-fast) var(--ease-out);
     box-shadow: none;
 }
 
-.btn-primary:hover,
+.btn-primary:hover {
+    background: color-mix(in srgb, var(--pf-cyan) 85%, var(--pf-text-main));
+}
+
 .btn-primary:focus-visible {
     background: color-mix(in srgb, var(--pf-cyan) 85%, var(--pf-text-main));
-    outline: none;
+    outline: 2px solid var(--pf-text-main);
+    outline-offset: 3px;
 }
 
 .btn-primary:active {
@@ -576,18 +593,23 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
+    transition: border-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
 }
 
 .btn-secondary:hover,
-.btn-secondary:focus-visible,
 .session-actions .btn-secondary:hover,
+.file-import:hover {
+    border-color: var(--color-signal-primary);
+    color: var(--color-text-primary);
+}
+
+.btn-secondary:focus-visible,
 .session-actions .btn-secondary:focus-visible,
-.file-import:hover,
 .file-import:focus-within {
     border-color: var(--color-signal-primary);
     color: var(--color-text-primary);
-    outline: none;
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
 }
 
 .btn-secondary:active,
@@ -615,10 +637,14 @@ body {
     font-family: var(--pf-font-main);
 }
 
-.btn-danger:hover,
+.btn-danger:hover {
+    border-color: var(--pf-danger);
+}
+
 .btn-danger:focus-visible {
     border-color: var(--pf-danger);
-    outline: none;
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
 }
 
 .btn-danger:active {
@@ -1051,7 +1077,12 @@ body.launch-ready #appShell {
 .launch-hero-veil {
     position: absolute;
     inset: 0;
-    background: color-mix(in srgb, var(--pf-bg-0) 55%, transparent);
+    background: linear-gradient(
+        to top,
+        color-mix(in srgb, var(--pf-bg-0) 88%, transparent) 0%,
+        color-mix(in srgb, var(--pf-bg-0) 36%, transparent) 42%,
+        color-mix(in srgb, var(--pf-bg-0) 12%, transparent) 100%
+    );
 }
 
 .launch-grain {
@@ -1065,15 +1096,15 @@ body.launch-ready #appShell {
 .launch-splash-inner {
     position: relative;
     align-self: flex-end;
-    width: min(28rem, 100%);
-    max-height: min(78vh, 40rem);
+    width: min(40rem, 100%);
+    max-height: min(86vh, 44rem);
     overflow: auto;
     margin-right: auto;
-    margin-bottom: clamp(1rem, 4vh, 2.5rem);
-    padding: clamp(1.25rem, 3vw, 1.75rem);
-    border: 1px solid var(--pf-border-subtle);
-    border-radius: var(--radius-md);
-    background: color-mix(in srgb, var(--pf-bg-1) 88%, transparent);
+    margin-bottom: clamp(1rem, 6vh, 3rem);
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
     box-shadow: none;
     animation: launch-panel-in var(--duration-standard) var(--ease-out) both;
 }
@@ -1102,13 +1133,15 @@ body.launch-ready #appShell {
 
 .launch-brand {
     font-family: var(--pf-font-display);
-    font-size: clamp(2.4rem, 6vw, 3.4rem);
+    font-size: clamp(3rem, 8vw, 4.5rem);
     font-weight: 600;
     font-style: normal;
     letter-spacing: -0.03em;
     color: var(--pf-text-main);
     margin: 0;
-    line-height: 1.05;
+    line-height: 0.95;
+    overflow-wrap: anywhere;
+    min-width: 0;
 }
 
 .launch-title {
@@ -1214,7 +1247,7 @@ body.launch-ready #appShell {
     min-height: 44px;
     outline: 2px solid transparent;
     outline-offset: 2px;
-    transition: border-color var(--duration-fast) ease, background var(--duration-fast) ease;
+    transition: border-color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
 }
 
 .launch-resolution select:hover {
@@ -1335,10 +1368,19 @@ body.launch-ready #appShell {
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
+    padding: 0 0 var(--space-3);
+    border-bottom: 0;
 }
 
 .experience-panel {
-    border-color: var(--pf-border-strong);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    overflow: visible;
+}
+
+.experience-panel .panel-body {
+    padding: 0;
 }
 
 .experience-body {
@@ -1351,9 +1393,9 @@ body.launch-ready #appShell {
     position: relative;
     background: var(--pf-bg-0);
     border: 1px solid var(--pf-border-subtle);
-    border-radius: var(--radius-md);
+    border-radius: 0;
     overflow: hidden;
-    min-height: clamp(360px, 56vh, 640px);
+    min-height: clamp(420px, 70vh, 820px);
 }
 
 .experience-advanced {
@@ -1697,6 +1739,20 @@ body.launch-ready #appShell {
 }
 
 /* ===== Responsive ===== */
+
+@media (min-width: 960px) {
+    .masthead {
+        grid-template-columns: minmax(0, 1.2fr) auto;
+        align-items: end;
+        column-gap: var(--space-6);
+    }
+
+    .masthead .workspace-nav {
+        justify-content: flex-end;
+        align-self: end;
+        max-width: 42rem;
+    }
+}
 
 @media (max-width: 900px) {
     .experience-body {

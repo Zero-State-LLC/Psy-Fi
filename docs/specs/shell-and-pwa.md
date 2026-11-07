@@ -29,7 +29,8 @@ The operator needs the instrument in a browser, including a phone, without a sto
 ## Implementation Decisions
 
 - The worker script is served from `/sw.js` with `Service-Worker-Allowed: /` and `Cache-Control: no-cache`.
-- Cache name is the shell version recorded in the worker. Current decision: `psyfi-shell-v41`.
+- Cache name is the shell version recorded in the worker. Current decision: `psyfi-shell-v42`.
+- The entry fold is the field photograph. The wordmark and Enter sit on the plate. The device scan starts closed. Then the workbench.
 - GPU documents are not precached as shell HTML.
 - The shell is zero-build. It is the Jinja page plus static scripts.
 - Design tokens stay the existing `--pf-*` set. The lab mirrors neutrals. It does not replace them.
