@@ -40,7 +40,8 @@ Full board: [`docs/PRODUCTION_READINESS.md`](docs/PRODUCTION_READINESS.md).
 | ---------------------------------- | ---------------- | --------------------------------------------------------------------------- |
 | `/api/v1` contracts                | **hard\_frozen** | `psyfi-api-v1-hard-2026-07-25`                                              |
 | CI (pytest + hallmark + GPU build) | **green path**   | `.github/workflows/ci.yml`                                                  |
-| Docker deploy                      | **ready**        | Compose + urllib healthcheck + GPU `dist/` bake                             |
+| Docker deploy                      | **ready**        | Local seam: Compose + urllib healthcheck + GPU `dist/` bake                 |
+| Cloudflare production host         | **specified**    | Worker + Container · [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md) · not deployed by CI |
 | Live Experience + safety           | **ready**        | Neutral View · ParameterField authority                                     |
 | GPU platform G0–G3                 | **ready**        | `/gpu/` present · compute · TAA · premium post                              |
 | GPU G4 cutover ship gates          | **ready**        | assets · parity · goldens · [`G4_CUTOVER.md`](docs/rendering/G4_CUTOVER.md) |
@@ -171,13 +172,16 @@ Canonical browser API is **`/api/v1`** (**hard-frozen**). Legacy `/api/*` and `/
 | [`docs/PWA_GPU_ROUTE.md`](docs/PWA_GPU_ROUTE.md)                                   | `/gpu/` separate-route decision |
 | [`docs/SIMULATED_ULTRA_QA.md`](docs/SIMULATED_ULTRA_QA.md)                         | Simulated P0 Ultra desktop QA   |
 | [`docs/NVIDIA_GPU.md`](docs/NVIDIA_GPU.md)                                         | NVIDIA drivers + Compose        |
+| [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md)                                         | Production Worker + vision call |
 | [`PLANS.md`](PLANS.md)                                                             | Product phases + gates          |
 | [`docs/VISUAL_EXPERIENCES.md`](docs/VISUAL_EXPERIENCES.md)                         | Live Experience guide           |
 | [`docs/rendering/README.md`](docs/rendering/README.md)                             | WebGPU platform docs            |
-| [`DEPLOYMENT.md`](DEPLOYMENT.md)                                                   | Docker deploy guide             |
+| [`DEPLOYMENT.md`](DEPLOYMENT.md)                                                   | Local Compose and production host |
 | [`docs/PHENOMENOLOGY_PIPELINE.md`](docs/PHENOMENOLOGY_PIPELINE.md)                 | Scraped → overlays              |
 | [`docs/BROWSER_CAPABILITY_MATRIX.md`](docs/BROWSER_CAPABILITY_MATRIX.md)           | Device QA (filled)              |
 | [`docs/contracts/frozen/API_V1_FREEZE.md`](docs/contracts/frozen/API_V1_FREEZE.md) | Contract hard freeze            |
+| [`docs/VERSIONING.md`](docs/VERSIONING.md)                                         | Product version and git tags    |
+| [`CHANGELOG.md`](CHANGELOG.md)                                                     | Retroactive version notes       |
 | [`docs/PHASE4_USABILITY.md`](docs/PHASE4_USABILITY.md)                             | Usability checklist             |
 | [`MOBILE_PWA_GUIDE.md`](MOBILE_PWA_GUIDE.md)                                       | PWA guidance                    |
 | [`docs/IOS_MIGRATION.md`](docs/IOS_MIGRATION.md)                                   | Deferred native notes           |

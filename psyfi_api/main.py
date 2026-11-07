@@ -12,8 +12,11 @@ from fastapi.templating import Jinja2Templates
 from psyfi_api.routers import experiences, jobs, midi, presets, simulate, telemetry
 from psyfi_api.telemetry import TELEMETRY_ENABLED
 from psyfi_core.models.substance_preset import get_registry
+from psyfi_core.version import __version__
 
-# Initialize FastAPI app
+# Initialize FastAPI app.
+# version= is the frozen OpenAPI document version (info.version).
+# The running build reports __version__ on /health, /ready, and /api/info.
 app = FastAPI(
     title="PsyFi API",
     description="Consciousness field simulation engine with ABX-Core v1.3",
@@ -95,7 +98,7 @@ async def health() -> dict[str, str]:
     return {
         "status": "healthy",
         "service": "psyfi-api",
-        "version": app.version,
+        "version": __version__,
         "abx_core": "1.3",
         "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
     }
@@ -135,7 +138,7 @@ async def ready() -> dict:
     return {
         "status": "ready" if ready_ok else "not_ready",
         "service": "psyfi-api",
-        "version": app.version,
+        "version": __version__,
         "api_version": "v1",
         "checks": checks,
         "gpu_shell_mounted": bool(
@@ -152,7 +155,7 @@ async def api_info() -> dict[str, str | bool]:
     """API info endpoint (legacy + v1)."""
     return {
         "message": "PsyFi API - Consciousness Field Simulation",
-        "version": "0.1.0",
+        "version": __version__,
         "api_version": "v1",
         "abx_core": "1.3",
         "telemetry_server_enabled": TELEMETRY_ENABLED,

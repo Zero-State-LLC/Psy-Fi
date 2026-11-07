@@ -1,0 +1,36 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "psyfi",
+  "main": "workers/psyfi/src/index.mjs",
+  "compatibility_date": "2026-11-07",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "containers": [
+    {
+      "class_name": "PsyfiApi",
+      "scheduling_policy": "durable_object",
+      "images": {
+        "base": {
+          "dockerfile": "./Dockerfile"
+        }
+      }
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "PSYFI_API",
+        "class_name": "PsyfiApi"
+      }
+    ]
+  },
+  "exports": {
+    "PsyfiApi": {
+      "type": "durable-object",
+      "storage": "sqlite"
+    }
+  }
+}

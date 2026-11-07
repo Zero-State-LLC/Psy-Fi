@@ -3842,6 +3842,18 @@
         ]
       }
     },
+    "/api/v1/visualize/image-reading": {
+      "post": {
+        "summary": "Inferred caption of an uploaded image. Does not change the master seed.",
+        "operationId": "image_reading_api_v1_visualize_image_reading_post",
+        "tags": ["experiences"],
+        "responses": {
+          "200": {
+            "description": "Inferred image reading"
+          }
+        }
+      }
+    },
     "/api/v1/visualize/image-seed": {
       "post": {
         "description": "Pass 1: experience-condition an uploaded image \u2192 master_seed + live hints.",

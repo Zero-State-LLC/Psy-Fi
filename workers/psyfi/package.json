@@ -1,0 +1,5 @@
+{
+  "name": "psyfi-worker",
+  "private": true,
+  "type": "module"
+}

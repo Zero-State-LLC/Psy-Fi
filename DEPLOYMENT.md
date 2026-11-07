@@ -1,11 +1,13 @@
 # PsyFi Deployment Guide
 
-**Supported model: Docker** (single container or Compose). Azure App Service and Render one-click paths have been removed.
+Production is one Cloudflare Worker: static shell and GPU lab, Python API in the existing image behind that Worker. The steps are in [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md). CI does not deploy.
+
+Docker Compose is the local seam. Azure, Render, and the Pages workflow are not ship paths.
 
 ## Local development
 
 ```bash
-git clone https://github.com/scrimshawlife-ctrl/Psy-Fi.git
+git clone https://github.com/Zero-State-LLC/Psy-Fi.git
 cd Psy-Fi
 pip install -e ".[dev]"
 cp .env.example .env
@@ -13,7 +15,7 @@ python3 scripts/run_dev_server.py
 # → http://localhost:8000
 ```
 
-## Docker (recommended)
+## Docker (local seam)
 
 ### Single container
 
@@ -40,13 +42,15 @@ Helper script (local / Docker / Compose / production checks):
 ./scripts/deploy.sh
 ```
 
-## Production checklist
+## Local image checklist
 
-1. Copy `.env.example` → `.env` and set non-default secrets.
+1. Copy `.env.example` → `.env`. Leave the vision model unset. Do not put an API key in `.env`.
 2. `python3 -m pytest tests/ -q`
 3. `docker build -t psyfi:latest .`
-4. Run behind TLS (Compose `production` profile with `nginx.conf`, or your own reverse proxy).
+4. For a local TLS proxy, use the Compose `production` profile with `nginx.conf`, or your own reverse proxy. That profile is not the Cloudflare host.
 5. Confirm `/health` and `/ready`.
+
+The production hostname is the Worker in [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md).
 
 ## GPU shell in the image
 

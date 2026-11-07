@@ -73,6 +73,8 @@ Optional **I4 planner** (`planner_notes`, `include_planner`) folds a determinist
 - `recommend_top_n` (1–12, default 5) fills `recommended_alternatives[]` (rank · id · title · mode_default · score).
 - Response schema: `psyfi.image_seed.v1` (recommended may include `experience_id` / `experience_title` / `experience_score`)
 
+`POST /api/v1/visualize/image-reading` → inferred caption beside the seed (`psyfi.image_reading.v1`, authority `INFERRED`). The shell shows it as text. It does not change `master_seed`, hints, recipe score, planner text, the journey sidecar, or the preset registry. An unset model returns 503 and opens no socket. See [`CLOUDFLARE.md`](CLOUDFLARE.md).
+
 `POST /api/v1/visualize/image-seed-journey` → one-shot seed + timeline + `psyfi.export_journey.v1` prompt package (no stills; rejects `recommend_only`; accepts `planner_notes`)
 
 `POST /api/v1/visualize/export-journey` → `psyfi.export_journey.v1` (optional `planner` / `spatiotemporal_anchors`)

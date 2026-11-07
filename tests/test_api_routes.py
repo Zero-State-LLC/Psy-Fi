@@ -3,6 +3,7 @@
 from fastapi.testclient import TestClient
 
 from psyfi_api.main import app
+from psyfi_core.version import __version__
 
 
 def test_root_route_renders_index_template():
@@ -22,7 +23,7 @@ def test_health_route_reports_status_payload():
     payload = response.json()
     assert payload["status"] == "healthy"
     assert payload["service"] == "psyfi-api"
-    assert payload["version"] == "0.1.0"
+    assert payload["version"] == __version__
     assert "timestamp" in payload
 
 
@@ -34,7 +35,7 @@ def test_api_info_route_reports_version():
     assert response.status_code == 200
     payload = response.json()
     assert payload["message"].startswith("PsyFi API")
-    assert payload["version"] == "0.1.0"
+    assert payload["version"] == __version__
     assert payload["api_version"] == "v1"
     assert v1.status_code == 200
     assert v1.json()["api_version"] == "v1"

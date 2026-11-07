@@ -1848,6 +1848,35 @@ document.addEventListener('DOMContentLoaded', () => {
         syncModulators();
     });
 
+    async function readImageFromUpload() {
+        const file = imageSeedFile?.files && imageSeedFile.files[0];
+        const imageReading = document.getElementById('imageReading');
+        if (!file) {
+            if (imageReading) imageReading.textContent = 'Choose an image first';
+            return;
+        }
+        if (imageReading) imageReading.textContent = 'Reading…';
+        try {
+            const form = new FormData();
+            form.append('file', file);
+            const res = await fetch('/api/v1/visualize/image-reading', { method: 'POST', body: form });
+            const body = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                const detail = body.detail;
+                const msg = (detail && (detail.detail || detail.error)) || res.statusText || 'Image reading failed';
+                if (imageReading) imageReading.textContent = String(msg);
+                return;
+            }
+            const caption = String(body.caption || '').slice(0, 2000);
+            const disclaimer = String(body.disclaimer || '').slice(0, 500);
+            if (imageReading) {
+                imageReading.textContent = disclaimer ? caption + '\n' + disclaimer : caption;
+            }
+        } catch (err) {
+            if (imageReading) imageReading.textContent = err.message || String(err);
+        }
+    }
+
     async function suggestImageSeedFormula() {
         const file = imageSeedFile?.files && imageSeedFile.files[0];
         if (!file) {
@@ -1923,6 +1952,8 @@ document.addEventListener('DOMContentLoaded', () => {
             syncSourcePlaneUI();
         }
         syncModulators();
+        const imageReading = document.getElementById('imageReading');
+        if (imageReading) imageReading.textContent = '';
         setImageSeedUiState('idle', 'Image seed cleared');
     });
 
@@ -2079,6 +2110,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     imageSeedSuggestBtn?.addEventListener('click', () => {
         suggestImageSeedFormula();
+    });
+    document.getElementById('imageReadingBtn')?.addEventListener('click', () => {
+        readImageFromUpload();
     });
     imageSeedApplyBtn?.addEventListener('click', () => {
         conditionImageAndLoad();
