@@ -7,6 +7,11 @@ Stage-0 proto-specs for this repo. Canonical pack:
 Non-trivial work starts **intent → spec/plan → code**.
 Do not skip to code. Do not invent product work in this folder.
 
+Accepted product decisions are recorded in [`docs/specs/`](../docs/specs/)
+(Matt Pocock spec shape). [`docs/specs/AUDIT.md`](../docs/specs/AUDIT.md)
+is the runtime check. Boards under `docs/` stay as evidence. They are
+not a second spec.
+
 ## Files
 
 | File | Role |

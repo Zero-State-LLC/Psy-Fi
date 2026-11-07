@@ -14,6 +14,8 @@ Related: [`PRODUCTION_READINESS.md`](PRODUCTION_READINESS.md), [`rendering/GPU_P
 
 PsyFi does **not** require CUDA toolkit install for the web product. Your **RTX 5060** (and other RTX 30/40/50 cards) accelerates the `/gpu/` WebGPU present path inside the browser.
 
+The image-reading caption is a different NVIDIA path. It is a server call to the operator's NVIDIA API, configured in [`CLOUDFLARE.md`](CLOUDFLARE.md). It does not run CUDA in the API container, and it does not use Workers AI. `docker compose --profile nvidia` only reserves a host GPU for the local image.
+
 ## Host setup (Windows + RTX 5060)
 
 1. Install current **NVIDIA Game Ready** or **Studio** drivers (50-series supported).
