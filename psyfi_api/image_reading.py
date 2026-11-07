@@ -113,7 +113,12 @@ def _post_once(base: str, key: str, body: dict) -> dict:
     )
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
-            raw = response.read()
+            try:
+                raw = response.read()
+            except TimeoutError as exc:
+                raise VisionProviderError("vision provider unreachable") from exc
+    except TimeoutError as exc:
+        raise VisionProviderError("vision provider unreachable") from exc
     except urllib.error.HTTPError as exc:
         message = _safe_provider_message(exc.read(500), key)
         raise VisionProviderError(message) from exc

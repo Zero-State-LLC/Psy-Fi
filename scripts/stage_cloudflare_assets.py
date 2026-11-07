@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC = ROOT / "public"
+GPU_DIST = ROOT / "packages" / "psyfi-gpu-renderer" / "dist"
 
 
 def _copy_tree(src: Path, dest: Path) -> None:
@@ -16,6 +17,11 @@ def _copy_tree(src: Path, dest: Path) -> None:
 
 
 def stage() -> Path:
+    gpu_index = GPU_DIST / "index.html"
+    if not gpu_index.is_file():
+        raise FileNotFoundError(
+            "GPU lab build is missing. Run npm run gpu:build before staging."
+        )
     if PUBLIC.exists():
         shutil.rmtree(PUBLIC)
     PUBLIC.mkdir()
@@ -26,9 +32,7 @@ def stage() -> Path:
     icons = ROOT / "docs" / "icons"
     if icons.is_dir():
         _copy_tree(icons, PUBLIC / "assets" / "icons")
-    gpu = ROOT / "packages" / "psyfi-gpu-renderer" / "dist"
-    if (gpu / "index.html").is_file():
-        _copy_tree(gpu, PUBLIC / "gpu")
+    _copy_tree(GPU_DIST, PUBLIC / "gpu")
     return PUBLIC
 
 

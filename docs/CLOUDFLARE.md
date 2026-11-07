@@ -19,9 +19,10 @@ The Container class is `PsyfiApi`. It listens on port 8000, uses instance type `
 
 ## Assets
 
-The shell template has no template variables. Stage it with the static files, the service worker, icons, and the GPU `dist/` when that build exists:
+The shell template has no template variables. Stage it with the static files, the service worker, icons, and the built GPU lab. `/gpu/` is a static asset, so the container image cannot stand in for a missing build. Staging stops when `packages/psyfi-gpu-renderer/dist/index.html` is absent.
 
 ```bash
+npm run gpu:build
 python3 scripts/stage_cloudflare_assets.py
 ```
 
@@ -54,6 +55,7 @@ The shell button is **Read image**. It writes the caption with `textContent` and
 From a checkout that includes `wrangler.jsonc`, with Wrangler 4.136 or newer and a Docker engine for the local container build:
 
 ```bash
+npm run gpu:build
 python3 scripts/stage_cloudflare_assets.py
 npx wrangler secret put NVIDIA_API_KEY
 npx wrangler deploy

@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import asyncio
 import base64
 import io
 import json
 import os
 import threading
+import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -171,6 +173,72 @@ def test_reading_rejects_oversize_before_calling_out() -> None:
         stub.close()
     assert response.status_code == 400
     assert stub.bodies == []
+
+
+def test_reading_runs_off_the_event_loop() -> None:
+    import psyfi_api.routers.experiences as experiences
+
+    seen: dict[str, bool] = {}
+
+    def blocked(data: bytes) -> dict[str, str]:
+        del data
+        try:
+            asyncio.get_running_loop()
+            seen["on_loop"] = True
+        except RuntimeError:
+            seen["on_loop"] = False
+        return {
+            "schema_version": "psyfi.image_reading.v1",
+            "authority": "INFERRED",
+            "caption": "held",
+            "model": "nvidia/test-vl",
+            "disclaimer": "Not medical advice.",
+        }
+
+    original = experiences.read_image
+    experiences.read_image = blocked  # type: ignore[assignment]
+    try:
+        response = client.post(
+            "/api/v1/visualize/image-reading",
+            files={"file": ("tiny.png", _png_bytes(), "image/png")},
+        )
+    finally:
+        experiences.read_image = original
+    assert response.status_code == 200
+    assert seen["on_loop"] is False
+
+
+def test_body_timeout_is_a_provider_error(monkeypatch) -> None:
+    from psyfi_api.image_reading import VisionProviderError, read_image
+
+    class _Response:
+        def read(self) -> bytes:
+            raise TimeoutError("timed out")
+
+        def __enter__(self) -> "_Response":
+            return self
+
+        def __exit__(self, *args) -> bool:
+            return False
+
+    monkeypatch.setattr(urllib.request, "urlopen", lambda *args, **kwargs: _Response())
+    saved = {key: os.environ.get(key) for key in ("NVIDIA_API_KEY", "NVIDIA_VISION_MODEL", "NVIDIA_API_BASE")}
+    os.environ["NVIDIA_API_KEY"] = "test-key"
+    os.environ["NVIDIA_VISION_MODEL"] = "nvidia/test-vl"
+    os.environ["NVIDIA_API_BASE"] = "http://127.0.0.1:9"
+    try:
+        try:
+            read_image(_png_bytes())
+        except VisionProviderError as exc:
+            assert exc.detail == "vision provider unreachable"
+        else:
+            raise AssertionError("body timeout escaped the provider error")
+    finally:
+        for key, value in saved.items():
+            if value is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = value
 
 
 def test_provider_error_is_not_retried() -> None:

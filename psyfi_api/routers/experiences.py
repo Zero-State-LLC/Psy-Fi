@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 from typing import Any, Literal
 
 from fastapi import APIRouter, File, Form, HTTPException, Query, UploadFile
@@ -570,7 +571,7 @@ async def image_reading(file: UploadFile = File(...)) -> dict[str, Any]:
     """Inferred caption of the upload. Does not condition the field or write presets."""
     data = await file.read()
     try:
-        return read_image(data)
+        return await asyncio.to_thread(read_image, data)
     except VisionConfigError as exc:
         raise HTTPException(
             status_code=503,

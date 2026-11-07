@@ -35,18 +35,43 @@ def test_wrangler_names_the_container_and_does_not_pin_a_model() -> None:
     assert _NEEDLE not in worker
 
 
-def test_staged_shell_is_the_template_without_a_key() -> None:
-    from scripts.stage_cloudflare_assets import stage
+def test_staged_shell_is_the_template_without_a_key(tmp_path) -> None:
+    from scripts import stage_cloudflare_assets as staging
 
-    public = stage()
+    gpu = tmp_path / "dist"
+    gpu.mkdir()
+    (gpu / "index.html").write_text("<!doctype html><title>gpu lab</title>", encoding="utf-8")
+    original = staging.GPU_DIST
+    staging.GPU_DIST = gpu
+    try:
+        public = staging.stage()
+    finally:
+        staging.GPU_DIST = original
     html = (public / "index.html").read_text(encoding="utf-8")
     source = (ROOT / "psyfi_api" / "templates" / "index.html").read_text(encoding="utf-8")
     assert html == source
     assert 'id="imageReading"' in html
     assert (public / "static" / "app.js").is_file()
     assert (public / "sw.js").is_file()
+    assert (public / "gpu" / "index.html").read_text(encoding="utf-8").startswith("<!doctype html>")
     blob = "\n".join(path.read_text(encoding="utf-8", errors="replace") for path in public.rglob("*") if path.is_file())
     assert _NEEDLE not in blob
+
+
+def test_stage_refuses_a_missing_gpu_build(tmp_path) -> None:
+    from scripts import stage_cloudflare_assets as staging
+
+    original = staging.GPU_DIST
+    staging.GPU_DIST = tmp_path / "absent"
+    try:
+        try:
+            staging.stage()
+        except FileNotFoundError as exc:
+            assert "npm run gpu:build" in str(exc)
+        else:
+            raise AssertionError("stage accepted a missing GPU build")
+    finally:
+        staging.GPU_DIST = original
 
 
 def test_product_surfaces_have_no_nvidia_key_value() -> None:
