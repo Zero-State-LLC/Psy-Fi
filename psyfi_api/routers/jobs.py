@@ -8,7 +8,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
-from psyfi_api.jobs import job_store
+from psyfi_api.jobs import CONCURRENT_LIMIT_DETAIL, job_store
 from psyfi_api.simulation_service import PresetNotFoundError, run_simulation
 from psyfi_api.telemetry import telemetry
 from psyfi_core.abx_core.errors import SimulationCancelled
@@ -93,7 +93,7 @@ async def create_simulate_job(body: JobCreateRequest) -> JobSummary:
     if not job_store.try_acquire_slot():
         raise HTTPException(
             status_code=429,
-            detail="Too many concurrent simulation jobs; retry after one completes",
+            detail=CONCURRENT_LIMIT_DETAIL,
         )
     try:
         job = job_store.create(body.model_dump())

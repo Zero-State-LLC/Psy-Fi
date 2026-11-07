@@ -8,6 +8,7 @@ import contextlib
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
 
+from psyfi_api.jobs import SimulationSlotUnavailable, simulation_slot
 from psyfi_api.simulation_service import PresetNotFoundError, run_simulation
 from psyfi_api.telemetry import telemetry
 from psyfi_core.abx_core.errors import SimulationCancelled
@@ -71,15 +72,19 @@ async def simulate_consciousness_field(
 
     watch_task = asyncio.create_task(_watch_disconnect())
     try:
-        payload = await asyncio.to_thread(
-            run_simulation,
-            width=body.width,
-            height=body.height,
-            steps=body.steps,
-            seed=body.seed,
-            preset=body.preset,
-            should_cancel=lambda: cancelled["flag"],
-        )
+        try:
+            with simulation_slot():
+                payload = await asyncio.to_thread(
+                    run_simulation,
+                    width=body.width,
+                    height=body.height,
+                    steps=body.steps,
+                    seed=body.seed,
+                    preset=body.preset,
+                    should_cancel=lambda: cancelled["flag"],
+                )
+        except SimulationSlotUnavailable as exc:
+            raise HTTPException(status_code=429, detail=str(exc)) from exc
     except PresetNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except SimulationCancelled as exc:
