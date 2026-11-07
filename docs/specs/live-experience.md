@@ -1,6 +1,6 @@
 # Spec: Live Experience
 
-Status: in review. Pull request #29 implements issue #19. This file stays the decision record. Do not rebuild the field.
+Status: implemented. Pull request #29 is merged. This file stays the decision record. Do not rebuild the field.
 Seam: parameter mapping, timelines, planner, and journey builders, then the shell that renders their output.
 
 ## Problem Statement

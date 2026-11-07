@@ -1,6 +1,6 @@
 # Spec: Cloudflare and NVIDIA
 
-Status: implemented on `spec/cloudflare-nvidia-image-reading`. GitHub issue #23 is closed. [Pull request #24](https://github.com/Zero-State-LLC/Psy-Fi/pull/24) is not merged, so `main` does not serve this route until that pull request lands. The provider call runs off the event loop, a body timeout is one provider error, and staging refuses a missing GPU lab build. Do not pin a model id or commit a key.
+Status: implemented. Pull request #24 is merged. The provider call runs off the event loop, a body timeout is one provider error, and staging refuses a missing GPU lab build. Do not pin a model id or commit a key.
 Seam: the public Worker, static assets, the Python Container, and the NVIDIA API call.
 
 ## Problem Statement
