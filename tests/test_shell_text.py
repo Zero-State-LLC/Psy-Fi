@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import shutil
 import subprocess
 from pathlib import Path
+
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 APP = ROOT / "psyfi_api" / "static" / "app.js"
@@ -31,6 +34,7 @@ def test_operator_strings_are_not_interpolated_into_html() -> None:
     assert "parameters INFERRED" in player
 
 
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not available")
 def test_text_helper_keeps_a_tag_as_characters() -> None:
     app = APP.read_text(encoding="utf-8")
     helper = app.split("function textEl", 1)[1].split("async function refreshHistory", 1)[0]
