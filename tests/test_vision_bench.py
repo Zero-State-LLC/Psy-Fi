@@ -43,3 +43,28 @@ def test_oracle_lock_matches_the_four_branches() -> None:
             assert not attractor and not void and not power
         assert oracle_for(rgba)["mode"] == ORACLE_MODE[image_id]
     assert_oracle_lock()
+
+
+from psyfi_core.visualization.vision_bench import parse_model_content
+
+
+def test_parse_accepts_only_the_four_modes_and_a_unit_interval() -> None:
+    good = parse_model_content('{"mode": "void", "intensity": 0.5, "extra": 1}')
+    assert good == {"parse_ok": True, "mode": "void", "intensity": 0.5, "error": None}
+    assert parse_model_content('{"mode": "open", "intensity": 0}')["parse_ok"] is True
+    assert parse_model_content('{"mode": "power", "intensity": 1}')["parse_ok"] is True
+    for text in (
+        "a dim field",
+        "```json\n{\"mode\": \"void\", \"intensity\": 0.5}\n```",
+        '{"mode": "Open", "intensity": 0.5}',
+        '{"mode": "void", "intensity": "0.5"}',
+        '{"mode": "void", "intensity": 70}',
+        '{"mode": "void"}',
+        '{"intensity": 0.5}',
+        "[]",
+    ):
+        parsed = parse_model_content(text)
+        assert parsed["parse_ok"] is False
+        assert parsed["mode"] is None
+        assert parsed["intensity"] is None
+        assert parsed["error"] == "parse"

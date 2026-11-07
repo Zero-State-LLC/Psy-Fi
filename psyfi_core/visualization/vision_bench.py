@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+
 import numpy as np
 
 from psyfi_core.visualization.image_seed import analyze_features, recommend_mode_intensity
@@ -62,3 +64,29 @@ def assert_oracle_lock() -> None:
         got = str(oracle_for(rgba)["mode"])
         if got != ORACLE_MODE[image_id]:
             raise RuntimeError(f"oracle lock failed: {image_id} returned {got}")
+
+
+MODES = frozenset({"attractor", "void", "power", "open"})
+
+
+def _parse_failure() -> dict[str, object]:
+    return {"parse_ok": False, "mode": None, "intensity": None, "error": "parse"}
+
+
+def parse_model_content(text: str) -> dict[str, object]:
+    try:
+        doc = json.loads(text)
+    except json.JSONDecodeError:
+        return _parse_failure()
+    if not isinstance(doc, dict):
+        return _parse_failure()
+    mode = doc.get("mode")
+    intensity = doc.get("intensity")
+    if not isinstance(mode, str) or mode not in MODES:
+        return _parse_failure()
+    if isinstance(intensity, bool) or not isinstance(intensity, (int, float)):
+        return _parse_failure()
+    value = float(intensity)
+    if value < 0.0 or value > 1.0:
+        return _parse_failure()
+    return {"parse_ok": True, "mode": mode, "intensity": value, "error": None}
