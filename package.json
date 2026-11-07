@@ -4,7 +4,7 @@
   "description": "PsyFi monorepo root — Python package in pyproject.toml; GPU renderer in packages/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/scrimshawlife-ctrl/Psy-Fi.git"
+    "url": "git+https://github.com/Zero-State-LLC/Psy-Fi.git"
   },
   "workspaces": [
     "packages/psyfi-gpu-renderer"
