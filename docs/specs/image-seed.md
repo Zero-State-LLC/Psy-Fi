@@ -1,6 +1,6 @@
 # Spec: Image seed
 
-Status: ready-for-agent. The remaining gap is GitHub issue #17. This file stays the decision record. Do not rebuild Pass 1.
+Status: in review. Pull request #28 implements issue #17. This file stays the decision record. Do not rebuild Pass 1.
 Seam: `build_image_seed` and the image-seed HTTP routes.
 
 ## Problem Statement
@@ -54,4 +54,4 @@ Prior art: image-seed determinism, multipart and JSON route tests, recommend-onl
 
 ## Further Notes
 
-The byte ceiling is applied after the multipart body is read into memory, and the full decoded raster is allocated before the 384-edge resize. The decision is a bounded upload and a bounded working image. The audit records the gap between that decision and the current order of operations.
+An empty upload, a body over 12 MB, and a raster over 25 million pixels are rejected before the float32 working image. Raw bytes stay in memory. An image under that cap is still decoded and then resized to a 384 edge. Pull request #28. The audit of `main` records the older order.

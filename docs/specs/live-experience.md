@@ -1,6 +1,6 @@
 # Spec: Live Experience
 
-Status: ready-for-agent. The remaining gap is GitHub issue #19. This file stays the decision record. Do not rebuild the field.
+Status: in review. Pull request #29 implements issue #19. This file stays the decision record. Do not rebuild the field.
 Seam: parameter mapping, timelines, planner, and journey builders, then the shell that renders their output.
 
 ## Problem Statement
@@ -42,6 +42,7 @@ An immutable ParameterField is the visual authority. Substance overlays and expe
 - Anchors are optional. Missing anchors leave the field unchanged.
 - The shell is the legacy page at `/`. The GPU lab is a separate route and is specified on its own.
 - IndexedDB holds history, comparisons, and journeys on the client. The server does not store them.
+- Planner text, operator notes, preset names, history fields, comparison titles, and journey titles are assigned as text. A note that contains a tag stays visible as characters. Pull request #29.
 
 ## Testing Decisions
 

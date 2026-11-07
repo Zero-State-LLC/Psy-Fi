@@ -46,7 +46,7 @@ The browser never sees the key. Do not put a key in Compose, the client bundle, 
 
 `POST /api/v1/visualize/image-reading` accepts a multipart `file`. The API rejects a body over 12 MB before decode, resizes the longest edge to 384, and sends one text part plus one `data:image/png` of that resized source. The response is `psyfi.image_reading.v1`: authority `INFERRED`, the caption, the model id, and a not-medical-advice sentence. The caption is not a master seed, a hint, a recipe score, planner text, or a preset write.
 
-A provider error is returned once, as HTTP 502 `vision_provider`. A missing key or a rejected model id is HTTP 503 `vision_unconfigured`.
+The provider call runs in a worker thread. The one API process can still answer other requests while NVIDIA responds. A provider error is returned once, as HTTP 502 `vision_provider`. A socket timeout, including a stall after the response headers, is that same error and is not retried. A missing key or a rejected model id is HTTP 503 `vision_unconfigured`.
 
 The shell button is **Read image**. It writes the caption with `textContent` and truncates it.
 
@@ -63,4 +63,4 @@ npx wrangler deploy
 
 Set `NVIDIA_VISION_MODEL` in the Worker configuration before the deploy you want to serve traffic. Leave it unset and the reading route stays closed.
 
-Do not delete the foreign Noema workflow in this step. That cleanup is issue #16.
+Pull request #31 deletes the foreign Noema workflow. This host document does not.

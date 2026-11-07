@@ -1,6 +1,6 @@
 # Spec: MIDI
 
-Status: ready-for-agent. The remaining gap is GitHub issue #21. This file stays the decision record. Do not add a login.
+Status: in review. Pull request #26 implements issue #21. This file stays the decision record. Do not add a login.
 Seam: the MIDI HTTP routes and `MIDIService`.
 
 ## Problem Statement
@@ -26,7 +26,7 @@ MIDI is off until a client starts it. One service instance can run. Input maps C
 
 ## Implementation Decisions
 
-- MIDI libraries are part of the default Python install, not an optional extra. The guide that says to install them separately is stale.
+- MIDI libraries are part of the default Python install, not an optional extra. Pull request #26 makes the guide say that. The package metadata already listed them as dependencies.
 - The service is one process-global instance.
 - Start opens the named ports, then marks the service running.
 - There is no login on these routes. The trust boundary is whoever can reach the port.

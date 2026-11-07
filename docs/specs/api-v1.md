@@ -1,6 +1,6 @@
 # Spec: Public API v1
 
-Status: ready-for-agent. The remaining gap is GitHub issue #20. This file stays the decision record. Do not reopen the freeze.
+Status: in review. Pull request #30 implements issue #20. This file stays the decision record. Do not reopen the freeze.
 Seam: the FastAPI app, its OpenAPI path set, and the freeze pack.
 
 ## Problem Statement
@@ -60,4 +60,4 @@ Prior art: OpenAPI path-set tests, frozen-contract tests, overlay golden tests, 
 
 `POST /api/v1/experiences/reload-catalog` exists as a dev helper and is not in the canonical route list. Additive routes are allowed. The inventory should name it or drop it.
 
-CORS is hardcoded to allow any origin with credentials. The sample environment file's origin list and `API_KEY_REQUIRED` are not read. That is outside the freeze text and is audited separately.
+CORS is hardcoded to allow any origin with credentials. The process does not read an origin allowlist, an API-key switch, a secret, or a rate limit. Pull request #30 removes those assignments from the sample environment file. The service still answers public routes with no key. That is outside the freeze text.

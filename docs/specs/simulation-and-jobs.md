@@ -1,6 +1,6 @@
 # Spec: Simulation and jobs
 
-Status: ready-for-agent. The remaining gap is GitHub issue #18. This file stays the decision record. Do not rebuild the field solver.
+Status: in review. Pull request #27 implements issue #18. This file stays the decision record. Do not rebuild the field solver.
 Seam: `run_simulation` and the in-process job store, observed through the simulate and job routes.
 
 ## Problem Statement
@@ -33,6 +33,7 @@ One Python runner serves the synchronous route and the job route. The same seed 
 - Grid bounds match the request model: width and height from 8 to 512, steps from 1 to 1000, seed in the 32-bit unsigned range. The config max grid is 1024×1024 and is checked as well.
 - Presets resolve by name or alias from the JSON registry. A missing preset is an error, not a fallback field.
 - The job store is single-process. Four worker slots. At most 64 retained jobs. Eviction drops oldest terminal jobs only.
+- Synchronous `POST /simulate/` and a scene snapshot that includes a simulation take one of those four slots. The slot stays held until that run returns, including when the request task is cancelled. A snapshot with simulation excluded does not take a slot. `field-frame` does not take a slot. Pull request #27.
 - Job ids are random, not sequential.
 - There is no job list route.
 - Cancel and finalize share one lock. If cancel is set, the stored status is cancelled and the result is cleared.
