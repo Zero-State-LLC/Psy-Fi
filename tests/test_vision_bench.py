@@ -217,3 +217,144 @@ def test_score_receipt_rejects_machinery_errors() -> None:
             score_receipt(receipt, candidates=_pair())
     with pytest.raises(ValueError, match="positive LSD catalog is empty"):
         score_receipt(good, candidates=[])
+
+
+import importlib.util
+import json
+from pathlib import Path
+
+from psyfi_api.image_reading import VisionProviderError, _PROMPT as CAPTION_PROMPT
+
+
+def _load_capture():
+    path = Path("scripts/capture_vision_bench.py")
+    spec = importlib.util.spec_from_file_location("capture_vision_bench", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_preflight_does_not_touch_an_existing_receipt(tmp_path: Path) -> None:
+    dest = tmp_path / "receipt.json"
+    dest.write_text('{"keep": true}', encoding="utf-8")
+    capture = _load_capture()
+    calls = {"n": 0}
+
+    def post(base: str, key: str, body: dict) -> dict:
+        calls["n"] += 1
+        return {}
+
+    code, text = capture.run_capture(
+        dest=dest,
+        environ={},
+        post=post,
+        today="2026-11-07",
+    )
+    assert code == 1
+    assert calls["n"] == 0
+    assert dest.read_text(encoding="utf-8") == '{"keep": true}'
+    assert "NVIDIA_API_KEY is unset" in text
+    assert REPORT_SCHEMA not in text
+    for model in ("@cf/nvidia/foo", "gemma"):
+        code, text = capture.run_capture(
+            dest=dest,
+            environ={"NVIDIA_API_KEY": "test-key-value", "NVIDIA_VISION_MODEL": model},
+            post=post,
+            today="2026-11-07",
+        )
+        assert code == 1
+        assert calls["n"] == 0
+        assert dest.read_text(encoding="utf-8") == '{"keep": true}'
+        assert "NVIDIA_VISION_MODEL must be an nvidia/ vision model id" in text
+
+
+def test_capture_writes_four_rows_and_redacts_the_key(tmp_path: Path) -> None:
+    dest = tmp_path / "receipt.json"
+    capture = _load_capture()
+    key = "test-key-value"
+    bodies: list[dict] = []
+
+    def post(base: str, key_arg: str, body: dict) -> dict:
+        bodies.append(body)
+        if len(bodies) == 2:
+            raise VisionProviderError(f"failure {key}\nsecond line")
+        image_id = IMAGE_ORDER[len(bodies) - 1]
+        mode = ORACLE_MODE[image_id]
+        return {"choices": [{"message": {"content": json.dumps({"mode": mode, "intensity": 0.5})}}]}
+
+    code, text = capture.run_capture(
+        dest=dest,
+        environ={"NVIDIA_API_KEY": key, "NVIDIA_VISION_MODEL": "nvidia/bench-test"},
+        post=post,
+        today="2026-11-07",
+    )
+    assert code == 1
+    assert len(bodies) == 4
+    assert all(body["max_tokens"] == 256 for body in bodies)
+    assert all(body["reasoning_effort"] == "none" for body in bodies)
+    assert all(body["messages"][0]["content"][0]["text"] == BENCH_PROMPT for body in bodies)
+    assert CAPTION_PROMPT not in json.dumps(bodies)
+    saved = json.loads(dest.read_text(encoding="utf-8"))
+    raw = dest.read_text(encoding="utf-8")
+    assert key not in raw
+    assert key not in text
+    assert "data:image" not in raw
+    assert "field_displacement" not in raw
+    assert [row["id"] for row in saved["images"]] == list(IMAGE_ORDER)
+    assert all(isinstance(row["latency_ms"], int) for row in saved["images"])
+    assert saved["images"][1]["parse_ok"] is False
+    assert saved["images"][1]["error"] == "provider"
+    assert "\n" not in saved["images"][1]["detail"]
+    assert len(saved["images"][1]["detail"]) <= 180
+    assert REPORT_SCHEMA in text
+
+
+def test_capture_exits_zero_when_every_row_parses(tmp_path: Path) -> None:
+    dest = tmp_path / "receipt.json"
+    capture = _load_capture()
+
+    def post(base: str, key_arg: str, body: dict) -> dict:
+        return {
+            "choices": [
+                {"message": {"content": json.dumps({"mode": "open", "intensity": 0.7})}}
+            ]
+        }
+
+    code, text = capture.run_capture(
+        dest=dest,
+        environ={"NVIDIA_API_KEY": "test-key-value", "NVIDIA_VISION_MODEL": "nvidia/bench-test"},
+        post=post,
+        today="2026-11-07",
+    )
+    assert code == 0
+    report = json.loads(text)
+    assert report["complete"] is True
+    assert report["schema"] == REPORT_SCHEMA
+
+
+def test_broken_oracle_lock_does_not_post(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    dest = tmp_path / "receipt.json"
+    dest.write_text("keep", encoding="utf-8")
+    capture = _load_capture()
+
+    def broken() -> None:
+        raise RuntimeError("oracle lock failed: void returned open")
+
+    monkeypatch.setattr(capture, "assert_oracle_lock", broken)
+    calls = {"n": 0}
+
+    def post(base: str, key: str, body: dict) -> dict:
+        calls["n"] += 1
+        return {}
+
+    code, text = capture.run_capture(
+        dest=dest,
+        environ={"NVIDIA_API_KEY": "test-key-value", "NVIDIA_VISION_MODEL": "nvidia/bench-test"},
+        post=post,
+        today="2026-11-07",
+    )
+    assert code == 1
+    assert calls["n"] == 0
+    assert dest.read_text(encoding="utf-8") == "keep"
+    assert text.startswith("oracle lock failed:")
