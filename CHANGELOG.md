@@ -1,13 +1,13 @@
 # Changelog
 
-Product versions follow [docs/VERSIONING.md](docs/VERSIONING.md). Tags `v0.1.0` through `v1.3.1` were applied on 2026-11-07 to commits already on `main`. Those trees still contain the string `0.1.0`. The notes below name the ship point, not every commit in between.
+Product versions follow [docs/VERSIONING.md](docs/VERSIONING.md). Tags `v0.1.0` through `v1.4.0` were applied on 2026-11-07 to commits already on `main`. The trees through `v1.3.1` still contain the string `0.1.0`. The notes below name the ship point, not every commit in between.
 
 ## 1.4.0 — 2026-11-07
 
 - Cloudflare Worker and Container host. Compose remains the local seam. CI does not deploy.
 - Inferred image reading at `POST /api/v1/visualize/image-reading`. It does not write presets or the catalog.
 - Product version is `psyfi_core/VERSION`. `/health`, `/ready`, `/api/info`, and the shell badge report it.
-- Tag `v1.4.0` when this commit is on `main`.
+- Tag `v1.4.0` on `84334ad`.
 
 ## 1.3.1 — 2026-10-23
 

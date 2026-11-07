@@ -19,7 +19,7 @@ The hard freeze id stays `psyfi-api-v1-hard-2026-07-25`. A breaking API change n
 
 Annotated tags were added on 2026-11-07. Each tag sits on a commit that is already on `main`. The source tree at those commits still contains the string `0.1.0`. The tag is the product version of that commit. History was not rewritten.
 
-`v1.4.0` is the version in this tree. Tag it when this commit is on `main`. A squash merge would need the tag on the squash commit.
+`v1.4.0` is the version in this tree. The tag is on `84334ad`, which is on `main`. Later merges did not change `psyfi_core/VERSION`.
 
 | Tag | Commit | Date | What landed since the previous tag |
 | --- | --- | --- | --- |
@@ -33,7 +33,7 @@ Annotated tags were added on 2026-11-07. Each tag sits on a commit that is alrea
 | `v1.2.0` | `2f0895b` | 2026-07-25 | Shell and safety passes, two-pass image seed |
 | `v1.3.0` | `077ac90` | 2026-08-04 | Instrument I1–I5 |
 | `v1.3.1` | `7ca678e` | 2026-10-23 | Org license, CodeQL, project automation, dependency bumps |
-| `v1.4.0` | this branch | 2026-11-07 | Cloudflare host, inferred image reading, this version file |
+| `v1.4.0` | `84334ad` | 2026-11-07 | Cloudflare host, inferred image reading, this version file |
 
 Dates are the committer dates. Commit subjects from 2025 and 2026 that mention a pull request number refer to the archived `scrimshawlife-ctrl/Psy-Fi` repository. Those numbers are not Zero-State-LLC issues.
 
