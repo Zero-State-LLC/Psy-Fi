@@ -2,7 +2,7 @@
 
 For: Aaron
 Date: 2026-11-07
-Updated: 2026-11-08, after the shell redesign deploy (#44)
+Updated: 2026-11-08, after the shell redesign deploy (#44) and its container rollout
 Repo: [`Zero-State-LLC/Psy-Fi`](https://github.com/Zero-State-LLC/Psy-Fi)
 Intent: [`intent.md`](intent.md)
 Host doc: [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md)
@@ -18,9 +18,9 @@ Public site: https://psy-fi.space
 | --- | --- |
 | Worker script | `psy-fi` |
 | Account | Zer0state, `315fb44b61212825452aad0ca566ea42` |
-| Current version | `7f79f732-3b1a-42a7-90a0-239ac1c5483d` |
-| That version | Upload of `main` at `7372d31` (shell redesign, #44), 2026-11-08T02:50:04.993Z, 100% |
-| Previous version | `d27e5f06-fc86-432f-9f6b-b1b6815e46f9`, secret change, 2026-11-07T23:50:49.525Z |
+| Current version | `363b5d70-0fca-425a-9a3b-9de45abcbe09` |
+| That version | Redeploy of `main` at `c2c534a` with `--containers-rollout immediate --keep-vars`, 2026-11-08T03:04:09.557Z, 100%. Same container image and assets as `7f79f732`. |
+| Previous versions | `7f79f732-3b1a-42a7-90a0-239ac1c5483d`, upload of `main` at `7372d31` (shell redesign, #44), 2026-11-08T02:50:04.993Z. `d27e5f06-fc86-432f-9f6b-b1b6815e46f9`, secret change, 2026-11-07T23:50:49.525Z. |
 | First upload | `aac88ff4-79a1-4c00-b31e-19b87074b26a` (not the current version) |
 | Custom domain | `psy-fi.space` only. Certificate comes from that binding. |
 | `workers.dev` | Off. https://psy-fi.zer0state-noema.workers.dev/health returned 404. |
@@ -36,17 +36,17 @@ Public site: https://psy-fi.space
 
 `NVIDIA_VISION_MODEL` is a plain-text var on that Worker. It is set. Do not commit the id. `NVIDIA_API_BASE` is empty, so image reading calls `https://integrate.api.nvidia.com` directly. This host does not add an AI Gateway.
 
-Deploy checks for `7f79f732`, with a browser user agent (a bare Python client gets Cloudflare 1010):
+Deploy checks for `363b5d70`, with a browser user agent (a bare Python client gets Cloudflare 1010):
 
-- `GET /health` — 200, `psyfi-api` `1.4.0`, at 2026-11-08T02:55:32Z.
-- `GET /ready` — 200, `gpu_shell_mounted` true, at 2026-11-08T02:55:33Z.
+- `GET /health` — 200, `psyfi-api` `1.4.0`, at 2026-11-08T03:05:32Z.
+- `GET /ready` — 200, `gpu_shell_mounted` true, at 2026-11-08T03:05:32Z.
 - `GET /` — 200, shell contains "Read image", `v1.4.0` and the front page headline; `GET /static/style.css?v=43` — 200.
 - `GET /gpu/` — 200, HTML.
 - `GET /sw.js` — `CACHE_NAME = 'psyfi-shell-v43'`.
-- Version `7f79f732` still binds `NVIDIA_API_KEY` (secret) and `NVIDIA_VISION_MODEL` (plain text). Names were checked; values were not printed.
+- Version `363b5d70` still binds `NVIDIA_API_KEY` (secret) and `NVIDIA_VISION_MODEL` (plain text). Names were checked; values were not printed.
 - No image-reading POST was made on this deploy. That call spends the key.
 
-The 2026-11-07 checks for `d27e5f06` answered the same way, with cache `psyfi-shell-v42`.
+The same checks answered the same way for `7f79f732` at 2026-11-08T02:55Z, and for `d27e5f06` on 2026-11-07 with cache `psyfi-shell-v42`.
 
 ## What stays up beside it
 
@@ -76,7 +76,7 @@ CI does not call Cloudflare and does not depend on DNS. Live `/health` and shell
 
 ## Git, as of this handoff
 
-Update, 2026-11-08: `origin/main` is `7372d31` (#44 merged by an admin merge at the operator's request). That tree names the script `psy-fi`. Version `7f79f732` was deployed from it with `npx wrangler@4 deploy --keep-vars` (Wrangler 4.152.0), without `--containers-rollout immediate`. The deploy built and pushed a new container base image, `psy-fi-psyfiapi-base:wrangler-mw78drmp` (`sha256:89ace427…`), but container application `psy-fi-psyfiapi` still reported last modified 2026-11-07T23:50:32Z with one live instance. Whether that instance runs the new image is not confirmed. The shell and `/gpu/` are static assets and are current either way. A deploy with `--containers-rollout immediate` settles the image.
+Update, 2026-11-08: `origin/main` is `c2c534a` (#44 and #45 merged by admin merges at the operator's request). That tree names the script `psy-fi`. Version `7f79f732` was deployed from `7372d31` with `npx wrangler@4 deploy --keep-vars` (Wrangler 4.152.0); version `363b5d70` redeployed `c2c534a` with `--containers-rollout immediate --keep-vars`. Both carry container base image `psy-fi-psyfiapi-base` `sha256:89ace427…`, built from `main`, so the vision-bench modules in the running image are the ones on `main`. The live instance (`npx wrangler containers instances`) was created 2026-11-08T02:50:28.448Z, 24 seconds after the `7f79f732` deploy, so it runs that image. Container application `psy-fi-psyfiapi` still reports last modified 2026-11-07T23:50:32Z: that field did not move on either deploy, so it is not a rollout signal.
 
 The paragraphs below describe the 2026-11-07 handoff.
 
