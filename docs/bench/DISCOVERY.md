@@ -63,7 +63,7 @@ Classification key: **Implemented and verified** (code read, behavior follows, t
 | Vision bench | `psyfi_core/visualization/vision_bench.py`, `scripts/capture_vision_bench.py`, `docs/specs/vision-bench.md` | Implemented and verified (Daniel, PR #40) | Four generated 64x64 images, oracle lock on `recommend_mode_intensity`, `field_displacement` as L1 over `parameters`, `mode_steps` ruler, catalog switch, receipt scoring, no public route, no committed receipt. 13 tests pass, 1 skips. Prior art for FDE, not a rebuild target. |
 | Image reading provider call | `psyfi_api/image_reading.py` | Implemented and verified with a stub transport | One `urllib` POST to `{NVIDIA_API_BASE or integrate host}/v1/chat/completions`, `nvidia/` namespace check, `max_tokens` 256, `reasoning_effort` none, 30 s timeout, key redaction. Reusable pattern for a provider adapter; the function itself is API-bound. |
 | Telemetry | `psyfi_api/telemetry.py`, `routers/telemetry.py` | Implemented and verified | Default off; in-process deque; no sink. Not benchmark telemetry. |
-| CI | `.github/workflows/ci.yml` | Implemented and verified by reading | Installs `.[dev]`, runs `python -m pytest -q`, `npx hallmark lint README.md`, `npm run gpu:test`, `gpu:typecheck`, `gpu:build`. No GPU runner, no provider call. Baseline in this session: 192 passed, 1 skipped; vitest 101 passed. |
+| CI | `.github/workflows/ci.yml` | Implemented and verified by reading | Installs `.[dev]`, runs `python -m pytest -q`, `npx remark README.md --frail --quiet --no-stdout` (hallmark until 2026-11-08), `npm run gpu:test`, `gpu:typecheck`, `gpu:build`. No GPU runner, no provider call. Baseline in this session: 192 passed, 1 skipped; vitest 101 passed. |
 | Hardware detection (Python) | none | Proposed | Nothing in `psyfi_core` or `psyfi_api` reads CPU, GPU, driver, or BLAS information. |
 | Power and thermal telemetry | none | Proposed | No `nvidia-smi`, `rocm-smi`, or `powermetrics` use anywhere. |
 | Statistics (CI, bootstrap, CV) | none | Proposed | No percentile beyond p95, no confidence interval, no variance analysis in either language. |
@@ -168,7 +168,7 @@ Governance conflict, stated plainly. `HANDOFF.md` in pull request #42 (unmerged 
 | Provider access (NVIDIA key, Anthropic key, local server) | Interpretation family cannot be measured live without a key | Replay and baseline providers; CI never opens a socket |
 | `.github/PULL_REQUEST_TEMPLATE.md` case collision on macOS | Appears modified in every checkout | Never stage it |
 | `tests/test_simulate_ultra_qa.py` rewrites a fixture | Dirty tree after `pytest` | Revert before commit; do not add tests that write committed files |
-| Hallmark lint on `README.md` | A malformed table fails CI | Only one added row, padded |
+| README lint (remark-lint) on `README.md` | A malformed table fails CI | Only one added row, padded |
 | Frozen OpenAPI full-body equality | Any new route on `app` fails two tests | Bench API mounted as a sub-app; parent OpenAPI unchanged |
 | Daniel's concurrent branches | Merge conflicts in shared files | Bench touches `psyfi_api/main.py` (one mount line), `pyproject.toml`, `vite.config.ts`, `README.md`; nothing else shared |
 | Model prompt sensitivity | Scores move with wording | Prompt text and revision are part of the manifest hash |

@@ -32,7 +32,7 @@ jobs:
     - name: Install JavaScript dependencies
       run: npm ci
     - name: Lint the README
-      run: npx hallmark lint README.md
+      run: npx remark README.md --frail --quiet --no-stdout
     - name: GPU test, typecheck, and build
       run: |
         npm run gpu:test

@@ -85,7 +85,7 @@ Root packaging: Python via [`pyproject.toml`](pyproject.toml); npm workspaces vi
 | Health | `GET /health`, `GET /ready` |
 | Interactive OpenAPI | `/docs` when server is running |
 | Python tests | `python3 -m pytest tests/ -q` |
-| README lint | `npm test` (hallmark) |
+| README lint | `npm test` (remark-lint) |
 | GPU tests / build | `npm run gpu:test` · `npm run gpu:build` |
 
 ---
@@ -215,7 +215,7 @@ python3 scripts/sync_frozen_contracts.py
 | --- | --- |
 | Python | [`tests/`](tests/) — API, jobs, freeze, overlays, experiences, shell assets, Ultra QA, scene snapshot, MIDI, … |
 | GPU / TS | `packages/psyfi-gpu-renderer` via `npm run gpu:test` |
-| CI | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) — pytest + hallmark + GPU build |
+| CI | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) — pytest + remark-lint + GPU build |
 | Startup smoke | [`test_startup.py`](test_startup.py) |
 
 ---
@@ -284,4 +284,4 @@ Phenomenology rebuild: `python3 scripts/build_experience_catalog.py` (sources un
 - Do not bypass the visual safety pass.
 - Do not add medical/healing claims.
 - Native iOS is out of the web track.
-- Keep root README hallmark-clean: `npx hallmark fix README.md`.
+- Keep root README lint-clean: `npm test` runs remark-lint with `.remarkrc.mjs`; fix its warnings by hand.

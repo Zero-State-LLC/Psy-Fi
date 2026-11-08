@@ -17,7 +17,7 @@ This register collects every open question from `intent.md`, `intent/*.md`, `HAN
 | 7 | [Per-frame energy (ADR 0011)](#7-per-frame-energy-adr-0011) | Open. Interval settled; acceptance pending | Operator |
 | 8 | [Publishing results on psy-fi.space](#8-publishing-results-on-psy-fispace) | Open. Recommend not yet | Operator |
 | 9 | [Read-only scorecard endpoint](#9-read-only-scorecard-endpoint) | Open. Tied to 8 | Operator, Fable |
-| 10 | [README linter advisories](#10-readme-linter-advisories) | Open. Recommend switching to `remark-cli`, checked as equivalent on the README | Operator |
+| 10 | [README linter advisories](#10-readme-linter-advisories) | Answered. Switched to `remark-cli` | — |
 | 16 | [NVIDIA API terms for the live image reading](#16-nvidia-api-terms-for-the-live-image-reading) | Open. Check before relying on it | Operator |
 | 11 | [WGSL kernel worth validating](#11-answered-wgsl-kernel-worth-validating) | Answered (#60) | — |
 | 12 | [Where FieldLoop results live](#12-answered-where-fieldloop-results-live) | Answered (#65) | — |
@@ -219,7 +219,9 @@ Asked in: #66 (merged) and `npm audit`.
   - the mentions in `README.md`, `AGENTS.md`, `PROJECT_INDEX.md`, `docs/PRODUCTION_READINESS.md`, `docs/bench/DISCOVERY.md` and `docs/specs/AUDIT.md`.
 - **What a switch loses:** `hallmark fix`, which has no one-to-one replacement. The unrelated Hallmark design skill under `.agents/skills/hallmark/` stays.
 
-**Recommend.** Switch to `remark-cli`. It is checked as equivalent on the README, it gives a clean `npm audit`, and upstream shows no sign of a fix. If you would rather keep hallmark, accept the finding with the rationale above, since the code path is unreachable. Either way, #66 (merged) already fixed the moderate findings.
+**Recommended.** Switch to `remark-cli`: checked as equivalent on the README, a clean `npm audit`, and upstream shows no sign of a fix.
+
+**Answered** by the operator on 2026-11-08 ("permission granted where required, continue"): switched. `npm test` runs `remark README.md --frail --quiet --no-stdout` with `.remarkrc.mjs`, and `npm audit` reports 0 vulnerabilities. The scoped `glob` and `minimatch` overrides now also cover `unified-engine` and `@npmcli/package-json`. `hallmark fix` has no replacement; fix lint warnings by hand. The Hallmark design skill under `.agents/skills/hallmark/` is unrelated and stays.
 
 ## 16. NVIDIA API terms for the live image reading
 

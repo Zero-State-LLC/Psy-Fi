@@ -25,7 +25,7 @@ Commands from this repo's README. Do not invent others.
 |---|---|
 | Tests | `python3 -m pytest tests/ -q` |
 | GPU tests | `npm run gpu:test` |
-| README lint | `npx hallmark lint README.md` |
+| README lint | `npx remark README.md --frail --quiet --no-stdout` (`npm test`) |
 | GPU build (optional) | `npm run gpu:build` |
 
 ## Invariants
