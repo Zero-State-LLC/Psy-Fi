@@ -181,7 +181,7 @@ export const FALLBACK_MANIFEST: BenchManifestDoc = {
     tiers: ['ultra', 'high', 'balanced', 'battery'],
     frames_per_stage: 240,
     warmup_frames: 120,
-    warmup_min_ms: 3000,
+    warmup_min_ms: 5000,
     sustained: { case: 'lsd_open_42', tier: 'ultra', frames: 1800 },
     thumbnail_size: 128,
     include_simulation: false,

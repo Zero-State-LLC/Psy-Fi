@@ -1,15 +1,15 @@
 {
   "schema": "psyfi.bench.result.v1",
   "bench_version": "0.1.0",
-  "run_id": "render_1794110078_1eea3188",
-  "created_at": "2026-11-08T03:54:38.003166Z",
+  "run_id": "render_1794110450_9a8bf389",
+  "created_at": "2026-11-08T04:00:50.596397Z",
   "manifest": {
     "schema": "psyfi.bench.manifest.v1",
     "id": "render.webgpu.tiers",
     "version": 1,
     "family": "render",
     "title": "WebGPU present path: frame times and tier fidelity on one device",
-    "description": "Browser runner (/gpu/bench.html) renders the three G4 seeds at every quality tier for a fixed frame count after a warm-up of at least 120 frames and 3 s (late pipeline compilation stays out of the sample), then one sustained Ultra stage. The capture carries per-frame wall times, GPU timestamps where exposed, adapter info and 128 px thumbnails. Python scores p50/p95/p99, 1% low, pacing, drift, budget checks and same-device fidelity against Ultra. Measured only: a capture from this runner is hardware evidence for the device it names and nothing else.",
+    "description": "Browser runner (/gpu/bench.html) renders the three G4 seeds at every quality tier for a fixed frame count after a warm-up of at least 120 frames and 5 s (each stage remounts the renderer; late pipeline compilation is reported as stutter), then one sustained Ultra stage. The capture carries per-frame wall times, GPU timestamps where exposed, adapter info and 128 px thumbnails. Python scores p50/p95/p99, 1% low, pacing, drift, budget checks and same-device fidelity against Ultra. Measured only: a capture from this runner is hardware evidence for the device it names and nothing else.",
     "execution": "browser",
     "params": {
       "execution_class": "webgpu",
@@ -57,7 +57,7 @@
         "balanced": 16.7,
         "battery": 33
       },
-      "warmup_min_ms": 3000
+      "warmup_min_ms": 5000
     },
     "protocol": {
       "warmup_runs": 0,
@@ -86,13 +86,13 @@
       "webgpu",
       "frame-time"
     ],
-    "manifest_hash": "be171b9e1e7a71bc"
+    "manifest_hash": "ff95d44ee9c1ec7f"
   },
-  "manifest_hash": "be171b9e1e7a71bc",
+  "manifest_hash": "ff95d44ee9c1ec7f",
   "measurement_class": "synthetic",
   "status": "complete",
   "environment": {
-    "captured_at": "2026-11-08T03:54:37.928213Z",
+    "captured_at": "2026-11-08T04:00:50.515039Z",
     "hostname_hash": "225369c658b1",
     "platform": {
       "system": "Darwin",
@@ -140,7 +140,7 @@
         "mps": true,
         "devices": []
       },
-      "git_commit": "eebf92a031b367a9805cfff8e53f0d08436b5193",
+      "git_commit": "2f64e795c2c4dfda6d70d9b289727bc6f9754d27",
       "git_dirty": true
     },
     "browser": {
@@ -3288,7 +3288,7 @@
   "determinism": {},
   "failures": [],
   "provenance": {
-    "git_commit": "eebf92a031b367a9805cfff8e53f0d08436b5193",
+    "git_commit": "2f64e795c2c4dfda6d70d9b289727bc6f9754d27",
     "git_dirty": true,
     "command": "scripts/export_bench_contracts.py",
     "bench_version": "0.1.0",
@@ -3297,5 +3297,5 @@
     "notes": []
   },
   "non_claim": "Modeled phenomenology for research and visualization only. The benchmark measures computation, rendering, and model interpretation of modeled representations. It does not measure consciousness or subjective experience. Not medical advice.",
-  "result_hash": "bdab5314ae619bc4c6264a129dfa7f18c894c6a249ecad4b852074ec04101693"
+  "result_hash": "61702cb6b2854561d73f980e45514ec3fb907627900862a8edb13a4777d181b9"
 }

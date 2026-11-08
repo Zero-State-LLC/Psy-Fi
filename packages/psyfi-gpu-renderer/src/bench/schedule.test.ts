@@ -35,7 +35,7 @@ describe('bench schedule', () => {
     expect(payload.stages[0].frames_ms).toEqual([8, 9, 8.5])
     expect(payload.stages[0].warmup_frames).toBe(130)
     expect(payload.stages[0].js_errors).toBe(2)
-    expect(stages[0].warmupMinMs).toBe(3000)
+    expect(stages[0].warmupMinMs).toBe(5000)
   })
 
   it('quick summary is a sanity check only', () => {

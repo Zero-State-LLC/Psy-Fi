@@ -236,7 +236,7 @@ export function BenchApp() {
       </header>
       <div style={{ position: 'relative', minHeight: 320 }}>
         {caps.webgpu ? (
-          <BenchCanvas snapshot={snapshot} tier={tier}>
+          <BenchCanvas key={stageIndex} snapshot={snapshot} tier={tier}>
             <BenchProbe handle={probe} enabled={measuring} />
           </BenchCanvas>
         ) : (

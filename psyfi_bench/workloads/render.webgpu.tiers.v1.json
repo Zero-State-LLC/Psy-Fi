@@ -4,7 +4,7 @@
   "version": 1,
   "family": "render",
   "title": "WebGPU present path: frame times and tier fidelity on one device",
-  "description": "Browser runner (/gpu/bench.html) renders the three G4 seeds at every quality tier for a fixed frame count after a warm-up of at least 120 frames and 3 s (late pipeline compilation stays out of the sample), then one sustained Ultra stage. The capture carries per-frame wall times, GPU timestamps where exposed, adapter info and 128 px thumbnails. Python scores p50/p95/p99, 1% low, pacing, drift, budget checks and same-device fidelity against Ultra. Measured only: a capture from this runner is hardware evidence for the device it names and nothing else.",
+  "description": "Browser runner (/gpu/bench.html) renders the three G4 seeds at every quality tier for a fixed frame count after a warm-up of at least 120 frames and 5 s (each stage remounts the renderer; late pipeline compilation is reported as stutter), then one sustained Ultra stage. The capture carries per-frame wall times, GPU timestamps where exposed, adapter info and 128 px thumbnails. Python scores p50/p95/p99, 1% low, pacing, drift, budget checks and same-device fidelity against Ultra. Measured only: a capture from this runner is hardware evidence for the device it names and nothing else.",
   "execution": "browser",
   "params": {
     "execution_class": "webgpu",
@@ -52,7 +52,7 @@
       "balanced": 16.7,
       "battery": 33
     },
-    "warmup_min_ms": 3000
+    "warmup_min_ms": 5000
   },
   "protocol": {
     "warmup_runs": 0,

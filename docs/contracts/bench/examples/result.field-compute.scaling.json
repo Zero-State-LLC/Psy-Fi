@@ -1,8 +1,8 @@
 {
   "schema": "psyfi.bench.result.v1",
   "bench_version": "0.1.0",
-  "run_id": "field-compute_1794110076_96061452",
-  "created_at": "2026-11-08T03:54:36.130180Z",
+  "run_id": "field-compute_1794110448_bcb17ad5",
+  "created_at": "2026-11-08T04:00:48.668384Z",
   "manifest": {
     "schema": "psyfi.bench.manifest.v1",
     "id": "field-compute.scaling",
@@ -65,7 +65,7 @@
   "measurement_class": "measured",
   "status": "complete",
   "environment": {
-    "captured_at": "2026-11-08T03:54:35.829073Z",
+    "captured_at": "2026-11-08T04:00:48.335811Z",
     "hostname_hash": "225369c658b1",
     "platform": {
       "system": "Darwin",
@@ -113,7 +113,7 @@
         "mps": true,
         "devices": []
       },
-      "git_commit": "eebf92a031b367a9805cfff8e53f0d08436b5193",
+      "git_commit": "2f64e795c2c4dfda6d70d9b289727bc6f9754d27",
       "git_dirty": true
     },
     "browser": null,
@@ -149,21 +149,21 @@
         }
       },
       "wall_ms": [
-        0.702375,
-        0.680875,
-        0.635083
+        0.757291,
+        0.75925,
+        0.6415
       ],
       "cpu_ms": [
-        0.7,
-        0.679,
-        0.633
+        0.75,
+        0.75,
+        0.64
       ],
-      "cold_wall_ms": 0.912125,
+      "cold_wall_ms": 0.903041,
       "warmup_wall_ms": [
-        0.912125
+        0.903041
       ],
       "memory": {
-        "rss_before_bytes": 302301184,
+        "rss_before_bytes": 301563904,
         "rss_peak_delta_bytes": 0,
         "tracemalloc_peak_bytes": 104136,
         "tracemalloc_current_bytes": 19906,
@@ -173,33 +173,33 @@
         "cells": 1024,
         "steps": 20,
         "cell_steps": 20480,
-        "wall_ms_median": 0.680875,
-        "ms_per_step_median": 0.03404375,
-        "cell_steps_per_s_median": 30078942.537176427,
+        "wall_ms_median": 0.757291,
+        "ms_per_step_median": 0.037864550000000004,
+        "cell_steps_per_s_median": 27043765.21046731,
         "tracemalloc_peak_bytes_per_cell": 101.6953125
       },
       "statistics": {
         "wall_ms": {
           "n": 3,
           "unit": "ms",
-          "mean": 0.6727776666666666,
-          "median": 0.680875,
-          "min": 0.635083,
-          "max": 0.702375,
-          "std": 0.03436900378732753,
-          "cv": 0.051085232893671464,
-          "mad": 0.021499999999999964,
-          "p50": 0.680875,
-          "p90": 0.698075,
-          "p95": 0.700225,
-          "p99": 0.7019449999999999,
+          "mean": 0.719347,
+          "median": 0.757291,
+          "min": 0.6415,
+          "max": 0.75925,
+          "std": 0.06742459474850408,
+          "cv": 0.0937302786395218,
+          "mad": 0.001958999999999933,
+          "p50": 0.757291,
+          "p90": 0.7588582,
+          "p95": 0.7590541,
+          "p99": 0.75921082,
           "ci95_mean": [
-            0.635083,
-            0.702375
+            0.6415,
+            0.7592500000000001
           ],
           "ci95_median": [
-            0.635083,
-            0.702375
+            0.6415,
+            0.75925
           ],
           "bootstrap": {
             "method": "percentile",
@@ -211,24 +211,24 @@
         "cpu_ms": {
           "n": 3,
           "unit": "ms",
-          "mean": 0.6706666666666666,
-          "median": 0.679,
-          "min": 0.633,
-          "max": 0.7,
-          "std": 0.03426854728950925,
-          "cv": 0.05109624347342334,
-          "mad": 0.020999999999999908,
-          "p50": 0.679,
-          "p90": 0.6958,
-          "p95": 0.6979,
-          "p99": 0.69958,
+          "mean": 0.7133333333333334,
+          "median": 0.75,
+          "min": 0.64,
+          "max": 0.75,
+          "std": 0.06350852961085883,
+          "cv": 0.08903064898718527,
+          "mad": 0.0,
+          "p50": 0.75,
+          "p90": 0.75,
+          "p95": 0.75,
+          "p99": 0.75,
           "ci95_mean": [
-            0.633,
-            0.6999999999999998
+            0.64,
+            0.75
           ],
           "ci95_median": [
-            0.633,
-            0.7
+            0.64,
+            0.75
           ],
           "bootstrap": {
             "method": "percentile",
@@ -273,21 +273,21 @@
         }
       },
       "wall_ms": [
-        1.215375,
-        1.26575,
-        1.257292
+        1.187,
+        1.290958,
+        1.25475
       ],
       "cpu_ms": [
-        1.213,
-        1.262,
-        1.255
+        1.184,
+        1.288,
+        1.253
       ],
-      "cold_wall_ms": 1.32675,
+      "cold_wall_ms": 1.308583,
       "warmup_wall_ms": [
-        1.32675
+        1.308583
       ],
       "memory": {
-        "rss_before_bytes": 302301184,
+        "rss_before_bytes": 301563904,
         "rss_peak_delta_bytes": 0,
         "tracemalloc_peak_bytes": 362552,
         "tracemalloc_current_bytes": 44482,
@@ -297,33 +297,33 @@
         "cells": 4096,
         "steps": 20,
         "cell_steps": 81920,
-        "wall_ms_median": 1.257292,
-        "ms_per_step_median": 0.0628646,
-        "cell_steps_per_s_median": 65155906.50381931,
+        "wall_ms_median": 1.25475,
+        "ms_per_step_median": 0.0627375,
+        "cell_steps_per_s_median": 65287905.957362026,
         "tracemalloc_peak_bytes_per_cell": 88.513671875
       },
       "statistics": {
         "wall_ms": {
           "n": 3,
           "unit": "ms",
-          "mean": 1.246139,
-          "median": 1.257292,
-          "min": 1.215375,
-          "max": 1.26575,
-          "std": 0.0269759562017734,
-          "cv": 0.02164763016146144,
-          "mad": 0.008457999999999855,
-          "p50": 1.257292,
-          "p90": 1.2640584,
-          "p95": 1.2649042,
-          "p99": 1.26558084,
+          "mean": 1.2442360000000001,
+          "median": 1.25475,
+          "min": 1.187,
+          "max": 1.290958,
+          "std": 0.05277048974569025,
+          "cv": 0.04241196183496559,
+          "mad": 0.03620800000000002,
+          "p50": 1.25475,
+          "p90": 1.2837164,
+          "p95": 1.2873372,
+          "p99": 1.29023384,
           "ci95_mean": [
-            1.215375,
-            1.26575
+            1.187,
+            1.290958
           ],
           "ci95_median": [
-            1.215375,
-            1.26575
+            1.187,
+            1.290958
           ],
           "bootstrap": {
             "method": "percentile",
@@ -335,24 +335,24 @@
         "cpu_ms": {
           "n": 3,
           "unit": "ms",
-          "mean": 1.2433333333333334,
-          "median": 1.255,
-          "min": 1.213,
-          "max": 1.262,
-          "std": 0.02650157228040121,
-          "cv": 0.02131493749093931,
-          "mad": 0.007000000000000117,
-          "p50": 1.255,
-          "p90": 1.2606,
-          "p95": 1.2613,
-          "p99": 1.26186,
+          "mean": 1.2416666666666665,
+          "median": 1.253,
+          "min": 1.184,
+          "max": 1.288,
+          "std": 0.05291817583149798,
+          "cv": 0.04261866509919301,
+          "mad": 0.03500000000000014,
+          "p50": 1.253,
+          "p90": 1.281,
+          "p95": 1.2845,
+          "p99": 1.2873,
           "ci95_mean": [
-            1.213,
-            1.262
+            1.184,
+            1.288
           ],
           "ci95_median": [
-            1.213,
-            1.262
+            1.184,
+            1.288
           ],
           "bootstrap": {
             "method": "percentile",
@@ -380,12 +380,12 @@
     "backend": "numpy",
     "pipeline": "field",
     "scaling": {
-      "exponent": 0.4424289402277993,
-      "log_intercept": -3.451060268448538,
+      "exponent": 0.36424012891740554,
+      "log_intercept": -2.8027278713177814,
       "r2": 1.0,
       "n": 2
     },
-    "peak_cell_steps_per_s": 65155906.50381931,
+    "peak_cell_steps_per_s": 65287905.957362026,
     "largest_cells": 4096,
     "determinism": {
       "stages_with_digest": 2,
@@ -412,7 +412,7 @@
   },
   "failures": [],
   "provenance": {
-    "git_commit": "eebf92a031b367a9805cfff8e53f0d08436b5193",
+    "git_commit": "2f64e795c2c4dfda6d70d9b289727bc6f9754d27",
     "git_dirty": true,
     "command": "scripts/export_bench_contracts.py",
     "bench_version": "0.1.0",
@@ -424,5 +424,5 @@
     ]
   },
   "non_claim": "Modeled phenomenology for research and visualization only. The benchmark measures computation, rendering, and model interpretation of modeled representations. It does not measure consciousness or subjective experience. Not medical advice.",
-  "result_hash": "7de429f6512442dff507b55fa461f37a456835648d9c18504558b8c91046fb3b"
+  "result_hash": "f87d7abbf433279ffc7d5e7b72aa66fef748a239f4aaabaf406cbe0fe51a11e8"
 }

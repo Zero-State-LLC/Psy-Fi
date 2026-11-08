@@ -1,14 +1,14 @@
 {
   "schema": "psyfi.bench.scorecard.v1",
-  "generated_at": "2026-11-08T03:54:37.235839Z",
+  "generated_at": "2026-11-08T04:00:49.833066Z",
   "family": "interpretation",
   "manifest_id": "interpretation.fieldread.smoke",
   "manifest_hash": "f3c603745664a241",
   "subjects": [
     {
       "label": "oracle",
-      "run_id": "interpretation_1794110076_f9f1d54c",
-      "created_at": "2026-11-08T03:54:36.838612Z",
+      "run_id": "interpretation_1794110449_b92001b2",
+      "created_at": "2026-11-08T04:00:49.413884Z",
       "measurement_class": "synthetic",
       "status": "complete",
       "hardware_class": "integrated",
@@ -21,8 +21,8 @@
     },
     {
       "label": "heuristic",
-      "run_id": "interpretation_1794110077_91ace4b2",
-      "created_at": "2026-11-08T03:54:37.233490Z",
+      "run_id": "interpretation_1794110449_cbefeb19",
+      "created_at": "2026-11-08T04:00:49.830934Z",
       "measurement_class": "synthetic",
       "status": "complete",
       "hardware_class": "integrated",
@@ -169,7 +169,7 @@
     },
     "latency_ms_p50": {
       "oracle": {
-        "value": 0.0013334210962057114,
+        "value": 0.0014584511518478394,
         "unit": "ms",
         "better": "lower",
         "ci95": null,
@@ -177,7 +177,7 @@
         "missing_reason": null
       },
       "heuristic": {
-        "value": 0.21706242114305496,
+        "value": 0.21066679619252682,
         "unit": "ms",
         "better": "lower",
         "ci95": null,
@@ -321,26 +321,26 @@
         "inputs": {
           "within_mode_step_rate": 1.0,
           "parse_rate": 1.0,
-          "latency_ms_p50": 0.0013334210962057114
+          "latency_ms_p50": 0.0014584511518478394
         },
         "missing_data_rule": "null when any input is missing or latency is zero",
         "valid_comparison": "same manifest_hash, same prompt_revision, same image_size",
-        "value": 749950.6366334904,
+        "value": 685658.8914431673,
         "sensitivity": {
           "delta": 0.1,
-          "base": 749950.6366334904,
+          "base": 685658.8914431673,
           "per_input": {
             "within_mode_step_rate": {
-              "minus": 674955.5729701414,
-              "plus": 824945.7002968396
+              "minus": 617093.0022988506,
+              "plus": 754224.7805874841
             },
             "parse_rate": {
-              "minus": 674955.5729701414,
-              "plus": 824945.7002968396
+              "minus": 617093.0022988506,
+              "plus": 754224.7805874841
             },
             "latency_ms_p50": {
-              "minus": 833278.4851483228,
-              "plus": 681773.3060304458
+              "minus": 761843.2127146303,
+              "plus": 623326.2649483338
             }
           }
         }
@@ -366,26 +366,26 @@
         "inputs": {
           "within_mode_step_rate": 0.25,
           "parse_rate": 1.0,
-          "latency_ms_p50": 0.21706242114305496
+          "latency_ms_p50": 0.21066679619252682
         },
         "missing_data_rule": "null when any input is missing or latency is zero",
         "valid_comparison": "same manifest_hash, same prompt_revision, same image_size",
-        "value": 1151.7424282079555,
+        "value": 1186.7081311263064,
         "sensitivity": {
           "delta": 0.1,
-          "base": 1151.7424282079555,
+          "base": 1186.7081311263064,
           "per_input": {
             "within_mode_step_rate": {
-              "minus": 1036.5681853871602,
-              "plus": 1266.9166710287514
+              "minus": 1068.0373180136758,
+              "plus": 1305.3789442389373
             },
             "parse_rate": {
-              "minus": 1036.5681853871602,
-              "plus": 1266.9166710287514
+              "minus": 1068.0373180136758,
+              "plus": 1305.3789442389373
             },
             "latency_ms_p50": {
-              "minus": 1279.7138091199506,
-              "plus": 1047.0385710981413
+              "minus": 1318.5645901403404,
+              "plus": 1078.8255737511877
             }
           }
         }
