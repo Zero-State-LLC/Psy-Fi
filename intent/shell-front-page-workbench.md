@@ -74,5 +74,4 @@ Author and date are in the header. Update the date if the draft is revised.
 
 ## Next
 
-A human accepts this file (`Status: accepted`). Then spec/plan.
-Do not implement from this file alone.
+Implemented in pull request #44 and live on https://psy-fi.space as Worker version `363b5d70`. This stream is done; a further shell change starts a new intent.

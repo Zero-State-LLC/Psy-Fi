@@ -174,6 +174,7 @@ Canonical browser API is **`/api/v1`** (**hard-frozen**). Legacy `/api/*` and `/
 | [`docs/SIMULATED_ULTRA_QA.md`](docs/SIMULATED_ULTRA_QA.md)                         | Simulated P0 Ultra desktop QA                      |
 | [`docs/NVIDIA_GPU.md`](docs/NVIDIA_GPU.md)                                         | NVIDIA drivers + Compose                           |
 | [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md)                                         | Production host <https://psy-fi.space>             |
+| [`HANDOFF.md`](HANDOFF.md)                                                         | Start here for a new implementation agent          |
 | [`context.md`](context.md)                                                         | Live-host map for the next operator                |
 | [`intent.md`](intent.md)                                                           | Accepted public-host intent                        |
 | [`PLANS.md`](PLANS.md)                                                             | Product phases + gates                             |

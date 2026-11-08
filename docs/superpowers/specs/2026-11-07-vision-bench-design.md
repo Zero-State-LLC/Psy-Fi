@@ -1,6 +1,6 @@
 # Vision-model bench
 
-Status: design. Not implemented.
+Status: implemented. The decision record is [docs/specs/vision-bench.md](../../specs/vision-bench.md). Pull request #40 is merged. Do not rebuild this bench from this design.
 Date: 2026-11-07.
 
 The first bench measures how far one configured vision model's reading would move the consciousness field. GPU frame time is a later spec. The two benches do not share a score, a corpus, or a pass rule.

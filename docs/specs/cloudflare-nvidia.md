@@ -31,15 +31,20 @@ The only model class is a vision-language model hosted on the operator's NVIDIA 
 14. As an operator, I want the picture forgotten after the call, so that the upload is still memory-only.
 15. As an operator, I want the planner text I already have, so that motifs and lighting stay a deterministic reading of the field.
 16. As an operator, I want the journey prompt to stay a sidecar I paste elsewhere, so that the instrument does not generate a video.
-17. As a maintainer, I want the NVIDIA key only in a Cloudflare secret or in AI Gateway BYOK, so that git, the image, Compose, and the browser never hold it.
+17. As a maintainer, I want the NVIDIA key only in the Worker secret, so that git, the image, Compose, and the browser never hold it.
 18. As a maintainer, I want the model id in config, so that changing the catalog id does not require a commit and does not hide a key.
 19. As a maintainer, I want that id to be an NVIDIA-authored vision-language model, so that a text model, or another vendor's model on the same host, cannot accept the call.
 20. As a maintainer, I want a non-vision or non-NVIDIA id to fail the reading, so that the call does not continue on a substitute.
-21. As a maintainer, I want the call to go through AI Gateway as a custom provider, so that rate limits exist without caching the picture.
-22. As a maintainer, I want gateway logs to omit the image body and the key, so that a caption request does not become a stored photo.
+21. As a maintainer, I want an empty API base to call `https://integrate.api.nvidia.com` directly, so that the public host does not depend on a gateway that was not built.
+22. As a maintainer, I want an AI Gateway left undecided, so that nobody adds one while that question is open.
 23. As a maintainer, I want the reading route to be additive under the current freeze id, so that existing clients keep their payloads.
 24. As a maintainer, I want production config to name the vision model, so that a deploy that cannot read an image is incomplete.
 25. As a maintainer, I want the copied Noema workflow left out of this host, so that this instrument does not deploy that product.
+26. As an operator, I want `https://psy-fi.space` served only by Worker `psy-fi`, so that the bought name is not attached to the older workers.dev script.
+27. As an operator, I want workers.dev and preview URLs off on that Worker, so that the public name is the only hostname.
+28. As an operator, I want `www` left off, so that a second hostname is not part of this host.
+29. As a maintainer, I want a later deploy to keep the vision-model var, so that a deploy does not delete it.
+30. As an operator, I want the older `psyfi` script left in place, so that this host does not delete the previous deploy.
 
 ## Implementation Decisions
 
@@ -75,9 +80,10 @@ Substance presets stay the authored registry. The catalog is 70 recipes: 44 auth
 
 ### Call
 
-- Provider base URL is `https://integrate.api.nvidia.com`. The chat path is `/v1/chat/completions`. Auth is a bearer token.
-- Production sends that call through an AI Gateway custom provider, BYOK. The gateway's provider base URL is the integrate host. The browser never calls either host.
-- The NVIDIA key is the Cloudflare secret `NVIDIA_API_KEY`, or the gateway BYOK entry for that provider. One of those holds it. The repo, the image, Compose, the client bundle, and this spec do not.
+- Provider base URL is `https://integrate.api.nvidia.com`. The chat path is `/v1/chat/completions`. Auth is a bearer token. The browser never calls that host.
+- The accepted public host is Worker `psy-fi` at `https://psy-fi.space`. `workers.dev` and preview URLs are off. `www` is not a hostname. The older Worker `psyfi` stays a separate script and does not receive this domain. Worker source stays under the existing `workers/psyfi` path. That directory name is not the script name.
+- `NVIDIA_API_BASE` stays empty on this host, so the call goes directly to the integrate host. An AI Gateway custom provider was an earlier idea. It is not part of this host. Do not add one unless a later accepted intent says so.
+- The NVIDIA key is the Cloudflare secret `NVIDIA_API_KEY` on Worker `psy-fi`. The repo, the image, Compose, the client bundle, and this spec do not hold it.
 - `NVIDIA_VISION_MODEL` is the model id. It is config, not a secret. It is chosen from the account's live catalog at deploy. The repo does not pin an id.
 - The id has to be NVIDIA-authored on that host (the `nvidia/` namespace) and vision-capable. The integrate host also serves other vendors' ids under the same key. Those ids are a failed config.
 - Workers AI `@cf/nvidia/nemotron-3-120b-a12b` is text-only and is scheduled to return HTTP 410 on 2026-11-20. It cannot satisfy this spec. A missing vision model is not repaired by substituting another vendor's model.
@@ -87,7 +93,7 @@ Substance presets stay the authored registry. The catalog is 70 recipes: 44 auth
 - The response carries the caption, the model id, an inferred label, and the not-medical-advice sentence. It does not carry the key. It is not hashed into the field, the planner, or a golden.
 - If the model is unset, the id fails the namespace or vision check, or the provider errors, the reading returns a visible error and no other model is tried. The seed path still returns.
 - Completion length is capped. The shell truncates the caption before display and assigns it as text.
-- AI Gateway may rate-limit the route. It does not cache it. Request logs omit the image body and the authorization header.
+- This host does not add a rate limit or a cache. The route is one attempt. A provider error is returned once.
 - Telemetry does not record image bytes, the caption, or the key.
 - Production config names `NVIDIA_VISION_MODEL`. Local and CI leave it unset and make no network call.
 
@@ -113,7 +119,7 @@ A good test calls the public route with the model unset, or with a stub transpor
 - Accounts, and a shared store of readings.
 - The host CUDA profile, and running NVIDIA inference inside the API container's GPU.
 - Native mobile, Azure, Render, and the existing Pages workflow.
-- Deleting the foreign deploy workflow. That defect is a separate issue.
+- Recreating the removed Noema deploy workflow.
 - Catalog reload. Whether that helper is named or removed is undecided.
 - Rebuilding the phenomenology corpus with Firecrawl, or any other fetch of third-party reports.
 - Writing an Image Reading, a crawl, or a motif score back into the substance preset registry.
@@ -124,6 +130,4 @@ The image-seed decision already refuses a generative model inside the seed. That
 
 The grounding plan allows an optional later language-model path behind an explicit flag, and it keeps the planner deterministic. The flag this spec adds is the image reading. The planner stays the template.
 
-The audit on `7ca678e0` finds no Worker config, no AI Gateway, no NVIDIA call, and no vision call. Compose is the only ship path in the tree.
-
-The public name as of 2026-11-07 is `https://psy-fi.space` on Worker `psy-fi` ([issue #36](https://github.com/Zero-State-LLC/Psy-Fi/issues/36)). `workers.dev` is off on that script. The older `psyfi` script stays a separate deploy target. This note names the host. It does not add an AI Gateway, and it does not replace the Call section above.
+The audit on `7ca678e0` found no Worker. That pass is historical. The Call section above is the current decision: direct integrate on Worker `psy-fi`, issue #36, pull request #39. An AI Gateway is an open question, not an agent task.

@@ -10,6 +10,19 @@ Verdicts:
 - **diverge** — the runtime contradicts the decision.
 - **unproven** — the decision is a document, a device claim, or a test that only checks prose.
 
+## Later main
+
+Read this before the grid below. The grid is the pass on `7ca678e` (2026-10-24). It is not the open-work list.
+
+On current `main`, after pull requests #24 through #40:
+
+- CI runs pytest, the README lint, and the GPU build. `pyproject.toml` license text matches `LICENSE`. The Noema deploy workflow is not in the tree.
+- Worker `psy-fi` is configured for `https://psy-fi.space`. The image-reading route exists. The vision bench is implemented and adds no public route. See [vision-bench.md](vision-bench.md) and the host decisions in [cloudflare-nvidia.md](cloudflare-nvidia.md).
+- The old "next fixes" for pytest in CI, the license text, and the Noema workflow are done.
+- Still true, and not an agent ticket unless a later accepted intent says so: catalog reload is implemented and undecided, and the public host has no login and no AI Gateway.
+- The Cloudflare rows below that say `main` has no Worker are stale.
+- This note did not re-score the ten-spec grid. Do not open or close issues from those counts.
+
 ## Result
 
 Ten specs. The instrument core (seeded simulation, jobs, ParameterField, freeze pack, shell worker, telemetry default-off, GPU present safety) matches the source. The ship gate does not. CI does not run the suite the deploy spec requires, and the tests that say the project is production-ready check that the board contains the right words.

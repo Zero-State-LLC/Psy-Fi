@@ -29,7 +29,7 @@ An immutable ParameterField is the visual authority. Substance overlays and expe
 14. As an operator, I want my notes echoed as notes, so that they do not become authority over the field.
 15. As an operator, I want planner text shown as text, so that a note cannot change the page.
 16. As an operator, I want a Journey object I can save and restore in this browser, so that a run has a portable local record.
-17. As an operator, I want transitions between phase, Neutral, load, and journey to be safety-clamped, and skipped when Reduce Motion or hold-and-compare is on.
+17. As an operator, I want transitions between phase, Neutral, load, and journey to be safety-clamped, and skipped when Reduce Motion or hold-and-compare is on, so that a scene change cannot skip the safety pass or play motion I turned off.
 18. As an operator, I want every planner and journey to say it is not medical advice, so that the instrument does not present itself as care.
 
 ## Implementation Decisions
