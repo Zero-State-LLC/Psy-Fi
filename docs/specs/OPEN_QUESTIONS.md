@@ -17,7 +17,7 @@ This register collects every open question from `intent.md`, `intent/*.md`, `HAN
 | 7 | [Per-frame energy (ADR 0011)](#7-per-frame-energy-adr-0011) | Open. Interval settled; acceptance pending | Operator |
 | 8 | [Publishing results on psy-fi.space](#8-publishing-results-on-psy-fispace) | Open. Recommend not yet | Operator |
 | 9 | [Read-only scorecard endpoint](#9-read-only-scorecard-endpoint) | Open. Tied to 8 | Operator, Fable |
-| 10 | [README linter advisories](#10-readme-linter-advisories) | Open. Recommend accept with rationale | Operator |
+| 10 | [README linter advisories](#10-readme-linter-advisories) | Open. Recommend switching to `remark-cli`, checked as equivalent on the README | Operator |
 | 16 | [NVIDIA API terms for the live image reading](#16-nvidia-api-terms-for-the-live-image-reading) | Open. Check before relying on it | Operator |
 | 11 | [WGSL kernel worth validating](#11-answered-wgsl-kernel-worth-validating) | Answered (#60) | — |
 | 12 | [Where FieldLoop results live](#12-answered-where-fieldloop-results-live) | Answered (#65) | — |
@@ -201,7 +201,25 @@ Asked in: #66 (open) and `npm audit`.
   - hallmark reads the repo URL from `package.json` `repository`, which is set, so it never parses `.git/config`.
 - **Replacement option:** a `remark-cli` setup (`remark-gfm`, `remark-validate-links` and the same 25 `remark-lint-*` rules), plus the #66-style `glob`/`minimatch` override, gives a clean audit. It flags the same issues on README.md: the same 46 missing-file warnings at the same positions on an unstubbed copy. It drops `hallmark fix` and `remark-github` URL shortening.
 
-**Recommend.** Accept with this rationale for now, since the code path is unreachable and the tool is dev only. Switch to `remark-cli` if a clean `npm audit` gate matters. Either way, merge #66, which fixes the moderate findings.
+**Checked later** (2026-11-08):
+- **Upstream will not fix it soon.**
+  - `parse-git-config` was last published in 2018. Its prototype-pollution issue (#14, January 2025) is open, and the fix PR (#15, March 2025) was never merged (<https://github.com/jonschlinkert/parse-git-config/issues/14>, <https://github.com/jonschlinkert/parse-git-config/pull/15>).
+  - hallmark's last release is 5.0.2, from 2025-10-17, and no hallmark issue mentions the advisory.
+  - The only fork on npm that claims a fix, `@keep-lts/parse-git-config`, was created and published in one day by a single anonymous maintainer, so it is not a safe override.
+- **The swap is equivalent on the README.**
+  - On the real `README.md` with all its real linked files, `npx hallmark lint README.md` and `npx remark README.md --frail --quiet --no-stdout` both exit 0 with no warnings.
+  - With three planted defects, both report the same warnings at the same positions: a missing heading in another doc, an unpadded table row, and a `*` bullet.
+  - The `remark-cli` setup audits clean, given the same `glob`/`minimatch` override as #66.
+- **What a switch touches:**
+  - `package.json`: devDependencies, `overrides`, the `test` and `markdown:lint` scripts, and the `hallmark` key;
+  - a new `.remarkrc.mjs` with hallmark's rule settings;
+  - deleting `.hallmarkrc`;
+  - the README step in `.github/workflows/ci.yml`;
+  - the assertion in `tests/test_ci_metadata.py` that pins `npx hallmark lint README.md`;
+  - the mentions in `README.md`, `AGENTS.md`, `PROJECT_INDEX.md`, `docs/PRODUCTION_READINESS.md`, `docs/bench/DISCOVERY.md` and `docs/specs/AUDIT.md`.
+- **What a switch loses:** `hallmark fix`, which has no one-to-one replacement. The unrelated Hallmark design skill under `.agents/skills/hallmark/` stays.
+
+**Recommend.** Switch to `remark-cli`. It is checked as equivalent on the README, it gives a clean `npm audit`, and upstream shows no sign of a fix. If you would rather keep hallmark, accept the finding with the rationale above, since the code path is unreachable. Either way, merge #66, which fixes the moderate findings.
 
 ## 16. NVIDIA API terms for the live image reading
 
