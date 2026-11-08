@@ -98,6 +98,13 @@
           "minimum": 0.0,
           "title": "Accelerator Rtol",
           "type": "number"
+        },
+        "reference_atol": {
+          "default": 0.001,
+          "description": "Max abs error of the output summary statistics vs the locked reference summary (cross-platform check).",
+          "minimum": 0.0,
+          "title": "Reference Atol",
+          "type": "number"
         }
       },
       "title": "Tolerances",

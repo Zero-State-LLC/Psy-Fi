@@ -202,6 +202,7 @@ def run_field_compute(manifest: WorkloadManifest, ctx: RunContext, env: Environm
         notes.append("accelerator timings include host->device transfer of the seeded initial field; CPU simulation remains the authority")
 
     locks: dict[str, str] = dict(manifest.references.get("quantized_sha256", {}) or {})
+    summary_locks: dict[str, dict[str, Any]] = dict(manifest.references.get("summary", {}) or {})
     quantization = manifest.tolerances.quantization
 
     for pt in points:
@@ -222,6 +223,8 @@ def run_field_compute(manifest: WorkloadManifest, ctx: RunContext, env: Environm
             protocol=protocol,
             quantization=quantization,
             reference_digest=locks.get(pt["id"]),
+            reference_summary=summary_locks.get(pt["id"]),
+            reference_atol=manifest.tolerances.reference_atol,
             digest_fn=_digest_of,
             metrics_fn=_throughput_metrics(pt["width"], pt["height"], pt["steps"]),
             cancel=ctx.cancel,
@@ -271,6 +274,18 @@ def run_field_compute(manifest: WorkloadManifest, ctx: RunContext, env: Environm
         "reference_locks": len(locks),
         "reference_matches": sum(1 for s in ok if s.determinism and s.determinism.reference_match is True),
         "reference_mismatches": [s.id for s in ok if s.determinism and s.determinism.reference_match is False],
+        "reference_summary_locks": len(summary_locks),
+        "reference_within_tolerance": sum(
+            1 for s in ok if s.determinism and s.determinism.reference_within_tolerance is True
+        ),
+        "reference_tolerance_mismatches": [
+            s.id for s in ok if s.determinism and s.determinism.reference_within_tolerance is False
+        ],
+        "reference_max_abs_error": max(
+            (s.determinism.reference_max_abs_error for s in ok if s.determinism and s.determinism.reference_max_abs_error is not None),
+            default=None,
+        ),
+        "reference_atol": manifest.tolerances.reference_atol,
         "nan_total": sum(s.determinism.nan_count for s in ok if s.determinism),
         "inf_total": sum(s.determinism.inf_count for s in ok if s.determinism),
         "quantization": quantization,
@@ -283,7 +298,8 @@ def lock_references(manifest: WorkloadManifest, ctx: RunContext | None = None) -
     """Compute quantized digests for every stage with the canonical backend and store them."""
     ctx = ctx or RunContext()
     locks: dict[str, str] = {}
-    from psyfi_bench.determinism import quantized_digest
+    summaries: dict[str, dict[str, Any]] = {}
+    from psyfi_bench.determinism import quantized_digest, reference_summary
 
     for pt in stage_points(manifest, ctx):
         settings = resolve_preset_settings(pt.get("preset")) if pt.get("preset") else _settings(manifest.params)
@@ -291,7 +307,18 @@ def lock_references(manifest: WorkloadManifest, ctx: RunContext | None = None) -
         arr = _digest_of(fn(lambda: False))
         if arr is not None:
             locks[pt["id"]] = quantized_digest(arr, manifest.tolerances.quantization)
+            summaries[pt["id"]] = reference_summary(arr)
+    import platform as _platform
+
     refs = dict(manifest.references)
     refs["quantized_sha256"] = locks
-    refs["locked_with"] = {"backend": "numpy", "quantization": manifest.tolerances.quantization}
+    refs["summary"] = summaries
+    refs["locked_with"] = {
+        "backend": "numpy",
+        "quantization": manifest.tolerances.quantization,
+        "reference_atol": manifest.tolerances.reference_atol,
+        "platform": f"{_platform.system()}-{_platform.machine()}",
+        "numpy": np.__version__,
+        "note": "quantized_sha256 is platform-class evidence; summary + reference_atol is the cross-platform check",
+    }
     return manifest.model_copy(update={"references": refs})

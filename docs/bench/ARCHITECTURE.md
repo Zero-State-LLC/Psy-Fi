@@ -58,7 +58,7 @@ All contracts are Pydantic v2 models in `psyfi_bench/schemas.py`. Every document
 | `StageRecord` | embedded | `id`, `kind`, `status`, `measurement_class`, `params`, `wall_ms[]`, `cpu_ms[]`, `cold_wall_ms`, `warmup_wall_ms[]`, `memory`, `metrics`, `statistics: dict[str, Statistics]`, `determinism`, `error`. |
 | `Statistics` | embedded | `n`, `unit`, `mean`, `median`, `min`, `max`, `std`, `cv`, `mad`, `p50`, `p90`, `p95`, `p99`, `ci95_mean`, `ci95_median`, `bootstrap` (method, resamples, seed, level). |
 | `MemoryRecord` | embedded | `rss_before_bytes`, `rss_peak_delta_bytes`, `tracemalloc_peak_bytes`, `tracemalloc_current_bytes`, `note`. |
-| `DeterminismRecord` | embedded | `exact_sha256`, `quantized_sha256`, `quantization`, `bitwise_identical_across_repeats`, `quantized_identical_across_repeats`, `reference_match` (None when no lock), `nan_count`, `inf_count`. |
+| `DeterminismRecord` | embedded | `exact_sha256`, `quantized_sha256`, `quantization`, `bitwise_identical_across_repeats`, `quantized_identical_across_repeats`, `reference_match` (digest equality, None when no lock), `reference_within_tolerance`, `reference_max_abs_error`, `nan_count`, `inf_count`. |
 | `FailureRecord` | embedded | `stage`, `category`, `detail`. |
 | `Provenance` | embedded | `git_commit`, `git_dirty`, `command`, `bench_version`, `psyfi_version`, `seed`, `notes[]`. |
 | `BenchResult` | `psyfi.bench.result.v1` | `run_id`, `created_at`, `manifest` (full document of the effective manifest), `manifest_hash`, `measurement_class`, `status`, `environment`, `stages[]`, `metrics` (headline), `determinism`, `failures[]`, `provenance`, `non_claim`, `result_hash`. `seal()` sets `result_hash` to the 64-char SHA-256 of the canonical JSON excluding itself; `verify()` recomputes it. |

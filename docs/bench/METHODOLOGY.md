@@ -10,7 +10,7 @@ Related: [ARCHITECTURE.md](ARCHITECTURE.md), [RESEARCH.md](RESEARCH.md).
 | --- | --- |
 | Workload identity | A manifest has an `id` and an integer `version`. `manifest_hash` covers id, version, family, execution, params, protocol, references and tolerances. A `--param` override is merged into the effective manifest, so the recorded hash changes. |
 | Seeds | Every manifest fixes seeds in `params`. `ABXRuntime(seed)` draws phases, then magnitudes. `map_parameters` and `build_scene_snapshot` are seed-deterministic. |
-| Fixtures and locks | `field_compute` locks a quantized digest per stage; `render.soft.g4` locks a raster SHA-256 per stage; `interpretation` locks a corpus digest. `reference_match` is None, True or False. Tests reproduce the locks on every run. |
+| Fixtures and locks | `field_compute` locks a quantized digest and a continuous summary (mean, std, max of magnitude, order parameter, 8×8 block means) per stage; `render.soft.g4` locks a raster SHA-256 per stage; `interpretation` locks a corpus digest. `reference_within_tolerance` is the cross-platform check (`tolerances.reference_atol`, 1e-3); `reference_match` (digest equality) is platform-class evidence. Tests reproduce the locks on every run. |
 | Cold run | With `cold_start`, the first execution is recorded as `cold_wall_ms` and excluded from the repeats. |
 | Warm-up | `warmup_runs` executions are discarded (recorded in `warmup_wall_ms`). The browser runner discards `warmup_frames`. |
 | Repeats | `repeats` timed executions after warm-up. Defaults: 5 for CPU timing, 3 for presets, 1 for provider workloads. |
@@ -37,7 +37,8 @@ All in `psyfi_bench/stats.py`, applied to the per-repeat `wall_ms` and `cpu_ms`,
 ### Determinism
 
 - `exact_sha256`: SHA-256 of dtype, shape and raw bytes. Identical across repeats on one machine proves bitwise reproducibility there.
-- `quantized_sha256`: SHA-256 after rounding to `tolerances.quantization` (1e-4 for field-compute). Identical across machines is the cross-platform reproducibility reference (hypothesis H2). A mismatch is a finding, not an error to hide.
+- `quantized_sha256`: SHA-256 after rounding to `tolerances.quantization` (1e-4 for field-compute). Identical digests mean the same floating-point platform (platform-class evidence). H2 as first stated predicted identical digests across machines; CI refuted it on 2026-11-08 (Linux x86-64 runner versus Apple arm64: `grid_256x256` and `preset_2c-e` differ at 1e-4 while the smaller stages agree). A digest flips whenever one element straddles a rounding boundary, so it cannot serve as a tolerance.
+- `reference_within_tolerance`: the locked summary statistics reproduce within `tolerances.reference_atol`. This is the cross-platform reproducibility check (H2, revised). `reference_max_abs_error` records the observed error so a near miss is visible.
 - NaN and Inf counts are recorded per stage.
 - Accelerator ports are validated against the NumPy pipeline on the same seeded initial field: `pipeline_max_abs_error <= tolerances.accelerator_atol`, else the stage is `failed` and its timings do not count.
 

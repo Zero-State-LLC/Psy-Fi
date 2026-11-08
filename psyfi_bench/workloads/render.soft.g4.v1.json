@@ -101,7 +101,8 @@
     "timing_cv_max": 0.3,
     "quantization": 1.0,
     "accelerator_atol": 0.0,
-    "accelerator_rtol": 0.0
+    "accelerator_rtol": 0.0,
+    "reference_atol": 0.001
   },
   "requires": [],
   "tags": [
@@ -109,5 +110,5 @@
     "render",
     "deterministic"
   ],
-  "manifest_hash": "13c0d51f868e73fb"
+  "manifest_hash": "b42835e69a0ab4ef"
 }

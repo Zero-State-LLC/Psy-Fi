@@ -8,22 +8,84 @@
   "execution": "python+provider",
   "params": {
     "cases": [
-      {"key": "lsd_open_42", "substance": "lsd", "mode": "open", "seed": 42, "intensity": 0.75},
-      {"key": "psilocybin_attractor_7", "substance": "psilocybin", "mode": "attractor", "seed": 7, "intensity": 0.6},
-      {"key": "dmt_void_99", "substance": "dmt", "mode": "void", "seed": 99, "intensity": 0.85},
-      {"key": "ketamine_power_3", "substance": "ketamine", "mode": "power", "seed": 3, "intensity": 0.9},
-      {"key": "mescaline_attractor_11", "substance": "mescaline", "mode": "attractor", "seed": 11, "intensity": 0.4},
-      {"key": "lsd_void_1337", "substance": "lsd", "mode": "void", "seed": 1337, "intensity": 0.3}
+      {
+        "key": "lsd_open_42",
+        "substance": "lsd",
+        "mode": "open",
+        "seed": 42,
+        "intensity": 0.75
+      },
+      {
+        "key": "psilocybin_attractor_7",
+        "substance": "psilocybin",
+        "mode": "attractor",
+        "seed": 7,
+        "intensity": 0.6
+      },
+      {
+        "key": "dmt_void_99",
+        "substance": "dmt",
+        "mode": "void",
+        "seed": 99,
+        "intensity": 0.85
+      },
+      {
+        "key": "ketamine_power_3",
+        "substance": "ketamine",
+        "mode": "power",
+        "seed": 3,
+        "intensity": 0.9
+      },
+      {
+        "key": "mescaline_attractor_11",
+        "substance": "mescaline",
+        "mode": "attractor",
+        "seed": 11,
+        "intensity": 0.4
+      },
+      {
+        "key": "lsd_void_1337",
+        "substance": "lsd",
+        "mode": "void",
+        "seed": 1337,
+        "intensity": 0.3
+      }
     ],
-    "simulation": {"width": 64, "height": 64, "steps": 12},
+    "simulation": {
+      "width": 64,
+      "height": 64,
+      "steps": 12
+    },
     "image_size": 256,
     "max_tokens": 64,
     "temperature": 0.0,
     "provider": "heuristic"
   },
-  "protocol": {"warmup_runs": 1, "repeats": 3, "cold_start": true, "timeout_s": 900, "memory_probe": false, "bootstrap_resamples": 1000, "bootstrap_seed": 0},
+  "protocol": {
+    "warmup_runs": 1,
+    "repeats": 3,
+    "cold_start": true,
+    "timeout_s": 900.0,
+    "min_duration_s": null,
+    "memory_probe": false,
+    "bootstrap_resamples": 1000,
+    "bootstrap_seed": 0
+  },
   "references": {},
-  "tolerances": {"timing_cv_max": 0.5, "quantization": 0.0001, "accelerator_atol": 0.0, "accelerator_rtol": 0.0},
-  "requires": ["provider"],
-  "tags": ["signature", "end-to-end", "fde"]
+  "tolerances": {
+    "timing_cv_max": 0.5,
+    "quantization": 0.0001,
+    "accelerator_atol": 0.0,
+    "accelerator_rtol": 0.0,
+    "reference_atol": 0.001
+  },
+  "requires": [
+    "provider"
+  ],
+  "tags": [
+    "signature",
+    "end-to-end",
+    "fde"
+  ],
+  "manifest_hash": "d11630c6fa207639"
 }

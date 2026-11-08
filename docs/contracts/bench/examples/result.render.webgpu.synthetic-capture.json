@@ -1,8 +1,8 @@
 {
   "schema": "psyfi.bench.result.v1",
   "bench_version": "0.1.0",
-  "run_id": "render_1794112215_99cc5bd1",
-  "created_at": "2026-11-08T04:30:15.749271Z",
+  "run_id": "render_1794125172_b6c89d32",
+  "created_at": "2026-11-08T08:06:12.421204Z",
   "manifest": {
     "schema": "psyfi.bench.manifest.v1",
     "id": "render.webgpu.tiers",
@@ -74,7 +74,8 @@
       "timing_cv_max": 0.5,
       "quantization": 1.0,
       "accelerator_atol": 0.0,
-      "accelerator_rtol": 0.0
+      "accelerator_rtol": 0.0,
+      "reference_atol": 0.001
     },
     "requires": [
       "browser",
@@ -86,13 +87,13 @@
       "webgpu",
       "frame-time"
     ],
-    "manifest_hash": "44af89f667eb90fc"
+    "manifest_hash": "34dbc9ae5f5d02ce"
   },
-  "manifest_hash": "44af89f667eb90fc",
+  "manifest_hash": "34dbc9ae5f5d02ce",
   "measurement_class": "synthetic",
   "status": "complete",
   "environment": {
-    "captured_at": "2026-11-08T04:30:15.663904Z",
+    "captured_at": "2026-11-08T08:06:12.342915Z",
     "hostname_hash": "225369c658b1",
     "platform": {
       "system": "Darwin",
@@ -140,7 +141,7 @@
         "mps": true,
         "devices": []
       },
-      "git_commit": "e0a46bab2548a8629a2cfb9460134569774a811f",
+      "git_commit": "210b78062f1d699f4c2f918b7e72a5f55b060b7b",
       "git_dirty": true
     },
     "browser": {
@@ -3288,7 +3289,7 @@
   "determinism": {},
   "failures": [],
   "provenance": {
-    "git_commit": "e0a46bab2548a8629a2cfb9460134569774a811f",
+    "git_commit": "210b78062f1d699f4c2f918b7e72a5f55b060b7b",
     "git_dirty": true,
     "command": "scripts/export_bench_contracts.py",
     "bench_version": "0.1.0",
@@ -3297,5 +3298,5 @@
     "notes": []
   },
   "non_claim": "Modeled phenomenology for research and visualization only. The benchmark measures computation, rendering, and model interpretation of modeled representations. It does not measure consciousness or subjective experience. Not medical advice.",
-  "result_hash": "17e4ddeb4e1267e538a9c1365bb460a808d0b90f9b12349095ad4d904a79299c"
+  "result_hash": "fad9cf9e87dfbfde66423b4974b58cd9898de441f2b7cfd2de0969a9d15239ac"
 }

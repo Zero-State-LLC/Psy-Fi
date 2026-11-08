@@ -85,7 +85,8 @@
     "timing_cv_max": 1.0,
     "quantization": 1.0,
     "accelerator_atol": 0.0,
-    "accelerator_rtol": 0.0
+    "accelerator_rtol": 0.0,
+    "reference_atol": 0.001
   },
   "requires": [
     "provider"
@@ -95,5 +96,5 @@
     "multimodal",
     "fde"
   ],
-  "manifest_hash": "96b72d3efcfe45cc"
+  "manifest_hash": "746506c7d9774a0f"
 }

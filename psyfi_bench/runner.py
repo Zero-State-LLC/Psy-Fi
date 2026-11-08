@@ -120,6 +120,8 @@ def measure_stage(
     protocol: Protocol,
     quantization: float,
     reference_digest: str | None = None,
+    reference_summary: dict[str, Any] | None = None,
+    reference_atol: float = 1e-3,
     digest_fn: Callable[[Any], np.ndarray | None] | None = None,
     metrics_fn: Callable[[Any, list[float]], dict[str, Any]] | None = None,
     cancel: Callable[[], bool] | None = None,
@@ -157,7 +159,15 @@ def measure_stage(
             if digest_fn is not None:
                 arr = digest_fn(t.result)
                 if arr is not None:
-                    determinism.append(record_for(arr, quantization=quantization, reference=reference_digest))
+                    determinism.append(
+                        record_for(
+                            arr,
+                            quantization=quantization,
+                            reference=reference_digest,
+                            reference_summary_lock=reference_summary,
+                            reference_atol=reference_atol,
+                        )
+                    )
             repeats_done += 1
             if protocol.min_duration_s is not None:
                 if (_time.perf_counter() - started) >= protocol.min_duration_s and repeats_done >= protocol.repeats:

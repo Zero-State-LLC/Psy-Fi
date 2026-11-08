@@ -6,6 +6,7 @@ Product versions follow [docs/VERSIONING.md](docs/VERSIONING.md). Tags `v0.1.0` 
 
 - FieldLoop benchmark subsystem (`psyfi_bench`): four workload families, locked references, sealed results, scorecards, CLI, mounted `/api/bench` read API, browser runner `/gpu/bench.html`. Product version unchanged.
 - `run_simulation` moved to `psyfi_core.simulation`; `psyfi_api.simulation_service` re-exports it.
+- Field-compute locks gain a tolerance-checked summary (`reference_within_tolerance`) after CI showed 1e-4 digests differ between Linux x86-64 and Apple arm64; `tolerances.reference_atol` added, so every manifest hash changed. Bench API resolves workload ids from the registry only.
 
 ## 1.4.0 — 2026-11-07
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
@@ -67,8 +68,32 @@ def list_manifests(directory: Path | None = None) -> list[WorkloadManifest]:
     return [load_manifest_file(p) for p in manifest_paths(directory)]
 
 
-def load_manifest(ref: str, directory: Path | None = None) -> WorkloadManifest:
-    """``ref`` is an id, ``id@version``, or a filesystem path."""
+MANIFEST_REF_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}(@[0-9]+)?$")
+
+
+def is_registry_ref(ref: str) -> bool:
+    """True for an ``id`` or ``id@version`` that can only resolve inside the packaged registry."""
+    return bool(MANIFEST_REF_PATTERN.match(ref)) and "/" not in ref and "\\" not in ref and ".." not in ref
+
+
+def load_registered_manifest(ref: str, directory: Path | None = None) -> WorkloadManifest:
+    """Resolve ``id`` or ``id@version`` from the registry only. Never touches a caller-supplied path."""
+    if not is_registry_ref(ref):
+        raise ManifestNotFound(ref)
+    want_id, _, want_version = ref.partition("@")
+    candidates = [m for m in list_manifests(directory) if m.id == want_id]
+    if want_version:
+        candidates = [m for m in candidates if str(m.version) == want_version]
+    if not candidates:
+        raise ManifestNotFound(ref)
+    return max(candidates, key=lambda m: m.version)
+
+
+def load_manifest(ref: str | Path, directory: Path | None = None) -> WorkloadManifest:
+    """``ref`` is an id, ``id@version``, or a filesystem path (CLI use; the API uses ``load_registered_manifest``)."""
+    ref = str(ref)
+    if is_registry_ref(ref):
+        return load_registered_manifest(ref, directory)
     path = Path(ref)
     if path.suffix == ".json" and path.exists():
         return load_manifest_file(path)

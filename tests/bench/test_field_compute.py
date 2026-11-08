@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import warnings
+
 import numpy as np
 import pytest
 
@@ -58,20 +60,34 @@ def test_scaling_workload_runs_and_matches_locked_reference(tmp_path) -> None:
     assert g32.determinism is not None
     assert g32.determinism.bitwise_identical_across_repeats is True
     # 32x32 is a locked stage; 48x48 is not in the manifest's locks.
-    assert g32.determinism.reference_match is True
+    assert g32.determinism.reference_within_tolerance is True
+    assert g32.determinism.reference_max_abs_error is not None
+    assert g32.determinism.reference_match in (True, False)  # digest equality is platform-class evidence
     assert result.stages[1].determinism.reference_match is None
+    assert result.stages[1].determinism.reference_within_tolerance is None
     assert result.metrics["scaling"]["n"] == 2
     assert result.verify()
     assert ctx.store.list(manifest_id="field-compute.scaling")
 
 
 def test_all_locked_manifests_still_match_on_this_platform() -> None:
-    """Quantized digests at 1e-4 are the cross-platform determinism reference (H2)."""
-    for ref in ("field-compute.scaling", "field-compute.steps"):
+    """The locked summary must reproduce within tolerance on every platform (H2, revised).
+
+    Quantized digests at 1e-4 differ between Linux x86-64 and Apple arm64 for the larger stages
+    (observed in CI on 2026-11-08), so digest equality is reported as a platform-class finding and
+    only the tolerance check is asserted.
+    """
+    from psyfi_bench.determinism import summary_error
+
+    for ref in ("field-compute.scaling", "field-compute.steps", "field-compute.presets"):
         manifest = load_manifest(ref)
-        locks = manifest.references["quantized_sha256"]
-        relocked = lock_references(manifest).references["quantized_sha256"]
-        assert relocked == locks, f"{ref}: canonical output drifted from the locked reference"
+        relocked = lock_references(manifest).references
+        for stage_id, lock in manifest.references["summary"].items():
+            err = summary_error(relocked["summary"][stage_id], lock)
+            assert err <= manifest.tolerances.reference_atol, f"{ref}/{stage_id}: summary drifted by {err}"
+        drifted = [k for k, v in manifest.references["quantized_sha256"].items() if relocked["quantized_sha256"].get(k) != v]
+        if drifted:
+            warnings.warn(f"{ref}: quantized digests differ on this platform for {drifted} (summary within tolerance)", stacklevel=1)
 
 
 def test_presets_workload_covers_registry_and_full_pipeline(tmp_path) -> None:
@@ -83,7 +99,7 @@ def test_presets_workload_covers_registry_and_full_pipeline(tmp_path) -> None:
     for stage in result.stages:
         assert stage.params["pipeline"] == "full"
         assert "valence" in stage.metrics["valence"]
-        assert stage.determinism and stage.determinism.reference_match is True
+        assert stage.determinism and stage.determinism.reference_within_tolerance is True
 
 
 def test_unknown_preset_is_a_validation_failure_not_a_crash() -> None:

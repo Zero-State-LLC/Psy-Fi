@@ -39,6 +39,7 @@ def dimensions_field_compute(r: BenchResult) -> dict[str, ScoreDimension]:
         "peak_tracemalloc_bytes_per_cell": _dim(big.metrics.get("tracemalloc_peak_bytes_per_cell") if big else None, "bytes/cell", "lower", f"stages.{big.id}.metrics" if big else "n/a", missing="memory probe disabled"),
         "bitwise_determinism": _dim(1.0 if det.get("all_bitwise_identical_across_repeats") else (0.0 if det.get("all_bitwise_identical_across_repeats") is False else None), "0|1", "higher", "metrics.determinism"),
         "reference_lock_matches": _dim(det.get("reference_matches"), "count", "higher", "metrics.determinism.reference_matches"),
+        "reference_within_tolerance": _dim(det.get("reference_within_tolerance"), "count", "higher", "metrics.determinism.reference_within_tolerance"),
     }
     if m.get("sustained"):
         dims["sustained_drift_ratio"] = _dim(m["sustained"].get("last_first_quartile_ratio"), "ratio", "lower", "metrics.sustained")

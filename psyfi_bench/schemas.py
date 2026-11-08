@@ -75,6 +75,10 @@ class Tolerances(BaseModel):
     quantization: float = Field(default=1e-5, gt=0.0, description="Rounding step for the quantized output hash.")
     accelerator_atol: float = Field(default=1e-4, ge=0.0, description="Max abs error of an accelerator vs numpy reference.")
     accelerator_rtol: float = Field(default=1e-4, ge=0.0)
+    reference_atol: float = Field(
+        default=1e-3, ge=0.0,
+        description="Max abs error of the output summary statistics vs the locked reference summary (cross-platform check).",
+    )
 
 
 class WorkloadManifest(BaseModel):
@@ -196,8 +200,16 @@ class DeterminismRecord(BaseModel):
     bitwise_identical_across_repeats: bool | None = None
     quantized_identical_across_repeats: bool | None = None
     reference_match: bool | None = Field(
-        default=None, description="Matches the manifest's locked reference hash (None when no lock)."
+        default=None,
+        description="Quantized digest equals the manifest's locked digest (None when no lock). Platform-class evidence: "
+        "the same digest means the same floating-point platform; a mismatch alone is not an error.",
     )
+    reference_within_tolerance: bool | None = Field(
+        default=None,
+        description="Output summary statistics are within tolerances.reference_atol of the locked summary "
+        "(None when no summary lock). The cross-platform reproducibility check.",
+    )
+    reference_max_abs_error: float | None = Field(default=None, description="Max abs error of the summary vs the lock.")
     nan_count: int = 0
     inf_count: int = 0
 

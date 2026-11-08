@@ -79,10 +79,10 @@ async def workloads(family: str | None = Query(default=None)) -> dict[str, Any]:
 
 @bench_app.get("/v1/workloads/{workload_id}", tags=["bench"])
 async def workload(workload_id: str) -> dict[str, Any]:
-    from psyfi_bench.registry import ManifestNotFound, load_manifest
+    from psyfi_bench.registry import ManifestNotFound, load_registered_manifest
 
     try:
-        return load_manifest(workload_id).to_document()
+        return load_registered_manifest(workload_id).to_document()
     except ManifestNotFound as exc:
         raise HTTPException(status_code=404, detail=f"unknown workload {workload_id!r}") from exc
 
@@ -135,12 +135,12 @@ async def ingest_capture(request: Request) -> dict[str, Any]:
         raise HTTPException(status_code=422, detail=f"invalid capture: {str(exc)[:300]}") from exc
     if sum(len(s.frames_ms) for s in capture.stages) > MAX_CAPTURE_FRAMES:
         raise HTTPException(status_code=413, detail=f"capture has more than {MAX_CAPTURE_FRAMES} frames")
-    from psyfi_bench.registry import ManifestNotFound, load_manifest
+    from psyfi_bench.registry import ManifestNotFound, load_registered_manifest
     from psyfi_bench.runner import RunContext, run_workload
     from psyfi_bench.store import ResultStore
 
     try:
-        manifest = load_manifest(capture.manifest_id)
+        manifest = load_registered_manifest(capture.manifest_id)
     except ManifestNotFound as exc:
         raise HTTPException(status_code=409, detail=f"capture names unknown manifest {capture.manifest_id!r}") from exc
     if manifest.family != "render":

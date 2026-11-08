@@ -100,7 +100,7 @@ def test_nvidia_provider_enforces_namespace_and_reasoning_effort(monkeypatch) ->
     assert provider.complete(ModelRequest(prompt="x", images=[IMG])).ok
     assert seen[0]["body"]["reasoning_effort"] == "none"
     assert "response_format" not in seen[0]["body"]
-    assert seen[0]["url"].startswith("https://integrate.api.nvidia.com")
+    assert httpx.URL(seen[0]["url"]).host == "integrate.api.nvidia.com"
 
 
 def test_anthropic_provider_shape(monkeypatch) -> None:

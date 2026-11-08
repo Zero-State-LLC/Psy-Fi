@@ -1,14 +1,14 @@
 {
   "schema": "psyfi.bench.scorecard.v1",
-  "generated_at": "2026-11-08T04:30:14.957162Z",
+  "generated_at": "2026-11-08T08:06:11.717022Z",
   "family": "interpretation",
   "manifest_id": "interpretation.fieldread.smoke",
-  "manifest_hash": "f3c603745664a241",
+  "manifest_hash": "3bfe42d860230106",
   "subjects": [
     {
       "label": "oracle",
-      "run_id": "interpretation_1794112214_c3cd58fe",
-      "created_at": "2026-11-08T04:30:14.626408Z",
+      "run_id": "interpretation_1794125171_fef91529",
+      "created_at": "2026-11-08T08:06:11.395306Z",
       "measurement_class": "synthetic",
       "status": "complete",
       "hardware_class": "integrated",
@@ -21,8 +21,8 @@
     },
     {
       "label": "heuristic",
-      "run_id": "interpretation_1794112214_52d6a37a",
-      "created_at": "2026-11-08T04:30:14.954750Z",
+      "run_id": "interpretation_1794125171_22f1c944",
+      "created_at": "2026-11-08T08:06:11.715213Z",
       "measurement_class": "synthetic",
       "status": "complete",
       "hardware_class": "integrated",
@@ -169,7 +169,7 @@
     },
     "latency_ms_p50": {
       "oracle": {
-        "value": 0.0012703239917755127,
+        "value": 0.0011455267667770386,
         "unit": "ms",
         "better": "lower",
         "ci95": null,
@@ -177,7 +177,7 @@
         "missing_reason": null
       },
       "heuristic": {
-        "value": 0.22912444546818733,
+        "value": 0.21279184147715569,
         "unit": "ms",
         "better": "lower",
         "ci95": null,
@@ -321,26 +321,26 @@
         "inputs": {
           "within_mode_step_rate": 1.0,
           "parse_rate": 1.0,
-          "latency_ms_p50": 0.0012703239917755127
+          "latency_ms_p50": 0.0011455267667770386
         },
         "missing_data_rule": "null when any input is missing or latency is zero",
         "valid_comparison": "same manifest_hash, same prompt_revision, same image_size",
-        "value": 787200.7507331378,
+        "value": 872960.8325203252,
         "sensitivity": {
           "delta": 0.1,
-          "base": 787200.7507331378,
+          "base": 872960.8325203252,
           "per_input": {
             "within_mode_step_rate": {
-              "minus": 708480.675659824,
-              "plus": 865920.8258064517
+              "minus": 785664.7492682927,
+              "plus": 960256.9157723578
             },
             "parse_rate": {
-              "minus": 708480.675659824,
-              "plus": 865920.8258064517
+              "minus": 785664.7492682927,
+              "plus": 960256.9157723578
             },
             "latency_ms_p50": {
-              "minus": 874667.5008145977,
-              "plus": 715637.0461210342
+              "minus": 969956.4805781391,
+              "plus": 793600.7568366593
             }
           }
         }
@@ -366,26 +366,26 @@
         "inputs": {
           "within_mode_step_rate": 0.25,
           "parse_rate": 1.0,
-          "latency_ms_p50": 0.22912444546818733
+          "latency_ms_p50": 0.21279184147715569
         },
         "missing_data_rule": "null when any input is missing or latency is zero",
         "valid_comparison": "same manifest_hash, same prompt_revision, same image_size",
-        "value": 1091.1101148075059,
+        "value": 1174.8570728302043,
         "sensitivity": {
           "delta": 0.1,
-          "base": 1091.1101148075059,
+          "base": 1174.8570728302043,
           "per_input": {
             "within_mode_step_rate": {
-              "minus": 981.9991033267553,
-              "plus": 1200.2211262882565
+              "minus": 1057.371365547184,
+              "plus": 1292.342780113225
             },
             "parse_rate": {
-              "minus": 981.9991033267553,
-              "plus": 1200.2211262882565
+              "minus": 1057.371365547184,
+              "plus": 1292.342780113225
             },
             "latency_ms_p50": {
-              "minus": 1212.3445720083398,
-              "plus": 991.9182861886418
+              "minus": 1305.396747589116,
+              "plus": 1068.0518843910947
             }
           }
         }
@@ -408,7 +408,7 @@
     "comparable": true,
     "reasons": [],
     "manifest_hashes": [
-      "f3c603745664a241"
+      "3bfe42d860230106"
     ],
     "measurement_classes": [
       "synthetic"

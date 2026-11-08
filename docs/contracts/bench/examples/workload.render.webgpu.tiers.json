@@ -69,7 +69,8 @@
     "timing_cv_max": 0.5,
     "quantization": 1.0,
     "accelerator_atol": 0.0,
-    "accelerator_rtol": 0.0
+    "accelerator_rtol": 0.0,
+    "reference_atol": 0.001
   },
   "requires": [
     "browser",
@@ -81,5 +82,5 @@
     "webgpu",
     "frame-time"
   ],
-  "manifest_hash": "44af89f667eb90fc"
+  "manifest_hash": "34dbc9ae5f5d02ce"
 }

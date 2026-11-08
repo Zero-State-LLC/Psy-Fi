@@ -33,6 +33,10 @@ Log-log scaling exponent over this range: **0.73** (R² 0.976). Between 128² an
 
 Determinism: every stage bitwise identical across repeats; 30 of 30 locked references match; zero NaN/Inf.
 
+## Family A: cross-platform determinism (GitHub Actions, Linux x86-64)
+
+Observed by CI on PR #56 (run 42447145978, 2026-11-08), not on this Mac. The locked quantized digests (1e-4) computed on Apple arm64 reproduced on the ubuntu runner for `grid_32x32`, `grid_64x64`, `grid_128x128` and 22 of 23 presets, but not for `grid_256x256` (20 steps) or `preset_2c-e` (64², full pipeline). Exact digests were identical across repeats on both machines. Interpretation: different BLAS/SIMD reduction order produces differences below 1e-4 that cross rounding boundaries once enough elements accumulate. Response: every field-compute lock now carries a continuous summary checked at `reference_atol` 1e-3; the digest stays recorded as platform-class evidence. The summary error on the runner is reported by the CI log of the next run and is not yet recorded here.
+
 ## Family A: accelerator port (torch, MPS)
 
 `field-compute.accelerator`, backend `torch-mps`, validated against NumPy per stage:

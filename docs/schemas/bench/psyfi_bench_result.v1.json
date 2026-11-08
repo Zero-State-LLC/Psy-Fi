@@ -73,8 +73,34 @@
             }
           ],
           "default": null,
-          "description": "Matches the manifest's locked reference hash (None when no lock).",
+          "description": "Quantized digest equals the manifest's locked digest (None when no lock). Platform-class evidence: the same digest means the same floating-point platform; a mismatch alone is not an error.",
           "title": "Reference Match"
+        },
+        "reference_within_tolerance": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Output summary statistics are within tolerances.reference_atol of the locked summary (None when no summary lock). The cross-platform reproducibility check.",
+          "title": "Reference Within Tolerance"
+        },
+        "reference_max_abs_error": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Max abs error of the summary vs the lock.",
+          "title": "Reference Max Abs Error"
         },
         "nan_count": {
           "default": 0,

@@ -16,7 +16,7 @@
       "requires": [
         "torch"
       ],
-      "manifest_hash": "cb2e15abd4358ced",
+      "manifest_hash": "9720ff6e599f7995",
       "title": "Experimental accelerator port of the field pipeline (torch)"
     },
     {
@@ -25,7 +25,7 @@
       "family": "field_compute",
       "execution": "python",
       "requires": [],
-      "manifest_hash": "588823acb17c9a7c",
+      "manifest_hash": "c579aeed8cfdb959",
       "title": "Full API-equivalent simulation for every substance preset"
     },
     {
@@ -34,7 +34,7 @@
       "family": "field_compute",
       "execution": "python",
       "requires": [],
-      "manifest_hash": "038432cccf3bf058",
+      "manifest_hash": "ebe01d8150c791ec",
       "title": "ABX-Core field pipeline: scaling with grid size"
     },
     {
@@ -43,7 +43,7 @@
       "family": "field_compute",
       "execution": "python",
       "requires": [],
-      "manifest_hash": "09f5b56ddb8dfcbb",
+      "manifest_hash": "3fe20fd4c3c3ec39",
       "title": "ABX-Core field pipeline: scaling with simulation steps"
     },
     {
@@ -52,7 +52,7 @@
       "family": "field_compute",
       "execution": "python",
       "requires": [],
-      "manifest_hash": "d7cadcfa372be2ae",
+      "manifest_hash": "d286190985cb61ca",
       "title": "ABX-Core field pipeline: sustained throughput"
     },
     {
@@ -63,7 +63,7 @@
       "requires": [
         "provider"
       ],
-      "manifest_hash": "10909d8a52a1d243",
+      "manifest_hash": "d11630c6fa207639",
       "title": "FieldLoop: simulate, snapshot, render, interpret, reconstruct"
     },
     {
@@ -74,7 +74,7 @@
       "requires": [
         "provider"
       ],
-      "manifest_hash": "f3c603745664a241",
+      "manifest_hash": "3bfe42d860230106",
       "title": "Field reading smoke corpus (8 items) for CI and provider checks"
     },
     {
@@ -85,7 +85,7 @@
       "requires": [
         "provider"
       ],
-      "manifest_hash": "96b72d3efcfe45cc",
+      "manifest_hash": "746506c7d9774a0f",
       "title": "Field reading: model interpretation of rendered and structured field states"
     },
     {
@@ -94,7 +94,7 @@
       "family": "render",
       "execution": "python",
       "requires": [],
-      "manifest_hash": "13c0d51f868e73fb",
+      "manifest_hash": "b42835e69a0ab4ef",
       "title": "Soft raster of the G4 canonical seeds across tiers and sizes"
     },
     {
@@ -106,7 +106,7 @@
         "browser",
         "webgpu"
       ],
-      "manifest_hash": "44af89f667eb90fc",
+      "manifest_hash": "34dbc9ae5f5d02ce",
       "title": "WebGPU present path: frame times and tier fidelity on one device"
     }
   ],
@@ -170,7 +170,7 @@
     "torch": true
   },
   "environment": {
-    "captured_at": "2026-11-08T04:30:13.296167Z",
+    "captured_at": "2026-11-08T08:06:10.176828Z",
     "hostname_hash": "225369c658b1",
     "platform": {
       "system": "Darwin",
@@ -218,7 +218,7 @@
         "mps": true,
         "devices": []
       },
-      "git_commit": "e0a46bab2548a8629a2cfb9460134569774a811f",
+      "git_commit": "210b78062f1d699f4c2f918b7e72a5f55b060b7b",
       "git_dirty": true
     },
     "browser": null,

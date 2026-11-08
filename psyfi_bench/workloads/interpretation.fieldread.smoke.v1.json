@@ -78,7 +78,8 @@
     "timing_cv_max": 1.0,
     "quantization": 1.0,
     "accelerator_atol": 0.0,
-    "accelerator_rtol": 0.0
+    "accelerator_rtol": 0.0,
+    "reference_atol": 0.001
   },
   "requires": [
     "provider"
@@ -89,5 +90,5 @@
     "fde",
     "smoke"
   ],
-  "manifest_hash": "f3c603745664a241"
+  "manifest_hash": "3bfe42d860230106"
 }

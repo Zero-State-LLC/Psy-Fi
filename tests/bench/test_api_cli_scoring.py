@@ -151,3 +151,16 @@ def test_cli_run_exit_codes_reflect_status(capsys) -> None:
     assert code == 1
     code = cli_main(["run", "render.webgpu.tiers", "--no-store", "--quiet"])
     assert code == 1
+
+
+def test_workload_route_rejects_path_like_ids() -> None:
+    from fastapi.testclient import TestClient
+
+    from psyfi_api.main import app
+    from psyfi_bench.registry import is_registry_ref
+
+    client = TestClient(app)
+    for bad in ("../../pyproject.toml", "/etc/passwd", "x/y.json", "field-compute.scaling.v1.json"):
+        assert client.get(f"/api/bench/v1/workloads/{bad}").status_code in (404, 422)
+    assert is_registry_ref("field-compute.scaling") and is_registry_ref("field-compute.scaling@1")
+    assert not is_registry_ref("../x") and not is_registry_ref("a/b") and not is_registry_ref("")

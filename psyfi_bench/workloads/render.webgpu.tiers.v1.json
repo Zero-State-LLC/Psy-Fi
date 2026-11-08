@@ -58,7 +58,8 @@
     "warmup_runs": 0,
     "repeats": 1,
     "cold_start": false,
-    "timeout_s": 900,
+    "timeout_s": 900.0,
+    "min_duration_s": null,
     "memory_probe": false,
     "bootstrap_resamples": 1000,
     "bootstrap_seed": 0
@@ -66,9 +67,10 @@
   "references": {},
   "tolerances": {
     "timing_cv_max": 0.5,
-    "quantization": 1,
-    "accelerator_atol": 0,
-    "accelerator_rtol": 0
+    "quantization": 1.0,
+    "accelerator_atol": 0.0,
+    "accelerator_rtol": 0.0,
+    "reference_atol": 0.001
   },
   "requires": [
     "browser",
@@ -79,5 +81,6 @@
     "browser",
     "webgpu",
     "frame-time"
-  ]
+  ],
+  "manifest_hash": "34dbc9ae5f5d02ce"
 }
