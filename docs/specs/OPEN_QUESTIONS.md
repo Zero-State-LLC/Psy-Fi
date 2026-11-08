@@ -1,6 +1,6 @@
 # Open questions — register
 
-Researched: 2026-11-08, against `main` at `d81483f` and the open pull requests #59, #60, #64, #65 and #66.
+Researched: 2026-11-08, against `main` at `d81483f` and the open pull requests #59, #60, #64, #65 and #66. Prices and terms were rechecked the same day against official sources where they exist.
 
 This register collects every open question from `intent.md`, `intent/*.md`, `HANDOFF.md` §4, ADR 0011 and the tracker in one place. Each entry gives the evidence and a recommendation. A recommendation is not a decision. Where an entry says "Decides: operator", nothing changes until a human says so in an accepted intent or in the issue. When a question is settled, mark it in its source document and here.
 
@@ -18,6 +18,7 @@ This register collects every open question from `intent.md`, `intent/*.md`, `HAN
 | 8 | [Publishing results on psy-fi.space](#8-publishing-results-on-psy-fispace) | Open. Recommend not yet | Operator |
 | 9 | [Read-only scorecard endpoint](#9-read-only-scorecard-endpoint) | Open. Tied to 8 | Operator, Fable |
 | 10 | [README linter advisories](#10-readme-linter-advisories) | Open. Recommend accept with rationale | Operator |
+| 16 | [NVIDIA API terms for the live image reading](#16-nvidia-api-terms-for-the-live-image-reading) | Open. Check before relying on it | Operator |
 | 11 | [WGSL kernel worth validating](#11-answered-wgsl-kernel-worth-validating) | Answered (#60) | — |
 | 12 | [Where FieldLoop results live](#12-answered-where-fieldloop-results-live) | Answered (#65) | — |
 | 13 | [GPU frame-time bench](#13-answered-gpu-frame-time-bench) | Answered (#56) | — |
@@ -50,6 +51,8 @@ Asked in: `intent.md` open questions, `HANDOFF.md` §3 and §4, `docs/specs/clou
 - no retries or fallbacks;
 - `NVIDIA_API_BASE` set to the gateway URL;
 - the gateway token added to the redaction in `_safe_provider_message`.
+
+**Checked later.** A request can carry both the provider's `Authorization: Bearer` and `cf-aig-authorization`; the OpenAI provider page shows the pair (<https://developers.cloudflare.com/ai-gateway/usage/providers/openai/>). Cloudflare publishes no figure for the gateway's own added latency; it gives one only for guardrails, about 500 ms.
 
 **Not verified:** latency overhead; whether a Worker binding can reach a custom provider.
 
@@ -98,6 +101,7 @@ Asked in: `intent.md`, `HANDOFF.md` §4, issue #49.
 - Run the vision-bench receipt first (about 4 posts) and commit it as the spec describes.
 - Then run the smoke workload (28 posts) for #49, before the full one (242 posts). The workload stops after 3 consecutive provider errors (`abort_after_consecutive_errors`), which bounds a failing run.
 - Keep each #49 result as a sealed result file.
+- Pace the posts. Users of the hosted API report a default of 1,000 credits and 40 requests per minute; NVIDIA publishes no number and says limits vary per model. At 40 per minute, the full run takes at least 6 minutes.
 - Never print the key or the model id.
 
 ## 5. FieldLoop run endpoint (#54)
@@ -129,7 +133,13 @@ Asked in: issues #48, #53, #50 and the open half of #59.
   - <https://developer.chrome.com/blog/supercharge-web-ai-testing>
   - <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvidia-GRID-driver.html>
   - <https://docs.nvidia.com/vgpu/latest/grid-management-sdk-user-guide/manage-vgpus-guest-vm-sdk.html>
-- **Prices:** from aggregator posts, unverified. #53 plus #50 is roughly under $1 of GPU time; #48 roughly $2–6 including setup.
+- **Prices** (checked 2026-11-08):
+  - AWS us-east-1 on-demand, from AWS's public price feed dated 2026-11-07: g4dn.xlarge (T4) $0.526/h Linux, $0.71/h Windows; g5.xlarge (A10G) $1.006/h Linux, $1.19/h Windows.
+  - The default quota for "Running On-Demand G and VT instances" is 0, so a new AWS account must request an increase first (<https://docs.aws.amazon.com/ec2/latest/instancetypes/ec2-instance-quotas.html>).
+  - RunPod RTX 4090 $0.89/h and L4 $0.59/h (<https://www.runpod.io/pricing>); vast.ai RTX 4090 median $0.47/h and L4 median $0.32/h (<https://vast.ai/pricing>, live marketplace).
+  - GitHub's Linux T4 GPU runner costs $0.052 per minute and needs GitHub Team or Enterprise Cloud (<https://docs.github.com/en/billing/reference/actions-runner-pricing>).
+  - Not verified on any of these: whether `nvidia-smi` reports `power.draw.instant`.
+  - So #53 plus #50 is well under $1 of GPU time, and #48 is a few dollars of g4dn Windows time, plus setup.
 
 **Recommend.** Run #53 and #50 together on a rented Linux NVIDIA box first, since it is cheap and needs no browser. Run #48 on Windows AWS g4dn or g5 with RDP or DCV. Leave the AMD and Arc rows unmeasured.
 
@@ -192,6 +202,20 @@ Asked in: #66 (open) and `npm audit`.
 - **Replacement option:** a `remark-cli` setup (`remark-gfm`, `remark-validate-links` and the same 25 `remark-lint-*` rules), plus the #66-style `glob`/`minimatch` override, gives a clean audit. It flags the same issues on README.md: the same 46 missing-file warnings at the same positions on an unstubbed copy. It drops `hallmark fix` and `remark-github` URL shortening.
 
 **Recommend.** Accept with this rationale for now, since the code path is unreachable and the tool is dev only. Switch to `remark-cli` if a clean `npm audit` gate matters. Either way, merge #66, which fixes the moderate findings.
+
+## 16. NVIDIA API terms for the live image reading
+
+Asked in: this register, found while checking the cost of entry 4.
+
+**Found.**
+- psy-fi.space's public image reading calls NVIDIA's hosted API at `integrate.api.nvidia.com`.
+- An NVIDIA staff FAQ post says the free hosted endpoints come with the NVIDIA Developer Program and are licensed for research, development and testing. Production use needs NVIDIA AI Enterprise (90-day trial) or a partner host (<https://forums.developer.nvidia.com/t/nvidia-nim-faq/300317>).
+- That is a forum post, not a docs page, and it may not match the account's current terms.
+
+**Recommend.** Before relying on the feature, check the terms of the account the live key belongs to. If the free endpoints are dev and test only, choose one of these:
+- keep the feature and present it as a research preview;
+- move it to an NVIDIA AI Enterprise or partner-hosted endpoint, which `NVIDIA_API_BASE` already allows;
+- switch it off on the public host.
 
 ## 11. Answered: WGSL kernel worth validating
 
