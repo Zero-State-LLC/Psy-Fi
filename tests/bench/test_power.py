@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import time
+
 import pytest
 
 from psyfi_bench import power as power_mod
@@ -38,10 +40,10 @@ def _run(factory, tmp_name="x"):
 
 def test_energy_is_trapezoid_of_samples_only() -> None:
     samples = [PowerSample(0.0, 100.0, 50.0, 1000.0), PowerSample(1.0, 200.0, 60.0, 1500.0), PowerSample(3.0, 200.0, 55.0, 1400.0)]
-    rec = build_power_record(samples, source="fake", interval_s=1.0, window_s=3.5, work_unit="cell_step", work_units=300.0)
+    rec = build_power_record(samples, source="fake", interval_s=1.0, window_s=3.2, work_unit="cell_step", work_units=300.0)
     assert rec.energy_j == pytest.approx(150.0 + 400.0)
     assert rec.energy_j_per_work_unit == pytest.approx(550.0 / 300.0)
-    assert rec.sampled_span_s == 3.0 and rec.window_s == 3.5 and rec.sample_count == 3
+    assert rec.sampled_span_s == 3.0 and rec.window_s == 3.2 and rec.sample_count == 3
     assert rec.power_w_mean == pytest.approx(500.0 / 3) and rec.power_w_max == 200.0
     assert rec.temperature_c_max == 60.0 and rec.sm_clock_mhz_max == 1500.0
     assert "no extrapolation" in rec.derivation
@@ -97,3 +99,28 @@ def test_results_without_power_still_validate() -> None:
     for st in doc["stages"]:
         st.pop("power", None)
     BenchResult.model_validate(doc)
+
+
+def test_per_unit_energy_needs_samples_across_most_of_the_window() -> None:
+    samples = [PowerSample(0.0, 100.0), PowerSample(1.0, 100.0)]
+    rec = build_power_record(samples, source="fake", interval_s=0.2, window_s=2.0, work_unit="cell_step", work_units=1000.0)
+    assert rec.energy_j == pytest.approx(100.0)
+    assert rec.energy_j_per_work_unit is None
+    assert "50%" in (rec.unavailable_reason or "")
+
+
+def test_threaded_sampler_takes_a_last_reading_at_stop_and_stops_once() -> None:
+    reads: list[float] = []
+
+    def read() -> PowerSample:
+        reads.append(1.0)
+        return PowerSample(float(len(reads)), 10.0)
+
+    s = ThreadedSampler(read, interval_s=60.0)  # the loop reads once, then waits
+    s.start()
+    deadline = time.monotonic() + 5.0
+    while not reads and time.monotonic() < deadline:  # let the loop take its first reading
+        time.sleep(0.001)
+    first = s.stop()
+    assert len(first) == 2  # the loop's reading plus the final one
+    assert s.stop() == first  # a second stop adds nothing

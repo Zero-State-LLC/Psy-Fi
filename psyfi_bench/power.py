@@ -21,9 +21,12 @@ from psyfi_bench.schemas import PowerRecord
 NVIDIA_SMI_QUERY = "power.draw,temperature.gpu,clocks.sm"
 DERIVATION = (
     "energy_j = trapezoid integral of sampled power.draw (W) over sample timestamps, from the first to the last "
-    "sample (no extrapolation to the stage edges); per-unit energy = energy_j / work units completed in the "
-    "sampled loop; samples are nvidia-smi readings of GPU index 0 (board power, whichever backend ran the stage)"
+    "sample (no extrapolation to the stage edges); the sampler takes one last reading when it stops, so the samples "
+    "span the measured loop; per-unit energy = energy_j / work units completed in the sampled loop, reported only "
+    "when the sampled span covers at least 90% of the window; samples are nvidia-smi readings of GPU index 0 "
+    "(board power, whichever backend ran the stage)"
 )
+MIN_SPAN_COVERAGE = 0.9
 
 
 @dataclass(frozen=True)
@@ -95,10 +98,14 @@ class ThreadedSampler:
         self._thread.start()
 
     def stop(self) -> list[PowerSample]:
+        """End sampling with one last reading, so the samples reach the end of the stage. Safe to call twice."""
         self._stop.set()
         if self._thread is not None:
             self._thread.join(timeout=10.0)
             self._thread = None
+            last = self._read()
+            if last is not None:
+                self._samples.append(last)
         return list(self._samples)
 
 
@@ -131,7 +138,15 @@ def build_power_record(
         reason = f"fewer than 2 power samples ({len(watts)}) in a {window_s:.3f}s window; energy not reported"
     per_unit = None
     if energy is not None and work_units:
-        per_unit = energy / work_units
+        coverage = span / window_s if window_s > 0 else 0.0
+        if coverage >= MIN_SPAN_COVERAGE:
+            per_unit = energy / work_units
+        else:
+            # The work ran over the whole window but the energy only over the sampled span.
+            reason = (
+                f"samples span {span:.3f}s of a {window_s:.3f}s window ({coverage:.0%}, under "
+                f"{MIN_SPAN_COVERAGE:.0%}); per-unit energy not reported"
+            )
     return PowerRecord(
         source=source, query=NVIDIA_SMI_QUERY, interval_s=interval_s, sample_count=len(samples),
         window_s=window_s, sampled_span_s=span,

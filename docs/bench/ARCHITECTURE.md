@@ -236,7 +236,7 @@ Hardware-dependent:
 - Captures from discrete GPUs (NVIDIA, AMD, Intel Arc, Apple Pro/Max) through `/gpu/bench.html`; this machine is integrated-class.
 - Torch backend validation on CUDA and MPS; the port exists and is validated against NumPy, but torch is not installed here.
 - A WGSL Kuramoto compute port in the browser validated against a Python reference field (not implemented).
-- Thermal sampling (not implemented). Power: when `nvidia-smi` exists, `field_compute` stages carry `StageRecord.power` (`psyfi_bench/power.py`): samples of `power.draw,temperature.gpu,clocks.sm` on a thread around the repeats, energy as the trapezoid integral of the samples (no extrapolation), `energy_j_per_work_unit` per cell-step. With no tool, no power field is written and `environment.unavailable.power` stays. Energy per frame for webgpu captures is not wired: a capture is taken in a browser outside this process, so there is no sample window to integrate.
+- Power and temperature: when `nvidia-smi` exists, `field_compute` stages carry `StageRecord.power` (`psyfi_bench/power.py`): samples of `power.draw,temperature.gpu,clocks.sm` on a thread around the repeats plus one last reading at stop, energy as the trapezoid integral of the samples (no extrapolation), `energy_j_per_work_unit` per cell-step only when the samples span at least 90% of the stage window, mean and max watts, and max GPU temperature. With no tool, no power field is written and `environment.unavailable.power` stays. Energy per frame for webgpu captures is not wired: a capture is taken in a browser outside this process, so there is no sample window to integrate.
 
 Provider-dependent:
 
