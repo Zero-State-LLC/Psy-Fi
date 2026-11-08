@@ -15,23 +15,6 @@ from psyfi_bench.schemas import BenchResult, Protocol
 FAST = Protocol(repeats=2, warmup_runs=0, cold_start=False, memory_probe=False, bootstrap_resamples=100)
 
 
-class FakeSampler:
-    name = "fake-smi"
-    interval_s = 0.5
-
-    def __init__(self, samples: list[PowerSample]) -> None:
-        self._samples = samples
-        self.started = 0
-        self.stopped = 0
-
-    def start(self) -> None:
-        self.started += 1
-
-    def stop(self) -> list[PowerSample]:
-        self.stopped += 1
-        return list(self._samples)
-
-
 def _run(factory, tmp_name="x"):
     manifest = load_manifest("field-compute.scaling").model_copy(update={"protocol": FAST})
     ctx = RunContext(inputs={"grid_sizes": [8], "steps": 3}, include_gpu_env=False, power_sampler_factory=factory)
@@ -57,16 +40,40 @@ def test_too_few_samples_reports_no_energy_and_a_reason() -> None:
     assert empty.sample_count == 0 and empty.power_w_mean is None and empty.energy_j is None
 
 
-def test_field_compute_records_energy_per_cell_step_with_fake_sampler() -> None:
-    fake = FakeSampler([PowerSample(0.0, 100.0), PowerSample(2.0, 100.0)])
+class ClockSampler:
+    """Stamps readings on the runner's clock: two inside the stage, one after it (the in-flight read at stop)."""
+
+    name = "fake-smi"
+    interval_s = 0.5
+
+    def __init__(self) -> None:
+        self.t0 = 0.0
+        self.started = 0
+        self.stopped = 0
+
+    def start(self) -> None:
+        self.started += 1
+        self.t0 = time.perf_counter()
+
+    def stop(self) -> list[PowerSample]:
+        self.stopped += 1
+        after = time.perf_counter() + 1.0
+        return [PowerSample(self.t0, 100.0), PowerSample(self.t0 + 1e-6, 100.0), PowerSample(after, 500.0)]
+
+
+def test_field_compute_records_in_window_power_with_fake_sampler() -> None:
+    fake = ClockSampler()
     result = _run(lambda: fake)
     stage = result.stages[0]
     assert fake.started == 1 and fake.stopped == 1
     p = stage.power
     assert p is not None and p.source == "fake-smi" and p.work_unit == "cell_step"
-    assert p.energy_j == pytest.approx(200.0)
+    assert p.sample_count == 2  # the reading after the stage is dropped
+    assert p.power_w_max == 100.0
+    assert p.energy_j == pytest.approx(100.0 * 1e-6, rel=1e-3)
     assert p.work_units == 8 * 8 * 3 * len(stage.wall_ms)
-    assert p.energy_j_per_work_unit == pytest.approx(200.0 / p.work_units)
+    assert p.energy_j_per_work_unit is None  # 1 µs of readings cannot stand for the whole stage
+    assert "%" in (p.unavailable_reason or "")
     assert "power" not in result.environment.unavailable and result.environment.power["source"] == "fake-smi"
     BenchResult.model_validate(result.model_dump(by_alias=True))
 
@@ -109,7 +116,7 @@ def test_per_unit_energy_needs_samples_across_most_of_the_window() -> None:
     assert "50%" in (rec.unavailable_reason or "")
 
 
-def test_threaded_sampler_takes_a_last_reading_at_stop_and_stops_once() -> None:
+def test_threaded_sampler_stop_returns_the_loop_readings_and_is_idempotent() -> None:
     reads: list[float] = []
 
     def read() -> PowerSample:
@@ -122,5 +129,32 @@ def test_threaded_sampler_takes_a_last_reading_at_stop_and_stops_once() -> None:
     while not reads and time.monotonic() < deadline:  # let the loop take its first reading
         time.sleep(0.001)
     first = s.stop()
-    assert len(first) == 2  # the loop's reading plus the final one
+    assert len(first) == 1  # no extra reading at stop: it would land after the stage
     assert s.stop() == first  # a second stop adds nothing
+
+
+def test_readings_after_the_stage_are_dropped() -> None:
+    # An 80 ms reader and a 5 ms stage: both readings land after the work finished.
+    samples = [PowerSample(0.080, 100.0), PowerSample(0.160, 100.0)]
+    rec = build_power_record(samples, source="fake", interval_s=0.2, window_s=0.005, window_start_s=0.0, work_unit="cell_step", work_units=1000.0)
+    assert rec.sample_count == 0 and rec.energy_j is None and rec.energy_j_per_work_unit is None
+    assert "fewer than 2" in (rec.unavailable_reason or "")
+
+
+def test_coverage_counts_only_samples_with_a_power_reading() -> None:
+    samples = [PowerSample(0.0, None, 50.0), PowerSample(4.0, 100.0), PowerSample(5.0, 100.0), PowerSample(10.0, None, 55.0)]
+    rec = build_power_record(samples, source="fake", interval_s=1.0, window_s=10.0, window_start_s=0.0, work_unit="cell_step", work_units=1000.0)
+    assert rec.energy_j == pytest.approx(100.0)
+    assert rec.sampled_span_s == pytest.approx(1.0)
+    assert rec.energy_j_per_work_unit is None
+    assert "10%" in (rec.unavailable_reason or "")
+    assert rec.temperature_c_max == 55.0  # non-power readings still count for their own fields
+
+
+def test_in_window_samples_spanning_the_stage_report_per_unit_energy() -> None:
+    samples = [PowerSample(10.0, 100.0), PowerSample(11.0, 100.0), PowerSample(12.0, 100.0), PowerSample(12.05, 300.0)]
+    rec = build_power_record(samples, source="fake", interval_s=1.0, window_s=2.0, window_start_s=10.0, work_unit="cell_step", work_units=400.0)
+    assert rec.sample_count == 3 and rec.power_w_max == 100.0
+    assert rec.energy_j == pytest.approx(200.0)
+    assert rec.energy_j_per_work_unit == pytest.approx(0.5)
+    assert rec.unavailable_reason is None

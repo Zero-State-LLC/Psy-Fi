@@ -20,11 +20,11 @@ from psyfi_bench.schemas import PowerRecord
 
 NVIDIA_SMI_QUERY = "power.draw,temperature.gpu,clocks.sm"
 DERIVATION = (
-    "energy_j = trapezoid integral of sampled power.draw (W) over sample timestamps, from the first to the last "
-    "sample (no extrapolation to the stage edges); the sampler takes one last reading when it stops, so the samples "
-    "span the measured loop; per-unit energy = energy_j / work units completed in the sampled loop, reported only "
-    "when the sampled span covers at least 90% of the window; samples are nvidia-smi readings of GPU index 0 "
-    "(board power, whichever backend ran the stage)"
+    "energy_j = trapezoid integral of sampled power.draw (W) over the samples taken inside the measured window that "
+    "carry a power reading, from the first to the last of them (no extrapolation to the stage edges; readings after "
+    "the stage are dropped); per-unit energy = energy_j / work units completed in the window, reported only when "
+    "those samples span at least 90% of the window; samples are nvidia-smi readings of GPU index 0 (board power, "
+    "whichever backend ran the stage)"
 )
 MIN_SPAN_COVERAGE = 0.9
 
@@ -98,14 +98,11 @@ class ThreadedSampler:
         self._thread.start()
 
     def stop(self) -> list[PowerSample]:
-        """End sampling with one last reading, so the samples reach the end of the stage. Safe to call twice."""
+        """End sampling and return the readings. Safe to call twice."""
         self._stop.set()
         if self._thread is not None:
             self._thread.join(timeout=10.0)
             self._thread = None
-            last = self._read()
-            if last is not None:
-                self._samples.append(last)
         return list(self._samples)
 
 
@@ -125,14 +122,25 @@ def _trapezoid_j(samples: list[PowerSample]) -> float | None:
 
 def build_power_record(
     samples: list[PowerSample], *, source: str, interval_s: float, window_s: float,
-    work_unit: str | None = None, work_units: float | None = None,
+    window_start_s: float | None = None, work_unit: str | None = None, work_units: float | None = None,
 ) -> PowerRecord:
-    """Summarize samples. Fields that the samples cannot support stay None with a reason."""
+    """Summarize samples. Fields that the samples cannot support stay None with a reason.
+
+    With ``window_start_s`` (same clock as the sample timestamps), only samples inside
+    ``[window_start_s, window_start_s + window_s]`` count: a reading that lands after the stage,
+    such as the one in flight when the sampler stops, is not evidence about the stage.
+    """
+    if window_start_s is not None:
+        end = window_start_s + window_s
+        samples = [s for s in samples if window_start_s <= s.t_s <= end]
     watts = [s.power_w for s in samples if s.power_w is not None]
     temps = [s.temperature_c for s in samples if s.temperature_c is not None]
     clocks = [s.sm_clock_mhz for s in samples if s.sm_clock_mhz is not None]
     energy = _trapezoid_j(samples)
-    span = (samples[-1].t_s - samples[0].t_s) if len(samples) >= 2 else 0.0
+    # The span that energy is integrated over: power readings only, so a sample with just a
+    # temperature or clock cannot stretch the coverage.
+    powered = [s for s in samples if s.power_w is not None]
+    span = (powered[-1].t_s - powered[0].t_s) if len(powered) >= 2 else 0.0
     reason = None
     if energy is None:
         reason = f"fewer than 2 power samples ({len(watts)}) in a {window_s:.3f}s window; energy not reported"

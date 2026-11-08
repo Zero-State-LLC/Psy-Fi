@@ -411,6 +411,7 @@
           "type": "number"
         },
         "sample_count": {
+          "description": "Samples taken inside the measured window; readings after the stage are dropped.",
           "title": "Sample Count",
           "type": "integer"
         },
@@ -420,7 +421,7 @@
           "type": "number"
         },
         "sampled_span_s": {
-          "description": "Seconds between the first and last sample (energy is integrated over this).",
+          "description": "Seconds between the first and last in-window sample with a power reading (energy is integrated over this).",
           "title": "Sampled Span S",
           "type": "number"
         },
