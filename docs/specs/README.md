@@ -24,6 +24,7 @@ One seam per spec. Existing seams only.
 | [Telemetry](telemetry.md) | Telemetry routes and the in-process buffer |
 | [Deploy and CI](deploy-and-ci.md) | Docker image, Compose, and `.github/workflows/ci.yml` (local seam) |
 | [Cloudflare and NVIDIA](cloudflare-nvidia.md) | Worker, static assets, Container, and the NVIDIA API call |
+| [FieldLoop benchmark platform](benchmark-platform.md) | `psyfi_bench` CLI and mounted `/api/bench` over `psyfi_core`; additive `/gpu/bench.html` |
 
 ## How this sits in the workflow
 

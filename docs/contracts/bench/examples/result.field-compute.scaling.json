@@ -1,0 +1,425 @@
+{
+  "schema": "psyfi.bench.result.v1",
+  "bench_version": "0.1.0",
+  "run_id": "field-compute_1794109059_072903c6",
+  "created_at": "2026-11-08T03:37:39.675580Z",
+  "manifest": {
+    "schema": "psyfi.bench.manifest.v1",
+    "id": "field-compute.scaling",
+    "version": 1,
+    "family": "field_compute",
+    "title": "ABX-Core field pipeline: scaling with grid size",
+    "description": "Seeded Kuramoto evolution plus divisive normalization on square grids from 32x32 to 256x256, 20 steps. Reports wall/CPU time, peak memory, cell-steps per second, the log-log scaling exponent, and exact plus quantized output digests.",
+    "execution": "python",
+    "params": {
+      "kind": "scaling",
+      "grid_sizes": [
+        32,
+        64
+      ],
+      "steps": 20,
+      "seed": 1337,
+      "coupling_strength": 0.5,
+      "normalization_P": 1.0,
+      "normalization_V": 1.0,
+      "pipeline": "field",
+      "backend": "numpy"
+    },
+    "protocol": {
+      "warmup_runs": 1,
+      "repeats": 3,
+      "cold_start": true,
+      "timeout_s": 120.0,
+      "min_duration_s": null,
+      "memory_probe": true,
+      "bootstrap_resamples": 1000,
+      "bootstrap_seed": 0
+    },
+    "references": {
+      "quantized_sha256": {
+        "grid_32x32": "2fe7a888a24661a9a42b07f45b1dbf077cf8913f0b6f4bb4c30c8e51e0f542cf",
+        "grid_64x64": "aa52ae2468cb0714200cdb2f3bd4a539525aeb62773d9c8dfe2f42c45a402551",
+        "grid_128x128": "2f94400df830f5c90bde320a0b82d6fe99e3c13ad870d6ebe929df13d856b20e",
+        "grid_256x256": "866bf569a700c086fc7541cdcfbdef76293d976090ba4200fd047868c7593fac"
+      },
+      "locked_with": {
+        "backend": "numpy",
+        "quantization": 0.0001
+      }
+    },
+    "tolerances": {
+      "timing_cv_max": 0.25,
+      "quantization": 0.0001,
+      "accelerator_atol": 0.0001,
+      "accelerator_rtol": 0.0001
+    },
+    "requires": [],
+    "tags": [
+      "cpu",
+      "deterministic",
+      "scaling"
+    ],
+    "manifest_hash": "d85b0841855e9531"
+  },
+  "manifest_hash": "d85b0841855e9531",
+  "measurement_class": "measured",
+  "status": "complete",
+  "environment": {
+    "captured_at": "2026-11-08T03:37:39.541800Z",
+    "hostname_hash": "225369c658b1",
+    "platform": {
+      "system": "Darwin",
+      "release": "25.5.0",
+      "version": "Darwin Kernel Version 25.5.0: Mon Apr 27 20:39:29 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T8142",
+      "machine": "arm64"
+    },
+    "cpu": {
+      "brand": "Apple M5",
+      "architecture": "arm64",
+      "logical_cores": 10,
+      "physical_cores": 10,
+      "performance_cores": 4,
+      "efficiency_cores": 6
+    },
+    "memory": {
+      "total_bytes": 17179869184
+    },
+    "gpus": [
+      {
+        "vendor": "apple",
+        "name": "Apple M5",
+        "memory_bytes": null,
+        "driver": null,
+        "cores": 8,
+        "source": "system_profiler",
+        "hardware_class": "integrated"
+      }
+    ],
+    "software": {
+      "python": "3.12.13",
+      "python_implementation": "CPython",
+      "numpy": "2.5.4",
+      "bench_version": "0.1.0",
+      "scipy": "1.18.1",
+      "psyfi_version": "1.4.0",
+      "blas": {
+        "name": "accelerate",
+        "version": "unknown"
+      },
+      "env_threads": {},
+      "accelerators": {
+        "torch": null
+      },
+      "git_commit": "7372d31eed042021aa866613deb1c62d72548a96",
+      "git_dirty": true
+    },
+    "browser": null,
+    "power": null,
+    "hardware_class": "integrated",
+    "unavailable": {
+      "gpu.memory": "Apple unified memory: GPU memory is shared with system RAM",
+      "power": "no power sampler on this host (nvidia-smi absent or not sampled)",
+      "thermal": "no thermal sensor API without elevated privileges"
+    }
+  },
+  "stages": [
+    {
+      "id": "grid_32x32",
+      "kind": "scaling",
+      "status": "ok",
+      "measurement_class": "measured",
+      "params": {
+        "id": "grid_32x32",
+        "width": 32,
+        "height": 32,
+        "steps": 20,
+        "seed": 1337,
+        "pipeline": "field",
+        "backend": "numpy",
+        "settings": {
+          "coupling_strength": 0.5,
+          "normalization_P": 1.0,
+          "normalization_V": 1.0,
+          "dt": 0.1,
+          "surround_radius": 3,
+          "coupling_type": "symmetric"
+        }
+      },
+      "wall_ms": [
+        0.694542,
+        0.629667,
+        0.631417
+      ],
+      "cpu_ms": [
+        0.691,
+        0.627,
+        0.63
+      ],
+      "cold_wall_ms": 0.896417,
+      "warmup_wall_ms": [
+        0.896417
+      ],
+      "memory": {
+        "rss_before_bytes": 125337600,
+        "rss_peak_delta_bytes": 49152,
+        "tracemalloc_peak_bytes": 104136,
+        "tracemalloc_current_bytes": 19906,
+        "note": "single probe under tracemalloc; its timing is excluded"
+      },
+      "metrics": {
+        "cells": 1024,
+        "steps": 20,
+        "cell_steps": 20480,
+        "wall_ms_median": 0.631417,
+        "ms_per_step_median": 0.03157085,
+        "cell_steps_per_s_median": 32434983.53702862,
+        "tracemalloc_peak_bytes_per_cell": 101.6953125
+      },
+      "statistics": {
+        "wall_ms": {
+          "n": 3,
+          "unit": "ms",
+          "mean": 0.6518753333333334,
+          "median": 0.631417,
+          "min": 0.629667,
+          "max": 0.694542,
+          "std": 0.03696077594333395,
+          "cv": 0.05669914790967283,
+          "mad": 0.0017500000000000293,
+          "p50": 0.631417,
+          "p90": 0.681917,
+          "p95": 0.6882294999999999,
+          "p99": 0.6932794999999999,
+          "ci95_mean": [
+            0.629667,
+            0.6945419999999999
+          ],
+          "ci95_median": [
+            0.629667,
+            0.694542
+          ],
+          "bootstrap": {
+            "method": "percentile",
+            "resamples": 1000,
+            "seed": 0,
+            "level": 0.95
+          }
+        },
+        "cpu_ms": {
+          "n": 3,
+          "unit": "ms",
+          "mean": 0.6493333333333333,
+          "median": 0.63,
+          "min": 0.627,
+          "max": 0.691,
+          "std": 0.03611555528208491,
+          "cv": 0.05561943831943262,
+          "mad": 0.0030000000000000027,
+          "p50": 0.63,
+          "p90": 0.6788,
+          "p95": 0.6849,
+          "p99": 0.68978,
+          "ci95_mean": [
+            0.627,
+            0.691
+          ],
+          "ci95_median": [
+            0.627,
+            0.691
+          ],
+          "bootstrap": {
+            "method": "percentile",
+            "resamples": 1000,
+            "seed": 0,
+            "level": 0.95
+          }
+        }
+      },
+      "determinism": {
+        "exact_sha256": "7a25d3d32737360b9f34ac86a314b036d6b66ae2ebee52f23d737c917514d30c",
+        "quantized_sha256": "2fe7a888a24661a9a42b07f45b1dbf077cf8913f0b6f4bb4c30c8e51e0f542cf",
+        "quantization": 0.0001,
+        "bitwise_identical_across_repeats": true,
+        "quantized_identical_across_repeats": true,
+        "reference_match": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "error": null
+    },
+    {
+      "id": "grid_64x64",
+      "kind": "scaling",
+      "status": "ok",
+      "measurement_class": "measured",
+      "params": {
+        "id": "grid_64x64",
+        "width": 64,
+        "height": 64,
+        "steps": 20,
+        "seed": 1337,
+        "pipeline": "field",
+        "backend": "numpy",
+        "settings": {
+          "coupling_strength": 0.5,
+          "normalization_P": 1.0,
+          "normalization_V": 1.0,
+          "dt": 0.1,
+          "surround_radius": 3,
+          "coupling_type": "symmetric"
+        }
+      },
+      "wall_ms": [
+        1.242708,
+        1.149125,
+        1.185416
+      ],
+      "cpu_ms": [
+        1.232,
+        1.147,
+        1.183
+      ],
+      "cold_wall_ms": 1.259291,
+      "warmup_wall_ms": [
+        1.259291
+      ],
+      "memory": {
+        "rss_before_bytes": 126124032,
+        "rss_peak_delta_bytes": 327680,
+        "tracemalloc_peak_bytes": 362552,
+        "tracemalloc_current_bytes": 44482,
+        "note": "single probe under tracemalloc; its timing is excluded"
+      },
+      "metrics": {
+        "cells": 4096,
+        "steps": 20,
+        "cell_steps": 81920,
+        "wall_ms_median": 1.185416,
+        "ms_per_step_median": 0.0592708,
+        "cell_steps_per_s_median": 69106541.50104266,
+        "tracemalloc_peak_bytes_per_cell": 88.513671875
+      },
+      "statistics": {
+        "wall_ms": {
+          "n": 3,
+          "unit": "ms",
+          "mean": 1.1924163333333333,
+          "median": 1.185416,
+          "min": 1.149125,
+          "max": 1.242708,
+          "std": 0.04718260243281767,
+          "cv": 0.03956889981615845,
+          "mad": 0.03629100000000007,
+          "p50": 1.185416,
+          "p90": 1.2312496,
+          "p95": 1.2369788,
+          "p99": 1.24156216,
+          "ci95_mean": [
+            1.149125,
+            1.242708
+          ],
+          "ci95_median": [
+            1.149125,
+            1.242708
+          ],
+          "bootstrap": {
+            "method": "percentile",
+            "resamples": 1000,
+            "seed": 0,
+            "level": 0.95
+          }
+        },
+        "cpu_ms": {
+          "n": 3,
+          "unit": "ms",
+          "mean": 1.1873333333333334,
+          "median": 1.183,
+          "min": 1.147,
+          "max": 1.232,
+          "std": 0.042665364563464495,
+          "cv": 0.03593377138977919,
+          "mad": 0.03600000000000003,
+          "p50": 1.183,
+          "p90": 1.2222,
+          "p95": 1.2271,
+          "p99": 1.23102,
+          "ci95_mean": [
+            1.147,
+            1.232
+          ],
+          "ci95_median": [
+            1.147,
+            1.232
+          ],
+          "bootstrap": {
+            "method": "percentile",
+            "resamples": 1000,
+            "seed": 0,
+            "level": 0.95
+          }
+        }
+      },
+      "determinism": {
+        "exact_sha256": "669a0f68768ff41c9770d4cef656cdc64b6089858869720620acdef5e809ab58",
+        "quantized_sha256": "aa52ae2468cb0714200cdb2f3bd4a539525aeb62773d9c8dfe2f42c45a402551",
+        "quantization": 0.0001,
+        "bitwise_identical_across_repeats": true,
+        "quantized_identical_across_repeats": true,
+        "reference_match": true,
+        "nan_count": 0,
+        "inf_count": 0
+      },
+      "error": null
+    }
+  ],
+  "metrics": {
+    "kind": "scaling",
+    "backend": "numpy",
+    "pipeline": "field",
+    "scaling": {
+      "exponent": 0.4543642132762646,
+      "log_intercept": -3.6092015127232875,
+      "r2": 1.0,
+      "n": 2
+    },
+    "peak_cell_steps_per_s": 69106541.50104266,
+    "largest_cells": 4096,
+    "determinism": {
+      "stages_with_digest": 2,
+      "all_bitwise_identical_across_repeats": true,
+      "all_quantized_identical_across_repeats": true,
+      "reference_locks": 4,
+      "reference_matches": 2,
+      "reference_mismatches": [],
+      "nan_total": 0,
+      "inf_total": 0,
+      "quantization": 0.0001
+    }
+  },
+  "determinism": {
+    "stages_with_digest": 2,
+    "all_bitwise_identical_across_repeats": true,
+    "all_quantized_identical_across_repeats": true,
+    "reference_locks": 4,
+    "reference_matches": 2,
+    "reference_mismatches": [],
+    "nan_total": 0,
+    "inf_total": 0,
+    "quantization": 0.0001
+  },
+  "failures": [],
+  "provenance": {
+    "git_commit": "7372d31eed042021aa866613deb1c62d72548a96",
+    "git_dirty": true,
+    "command": "scripts/export_bench_contracts.py",
+    "bench_version": "0.1.0",
+    "psyfi_version": "1.4.0",
+    "seed": null,
+    "notes": [
+      "params overridden: ['grid_sizes']; manifest_hash reflects the effective workload",
+      "backend={'name': 'numpy', 'device': 'cpu', 'canonical': True, 'dtype': 'complex64'}"
+    ]
+  },
+  "non_claim": "Modeled phenomenology for research and visualization only. The benchmark measures computation, rendering, and model interpretation of modeled representations. It does not measure consciousness or subjective experience. Not medical advice.",
+  "result_hash": "c0df56e2f12d449fa82ff0fef23eb0424838cb8eb4c44a9b3267bed879fa429a"
+}

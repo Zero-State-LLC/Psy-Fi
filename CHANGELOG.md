@@ -2,6 +2,11 @@
 
 Product versions follow [docs/VERSIONING.md](docs/VERSIONING.md). Tags `v0.1.0` through `v1.4.0` were applied on 2026-11-07 to commits already on `main`. The trees through `v1.3.1` still contain the string `0.1.0`. The notes below name the ship point, not every commit in between.
 
+## Unreleased
+
+- FieldLoop benchmark subsystem (`psyfi_bench`): four workload families, locked references, sealed results, scorecards, CLI, mounted `/api/bench` read API, browser runner `/gpu/bench.html`. Product version unchanged.
+- `run_simulation` moved to `psyfi_core.simulation`; `psyfi_api.simulation_service` re-exports it.
+
 ## 1.4.0 — 2026-11-07
 
 - Cloudflare Worker and Container host. Compose remains the local seam. CI does not deploy.

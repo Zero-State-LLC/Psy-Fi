@@ -1,0 +1,691 @@
+{
+  "schema": "psyfi.bench.result.v1",
+  "bench_version": "0.1.0",
+  "run_id": "fieldloop_1794109061_dbb60c90",
+  "created_at": "2026-11-08T03:37:41.044058Z",
+  "manifest": {
+    "schema": "psyfi.bench.manifest.v1",
+    "id": "fieldloop.signature",
+    "version": 1,
+    "family": "fieldloop",
+    "title": "FieldLoop: simulate, snapshot, render, interpret, reconstruct",
+    "description": "The signature closed loop over six seeded cases. Each stage is timed on its own and the loop end to end; the loop closes when the model's reading reconstructs a field, scored as FDE against the generating field. Provider locality (local, remote, baseline, replay) is recorded; CPU stages use the canonical pipeline and the deterministic soft raster.",
+    "execution": "python+provider",
+    "params": {
+      "cases": [
+        {
+          "key": "lsd_open_42",
+          "substance": "lsd",
+          "mode": "open",
+          "seed": 42,
+          "intensity": 0.75
+        },
+        {
+          "key": "psilocybin_attractor_7",
+          "substance": "psilocybin",
+          "mode": "attractor",
+          "seed": 7,
+          "intensity": 0.6
+        },
+        {
+          "key": "dmt_void_99",
+          "substance": "dmt",
+          "mode": "void",
+          "seed": 99,
+          "intensity": 0.85
+        },
+        {
+          "key": "ketamine_power_3",
+          "substance": "ketamine",
+          "mode": "power",
+          "seed": 3,
+          "intensity": 0.9
+        },
+        {
+          "key": "mescaline_attractor_11",
+          "substance": "mescaline",
+          "mode": "attractor",
+          "seed": 11,
+          "intensity": 0.4
+        },
+        {
+          "key": "lsd_void_1337",
+          "substance": "lsd",
+          "mode": "void",
+          "seed": 1337,
+          "intensity": 0.3
+        }
+      ],
+      "simulation": {
+        "width": 64,
+        "height": 64,
+        "steps": 12
+      },
+      "image_size": 256,
+      "max_tokens": 64,
+      "temperature": 0.0,
+      "provider": "heuristic"
+    },
+    "protocol": {
+      "warmup_runs": 1,
+      "repeats": 2,
+      "cold_start": true,
+      "timeout_s": 120.0,
+      "min_duration_s": null,
+      "memory_probe": false,
+      "bootstrap_resamples": 500,
+      "bootstrap_seed": 0
+    },
+    "references": {},
+    "tolerances": {
+      "timing_cv_max": 0.5,
+      "quantization": 0.0001,
+      "accelerator_atol": 0.0,
+      "accelerator_rtol": 0.0
+    },
+    "requires": [
+      "provider"
+    ],
+    "tags": [
+      "signature",
+      "end-to-end",
+      "fde"
+    ],
+    "manifest_hash": "48bc633b7c08b51f"
+  },
+  "manifest_hash": "48bc633b7c08b51f",
+  "measurement_class": "synthetic",
+  "status": "complete",
+  "environment": {
+    "captured_at": "2026-11-08T03:37:40.961327Z",
+    "hostname_hash": "225369c658b1",
+    "platform": {
+      "system": "Darwin",
+      "release": "25.5.0",
+      "version": "Darwin Kernel Version 25.5.0: Mon Apr 27 20:39:29 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T8142",
+      "machine": "arm64"
+    },
+    "cpu": {
+      "brand": "Apple M5",
+      "architecture": "arm64",
+      "logical_cores": 10,
+      "physical_cores": 10,
+      "performance_cores": 4,
+      "efficiency_cores": 6
+    },
+    "memory": {
+      "total_bytes": 17179869184
+    },
+    "gpus": [
+      {
+        "vendor": "apple",
+        "name": "Apple M5",
+        "memory_bytes": null,
+        "driver": null,
+        "cores": 8,
+        "source": "system_profiler",
+        "hardware_class": "integrated"
+      }
+    ],
+    "software": {
+      "python": "3.12.13",
+      "python_implementation": "CPython",
+      "numpy": "2.5.4",
+      "bench_version": "0.1.0",
+      "scipy": "1.18.1",
+      "psyfi_version": "1.4.0",
+      "blas": {
+        "name": "accelerate",
+        "version": "unknown"
+      },
+      "env_threads": {},
+      "accelerators": {
+        "torch": null
+      },
+      "git_commit": "7372d31eed042021aa866613deb1c62d72548a96",
+      "git_dirty": true
+    },
+    "browser": null,
+    "power": null,
+    "hardware_class": "integrated",
+    "unavailable": {
+      "gpu.memory": "Apple unified memory: GPU memory is shared with system RAM",
+      "power": "no power sampler on this host (nvidia-smi absent or not sampled)",
+      "thermal": "no thermal sensor API without elevated privileges"
+    }
+  },
+  "stages": [
+    {
+      "id": "lsd_open_42",
+      "kind": "fieldloop",
+      "status": "ok",
+      "measurement_class": "synthetic",
+      "params": {
+        "case": {
+          "key": "lsd_open_42",
+          "substance": "lsd",
+          "mode": "open",
+          "seed": 42,
+          "intensity": 0.75
+        },
+        "simulation": {
+          "width": 64,
+          "height": 64,
+          "steps": 12
+        },
+        "image_size": 256,
+        "prompt_revision": 1
+      },
+      "wall_ms": [
+        11.74825,
+        11.771166
+      ],
+      "cpu_ms": [],
+      "cold_wall_ms": 13.9205,
+      "warmup_wall_ms": [
+        13.9205
+      ],
+      "memory": null,
+      "metrics": {
+        "runs": 2,
+        "stage_ms": {
+          "simulate": {
+            "n": 2,
+            "unit": "ms",
+            "mean": 1.3498545,
+            "median": 1.3498545,
+            "min": 1.342542,
+            "max": 1.357167,
+            "std": 0.010341436674853335,
+            "cv": 0.0076611491644864955,
+            "mad": 0.007312500000000055,
+            "p50": 1.3498545,
+            "p90": 1.3557045,
+            "p95": 1.35643575,
+            "p99": 1.35702075,
+            "ci95_mean": [
+              1.342542,
+              1.357167
+            ],
+            "ci95_median": [
+              1.342542,
+              1.357167
+            ],
+            "bootstrap": {
+              "method": "percentile",
+              "resamples": 2000,
+              "seed": 0,
+              "level": 0.95
+            }
+          },
+          "snapshot": {
+            "n": 2,
+            "unit": "ms",
+            "mean": 0.0909375,
+            "median": 0.0909375,
+            "min": 0.09075,
+            "max": 0.091125,
+            "std": 0.0002651650429449556,
+            "cv": 0.0029159042523156627,
+            "mad": 0.00018750000000000017,
+            "p50": 0.0909375,
+            "p90": 0.0910875,
+            "p95": 0.09110625,
+            "p99": 0.09112125,
+            "ci95_mean": [
+              0.09075,
+              0.091125
+            ],
+            "ci95_median": [
+              0.09075,
+              0.091125
+            ],
+            "bootstrap": {
+              "method": "percentile",
+              "resamples": 2000,
+              "seed": 0,
+              "level": 0.95
+            }
+          },
+          "render": {
+            "n": 2,
+            "unit": "ms",
+            "mean": 9.340271,
+            "median": 9.340271,
+            "min": 9.3165,
+            "max": 9.364042,
+            "std": 0.033617270591170825,
+            "cv": 0.003599175076523029,
+            "mad": 0.023770999999999987,
+            "p50": 9.340271,
+            "p90": 9.359287799999999,
+            "p95": 9.3616649,
+            "p99": 9.363566579999999,
+            "ci95_mean": [
+              9.3165,
+              9.364042
+            ],
+            "ci95_median": [
+              9.3165,
+              9.364042
+            ],
+            "bootstrap": {
+              "method": "percentile",
+              "resamples": 2000,
+              "seed": 0,
+              "level": 0.95
+            }
+          },
+          "interpret": {
+            "n": 2,
+            "unit": "ms",
+            "mean": 0.712729,
+            "median": 0.712729,
+            "min": 0.699833,
+            "max": 0.725625,
+            "std": 0.01823769810036338,
+            "cv": 0.02558854501551555,
+            "mad": 0.012895999999999963,
+            "p50": 0.712729,
+            "p90": 0.7230458,
+            "p95": 0.7243354,
+            "p99": 0.7253670799999999,
+            "ci95_mean": [
+              0.699833,
+              0.725625
+            ],
+            "ci95_median": [
+              0.699833,
+              0.725625
+            ],
+            "bootstrap": {
+              "method": "percentile",
+              "resamples": 2000,
+              "seed": 0,
+              "level": 0.95
+            }
+          },
+          "reconstruct": {
+            "n": 2,
+            "unit": "ms",
+            "mean": 0.257917,
+            "median": 0.257917,
+            "min": 0.252334,
+            "max": 0.2635,
+            "std": 0.007895554318728995,
+            "cv": 0.030612772010875575,
+            "mad": 0.005583000000000005,
+            "p50": 0.257917,
+            "p90": 0.2623834,
+            "p95": 0.2629417,
+            "p99": 0.26338834,
+            "ci95_mean": [
+              0.252334,
+              0.2635
+            ],
+            "ci95_median": [
+              0.252334,
+              0.2635
+            ],
+            "bootstrap": {
+              "method": "percentile",
+              "resamples": 2000,
+              "seed": 0,
+              "level": 0.95
+            }
+          }
+        },
+        "stage_share_of_e2e": {
+          "simulate": 0.11478639605677284,
+          "snapshot": 0.007732972621429036,
+          "render": 0.7942604527255268,
+          "interpret": 0.06060771236836833,
+          "reconstruct": 0.021932262263654845
+        },
+        "provider_reported_latency_ms_median": 0.7099171634763479,
+        "loop_closed_rate": 1.0,
+        "fde_median": 2.6789,
+        "within_mode_step_rate": 0.0,
+        "mode_accuracy": 0.0,
+        "readings": [
+          {
+            "mode": "power",
+            "intensity": 0.7053
+          },
+          {
+            "mode": "power",
+            "intensity": 0.7053
+          }
+        ],
+        "image_sha256": "6cc7b0690420bde0005ee805d60067d03c3e89cb714de54c985bf7e7e76ebd0c",
+        "field_hash": "126d9f00440f9a21",
+        "simulation": {
+          "provenance_id": "prov_2d36889e7a1a",
+          "valence": -0.6145311594009399,
+          "coherence": 0.015369466505944729
+        },
+        "deterministic_image_across_runs": true,
+        "locality": "baseline",
+        "provider_errors": 0
+      },
+      "statistics": {
+        "end_to_end_ms": {
+          "n": 2,
+          "unit": "ms",
+          "mean": 11.759708,
+          "median": 11.759708,
+          "min": 11.74825,
+          "max": 11.771166,
+          "std": 0.016204058997669937,
+          "cv": 0.0013779303871890303,
+          "mad": 0.011457999999999302,
+          "p50": 11.759708,
+          "p90": 11.7688744,
+          "p95": 11.7700202,
+          "p99": 11.77093684,
+          "ci95_mean": [
+            11.74825,
+            11.771166
+          ],
+          "ci95_median": [
+            11.74825,
+            11.771166
+          ],
+          "bootstrap": {
+            "method": "percentile",
+            "resamples": 500,
+            "seed": 0,
+            "level": 0.95
+          }
+        }
+      },
+      "determinism": null,
+      "error": null
+    },
+    {
+      "id": "psilocybin_attractor_7",
+      "kind": "fieldloop",
+      "status": "ok",
+      "measurement_class": "synthetic",
+      "params": {
+        "case": {
+          "key": "psilocybin_attractor_7",
+          "substance": "psilocybin",
+          "mode": "attractor",
+          "seed": 7,
+          "intensity": 0.6
+        },
+        "simulation": {
+          "width": 64,
+          "height": 64,
+          "steps": 12
+        },
+        "image_size": 256,
+        "prompt_revision": 1
+      },
+      "wall_ms": [
+        8.555583,
+        8.51275
+      ],
+      "cpu_ms": [],
+      "cold_wall_ms": 8.697042,
+      "warmup_wall_ms": [
+        8.697042
+      ],
+      "memory": null,
+      "metrics": {
+        "runs": 2,
+        "stage_ms": {
+          "simulate": {
+            "n": 2,
+            "unit": "ms",
+            "mean": 1.2653335,
+            "median": 1.2653335,
+            "min": 1.258375,
+            "max": 1.272292,
+            "std": 0.009840805073773152,
+            "cv": 0.007777242184588609,
+            "mad": 0.006958499999999979,
+            "p50": 1.2653335,
+            "p90": 1.2709003,
+            "p95": 1.27159615,
+            "p99": 1.27215283,
+            "ci95_mean": [
+              1.258375,
+              1.272292
+            ],
+            "ci95_median": [
+              1.258375,
+              1.272292
+            ],
+            "bootstrap": {
+              "method": "percentile",
+              "resamples": 2000,
+              "seed": 0,
+              "level": 0.95
+            }
+          },
+          "snapshot": {
+            "n": 2,
+            "unit": "ms",
+            "mean": 0.08264550000000001,
+            "median": 0.08264550000000001,
+            "min": 0.080458,
+            "max": 0.084833,
+            "std": 0.003093592167691148,
+            "cv": 0.037432070320721,
+            "mad": 0.002187500000000002,
+            "p50": 0.08264550000000001,
+            "p90": 0.08439550000000001,
+            "p95": 0.08461425,
+            "p99": 0.08478925000000001,
+            "ci95_mean": [
+              0.080458,
+              0.084833
+            ],
+            "ci95_median": [
+              0.080458,
+              0.084833
+            ],
+            "bootstrap": {
+              "method": "percentile",
+              "resamples": 2000,
+              "seed": 0,
+              "level": 0.95
+            }
+          },
+          "render": {
+            "n": 2,
+            "unit": "ms",
+            "mean": 6.1759585,
+            "median": 6.1759585,
+            "min": 6.098042,
+            "max": 6.253875,
+            "std": 0.11019057103264288,
+            "cv": 0.017841857427092957,
+            "mad": 0.07791649999999972,
+            "p50": 6.1759585,
+            "p90": 6.2382916999999996,
+            "p95": 6.24608335,
+            "p99": 6.25231667,
+            "ci95_mean": [
+              6.098042,
+              6.253875
+            ],
+            "ci95_median": [
+              6.098042,
+              6.253875
+            ],
+            "bootstrap": {
+              "method": "percentile",
+              "resamples": 2000,
+              "seed": 0,
+              "level": 0.95
+            }
+          },
+          "interpret": {
+            "n": 2,
+            "unit": "ms",
+            "mean": 0.7622295,
+            "median": 0.7622295,
+            "min": 0.694084,
+            "max": 0.830375,
+            "std": 0.09637229031469571,
+            "cv": 0.12643474218026948,
+            "mad": 0.06814549999999997,
+            "p50": 0.7622295,
+            "p90": 0.8167459,
+            "p95": 0.82356045,
+            "p99": 0.82901209,
+            "ci95_mean": [
+              0.694084,
+              0.830375
+            ],
+            "ci95_median": [
+              0.694084,
+              0.830375
+            ],
+            "bootstrap": {
+              "method": "percentile",
+              "resamples": 2000,
+              "seed": 0,
+              "level": 0.95
+            }
+          },
+          "reconstruct": {
+            "n": 2,
+            "unit": "ms",
+            "mean": 0.2416455,
+            "median": 0.2416455,
+            "min": 0.219125,
+            "max": 0.264166,
+            "std": 0.0318487965314233,
+            "cv": 0.13179966741124208,
+            "mad": 0.022520500000000013,
+            "p50": 0.2416455,
+            "p90": 0.2596619,
+            "p95": 0.26191395,
+            "p99": 0.26371559,
+            "ci95_mean": [
+              0.219125,
+              0.264166
+            ],
+            "ci95_median": [
+              0.219125,
+              0.264166
+            ],
+            "bootstrap": {
+              "method": "percentile",
+              "resamples": 2000,
+              "seed": 0,
+              "level": 0.95
+            }
+          }
+        },
+        "stage_share_of_e2e": {
+          "simulate": 0.14826679324805767,
+          "snapshot": 0.009684074010039527,
+          "render": 0.7236744795171267,
+          "interpret": 0.08931504910292058,
+          "reconstruct": 0.028315067440973875
+        },
+        "provider_reported_latency_ms_median": 0.7600623648613691,
+        "loop_closed_rate": 1.0,
+        "fde_median": 3.5225,
+        "within_mode_step_rate": 0.0,
+        "mode_accuracy": 0.0,
+        "readings": [
+          {
+            "mode": "power",
+            "intensity": 0.6959
+          },
+          {
+            "mode": "power",
+            "intensity": 0.6959
+          }
+        ],
+        "image_sha256": "dafd06cc8d9d05f6178cac19b2b4ae1021e6b302d18c481e92e3b006aad3e5e2",
+        "field_hash": "81e82f10dc541f80",
+        "simulation": {
+          "provenance_id": "prov_a147e5e78b3a",
+          "valence": -0.6388812065124512,
+          "coherence": 0.012782919220626354
+        },
+        "deterministic_image_across_runs": true,
+        "locality": "baseline",
+        "provider_errors": 0
+      },
+      "statistics": {
+        "end_to_end_ms": {
+          "n": 2,
+          "unit": "ms",
+          "mean": 8.534166500000001,
+          "median": 8.534166500000001,
+          "min": 8.51275,
+          "max": 8.555583,
+          "std": 0.03028750475856332,
+          "cv": 0.003548970454064063,
+          "mad": 0.02141649999999995,
+          "p50": 8.534166500000001,
+          "p90": 8.551299700000001,
+          "p95": 8.55344135,
+          "p99": 8.55515467,
+          "ci95_mean": [
+            8.51275,
+            8.555583
+          ],
+          "ci95_median": [
+            8.51275,
+            8.555583
+          ],
+          "bootstrap": {
+            "method": "percentile",
+            "resamples": 500,
+            "seed": 0,
+            "level": 0.95
+          }
+        }
+      },
+      "determinism": null,
+      "error": null
+    }
+  ],
+  "metrics": {
+    "provider": {
+      "name": "heuristic",
+      "model": "recommend_mode_intensity",
+      "locality": "baseline",
+      "note": "psyfi_core.visualization.image_seed.recommend_mode_intensity on the image"
+    },
+    "locality": "baseline",
+    "cases": 2,
+    "closed": 2,
+    "e2e_ms_median": 10.14693725,
+    "fde_median": 3.1007,
+    "within_mode_step_rate": 0.0,
+    "stage_share_of_e2e_mean": {
+      "simulate": 0.13152659465241526,
+      "snapshot": 0.008708523315734282,
+      "render": 0.7589674661213268,
+      "interpret": 0.07496138073564446,
+      "reconstruct": 0.025123664852314362
+    },
+    "render_source": "soft",
+    "note": "CPU loop: render is the deterministic soft raster. A browser loop would substitute a WebGPU capture thumbnail and add browser, network and provider time as separate stages."
+  },
+  "determinism": {},
+  "failures": [],
+  "provenance": {
+    "git_commit": "7372d31eed042021aa866613deb1c62d72548a96",
+    "git_dirty": true,
+    "command": "scripts/export_bench_contracts.py",
+    "bench_version": "0.1.0",
+    "psyfi_version": "1.4.0",
+    "seed": null,
+    "notes": [
+      "provider={\"name\": \"heuristic\", \"model\": \"recommend_mode_intensity\", \"locality\": \"baseline\", \"note\": \"psyfi_core.visualization.image_seed.recommend_mode_intensity on the image\"}"
+    ]
+  },
+  "non_claim": "Modeled phenomenology for research and visualization only. The benchmark measures computation, rendering, and model interpretation of modeled representations. It does not measure consciousness or subjective experience. Not medical advice.",
+  "result_hash": "d5a216ba59d070ad9551cfb95a9044cb300d70253eaefbea493e1fa4b3c1bf3d"
+}

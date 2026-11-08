@@ -58,6 +58,7 @@ Details: [`docs/WEB_ARCHITECTURE.md`](docs/WEB_ARCHITECTURE.md), [`docs/FRONTEND
 | --- | --- |
 | [`psyfi_core/`](psyfi_core/) | Deterministic simulation authority (ABX runtime, engines, models, presets, viz schemas) |
 | [`psyfi_api/`](psyfi_api/) | FastAPI app, routers, Jinja shell, static PWA assets |
+| [`psyfi_bench/`](psyfi_bench/) | FieldLoop benchmark subsystem (workloads, runner, providers, scoring, `/api/bench` sub-app, CLI) — see [`docs/bench/README.md`](docs/bench/README.md) |
 | [`packages/psyfi-gpu-renderer/`](packages/psyfi-gpu-renderer/) | Optional Vite + React + R3F WebGPU client → served at `/gpu/` |
 | [`data/phenomenology/`](data/phenomenology/) | Source phenomenology → catalog / overlays (build scripts) |
 | [`docs/`](docs/) | Architecture, contracts, rendering, QA, design |
@@ -112,7 +113,7 @@ Config and public exports: [`psyfi_core/__init__.py`](psyfi_core/__init__.py).
 | File / dir | Purpose |
 | --- | --- |
 | [`main.py`](psyfi_api/main.py) | App, mounts (`/static`, `/assets/icons`, `/gpu`), routers, `/`, SW, health |
-| [`simulation_service.py`](psyfi_api/simulation_service.py) | Sync simulate orchestration |
+| [`simulation_service.py`](psyfi_api/simulation_service.py) | Re-exports `run_simulation` from [`psyfi_core/simulation.py`](psyfi_core/simulation.py) |
 | [`jobs.py`](psyfi_api/jobs.py) | In-memory cancelable job store |
 | [`telemetry.py`](psyfi_api/telemetry.py) | Opt-in telemetry (off by default) |
 | [`routers/simulate.py`](psyfi_api/routers/simulate.py) | `POST …/simulate/` |
@@ -204,6 +205,7 @@ python3 scripts/sync_frozen_contracts.py
 | [`vendor_gpu_codecs.sh`](scripts/vendor_gpu_codecs.sh) | Draco / Basis vendors |
 | [`deploy.sh`](scripts/deploy.sh) · [`check_nvidia_host.sh`](scripts/check_nvidia_host.sh) | Deploy / NVIDIA host checks |
 | [`merge_ultra_fps_measured.py`](scripts/merge_ultra_fps_measured.py) | Ultra fps matrix merge |
+| [`run_bench_suite.sh`](scripts/run_bench_suite.sh) · [`export_bench_contracts.py`](scripts/export_bench_contracts.py) | FieldLoop CPU suite · bench schemas, OpenAPI, examples |
 
 ---
 

@@ -1,0 +1,2046 @@
+{
+  "schema": "psyfi.bench.result.v1",
+  "bench_version": "0.1.0",
+  "run_id": "interpretation_1794109060_80a3a402",
+  "created_at": "2026-11-08T03:37:40.368949Z",
+  "manifest": {
+    "schema": "psyfi.bench.manifest.v1",
+    "id": "interpretation.fieldread.smoke",
+    "version": 1,
+    "family": "interpretation",
+    "title": "Field reading smoke corpus (8 items) for CI and provider checks",
+    "description": "2 substances x 4 modes x 1 intensity x 1 seed at 128 px with every task on a tiny subset. Meant for CI with baselines and for a first live-provider check; it is not a leaderboard corpus.",
+    "execution": "python+provider",
+    "params": {
+      "corpus": {
+        "substances": [
+          "lsd",
+          "dmt"
+        ],
+        "modes": [
+          "open",
+          "attractor",
+          "void",
+          "power"
+        ],
+        "intensities": [
+          0.6
+        ],
+        "seeds": [
+          42
+        ],
+        "phase_t": 0.4,
+        "tier": "balanced"
+      },
+      "image_size": 128,
+      "tasks": [
+        "image_read",
+        "structured_read",
+        "perturbation",
+        "repeatability"
+      ],
+      "perturbations": [
+        "noise",
+        "flip_h"
+      ],
+      "perturbation_subset": 4,
+      "perturbation_amount": 0.02,
+      "repeatability": {
+        "subset": 2,
+        "repeats": 2
+      },
+      "max_tokens": 64,
+      "temperature": 0.0,
+      "abort_after_consecutive_errors": 3,
+      "provider": "heuristic",
+      "pricing": null
+    },
+    "protocol": {
+      "warmup_runs": 0,
+      "repeats": 1,
+      "cold_start": false,
+      "timeout_s": 1200.0,
+      "min_duration_s": null,
+      "memory_probe": false,
+      "bootstrap_resamples": 500,
+      "bootstrap_seed": 0
+    },
+    "references": {
+      "corpus_sha256": "9b0bb5c5df879270eaabc9e9de3340c244a4489064422a4f477b0645e1a887ff",
+      "corpus_items": 8,
+      "oracle_modes": [
+        "attractor",
+        "open",
+        "power",
+        "void"
+      ],
+      "locked_with": {
+        "raster": "psyfi_bench.render.soft_raster",
+        "prompt_revision": 1
+      }
+    },
+    "tolerances": {
+      "timing_cv_max": 1.0,
+      "quantization": 1.0,
+      "accelerator_atol": 0.0,
+      "accelerator_rtol": 0.0
+    },
+    "requires": [
+      "provider"
+    ],
+    "tags": [
+      "model",
+      "multimodal",
+      "fde",
+      "smoke"
+    ],
+    "manifest_hash": "f3c603745664a241"
+  },
+  "manifest_hash": "f3c603745664a241",
+  "measurement_class": "synthetic",
+  "status": "complete",
+  "environment": {
+    "captured_at": "2026-11-08T03:37:39.893851Z",
+    "hostname_hash": "225369c658b1",
+    "platform": {
+      "system": "Darwin",
+      "release": "25.5.0",
+      "version": "Darwin Kernel Version 25.5.0: Mon Apr 27 20:39:29 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T8142",
+      "machine": "arm64"
+    },
+    "cpu": {
+      "brand": "Apple M5",
+      "architecture": "arm64",
+      "logical_cores": 10,
+      "physical_cores": 10,
+      "performance_cores": 4,
+      "efficiency_cores": 6
+    },
+    "memory": {
+      "total_bytes": 17179869184
+    },
+    "gpus": [
+      {
+        "vendor": "apple",
+        "name": "Apple M5",
+        "memory_bytes": null,
+        "driver": null,
+        "cores": 8,
+        "source": "system_profiler",
+        "hardware_class": "integrated"
+      }
+    ],
+    "software": {
+      "python": "3.12.13",
+      "python_implementation": "CPython",
+      "numpy": "2.5.4",
+      "bench_version": "0.1.0",
+      "scipy": "1.18.1",
+      "psyfi_version": "1.4.0",
+      "blas": {
+        "name": "accelerate",
+        "version": "unknown"
+      },
+      "env_threads": {},
+      "accelerators": {
+        "torch": null
+      },
+      "git_commit": "7372d31eed042021aa866613deb1c62d72548a96",
+      "git_dirty": true
+    },
+    "browser": null,
+    "power": null,
+    "hardware_class": "integrated",
+    "unavailable": {
+      "gpu.memory": "Apple unified memory: GPU memory is shared with system RAM",
+      "power": "no power sampler on this host (nvidia-smi absent or not sampled)",
+      "thermal": "no thermal sensor API without elevated privileges"
+    }
+  },
+  "stages": [
+    {
+      "id": "image_read",
+      "kind": "image_read",
+      "status": "ok",
+      "measurement_class": "synthetic",
+      "params": {
+        "items": 8,
+        "prompt_revision": 1,
+        "max_tokens": 64,
+        "temperature": 0.0
+      },
+      "wall_ms": [
+        0.004250090569257736,
+        0.0020419247448444366,
+        0.0014579854905605316,
+        0.0012922100722789764,
+        0.001125037670135498,
+        0.001166015863418579,
+        0.0013331882655620575,
+        0.0010421499609947205
+      ],
+      "cpu_ms": [],
+      "cold_wall_ms": null,
+      "warmup_wall_ms": [],
+      "memory": null,
+      "metrics": {
+        "rows": [
+          {
+            "key": "lsd:open:0.6:42",
+            "variant": "base",
+            "reference": {
+              "mode": "open",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.004250090569257736,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "attractor": 1.7873,
+              "void": 1.5058,
+              "power": 2.6246
+            },
+            "mode_step_min": 1.5058,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:attractor:0.6:42",
+            "variant": "base",
+            "reference": {
+              "mode": "attractor",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0020419247448444366,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.7873,
+              "void": 3.1373,
+              "power": 3.0763
+            },
+            "mode_step_min": 1.7873,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:void:0.6:42",
+            "variant": "base",
+            "reference": {
+              "mode": "void",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"void\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0014579854905605316,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.5058,
+              "attractor": 3.1373,
+              "power": 3.0478
+            },
+            "mode_step_min": 1.5058,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:power:0.6:42",
+            "variant": "base",
+            "reference": {
+              "mode": "power",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"power\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0012922100722789764,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 2.6246,
+              "attractor": 3.0763,
+              "void": 3.0478
+            },
+            "mode_step_min": 2.6246,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "dmt:open:0.6:42",
+            "variant": "base",
+            "reference": {
+              "mode": "open",
+              "intensity": 0.6,
+              "substance": "dmt"
+            },
+            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.001125037670135498,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "attractor": 1.7644,
+              "void": 1.4854,
+              "power": 2.5888
+            },
+            "mode_step_min": 1.4854,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "dmt:attractor:0.6:42",
+            "variant": "base",
+            "reference": {
+              "mode": "attractor",
+              "intensity": 0.6,
+              "substance": "dmt"
+            },
+            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.001166015863418579,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.7644,
+              "void": 3.1024,
+              "power": 3.0404
+            },
+            "mode_step_min": 1.7644,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "dmt:void:0.6:42",
+            "variant": "base",
+            "reference": {
+              "mode": "void",
+              "intensity": 0.6,
+              "substance": "dmt"
+            },
+            "text": "{\"mode\": \"void\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0013331882655620575,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.4854,
+              "attractor": 3.1024,
+              "power": 3.0048
+            },
+            "mode_step_min": 1.4854,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "dmt:power:0.6:42",
+            "variant": "base",
+            "reference": {
+              "mode": "power",
+              "intensity": 0.6,
+              "substance": "dmt"
+            },
+            "text": "{\"mode\": \"power\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0010421499609947205,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 2.5888,
+              "attractor": 3.0404,
+              "void": 3.0048
+            },
+            "mode_step_min": 2.5888,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          }
+        ],
+        "summary": {
+          "n": 8,
+          "parsed": 8,
+          "parse_rate": 1.0,
+          "provider_error_rate": 0.0,
+          "schema_violation_rate": 0.0,
+          "recoverable_format_violations": 0,
+          "extra_keys_rate": 0.0,
+          "violations": {},
+          "mode_accuracy": 1.0,
+          "intensity_mae": 0.0,
+          "fde_mean": 0.0,
+          "fde_median": 0.0,
+          "fde_ci95_mean": [
+            0.0,
+            0.0
+          ],
+          "fde_normalized_mean": 0.0,
+          "within_mode_step_rate": 1.0,
+          "fde_mode_only_mean": 0.0,
+          "fde_intensity_only_mean": 0.0,
+          "latency_ms": {
+            "n": 8,
+            "unit": "ms",
+            "mean": 0.001713575329631567,
+            "median": 0.001312699168920517,
+            "min": 0.0010421499609947205,
+            "max": 0.004250090569257736,
+            "std": 0.0010708009042041996,
+            "cv": 0.6248928107726847,
+            "mad": 0.0001671724021434784,
+            "p50": 0.001312699168920517,
+            "p90": 0.002704374492168426,
+            "p95": 0.00347723253071308,
+            "p99": 0.004095518961548804,
+            "ci95_mean": [
+              0.0012030912330374122,
+              0.0024740598746575415
+            ],
+            "ci95_median": [
+              0.001125037670135498,
+              0.0020419247448444366
+            ],
+            "bootstrap": {
+              "method": "percentile",
+              "resamples": 2000,
+              "seed": 0,
+              "level": 0.95
+            }
+          },
+          "tokens": null,
+          "cost_total": null,
+          "cost_per_valid_result": null
+        },
+        "discriminability": {
+          "pairs": 28,
+          "spearman_rho": 0.9999999999999998,
+          "mean_field_distance": 2.5018678571428574,
+          "mean_reading_distance": 2.5018678571428574
+        }
+      },
+      "statistics": {
+        "latency_ms": {
+          "n": 8,
+          "unit": "ms",
+          "mean": 0.001713575329631567,
+          "median": 0.001312699168920517,
+          "min": 0.0010421499609947205,
+          "max": 0.004250090569257736,
+          "std": 0.0010708009042041996,
+          "cv": 0.6248928107726847,
+          "mad": 0.0001671724021434784,
+          "p50": 0.001312699168920517,
+          "p90": 0.002704374492168426,
+          "p95": 0.00347723253071308,
+          "p99": 0.004095518961548804,
+          "ci95_mean": [
+            0.0012081247405149043,
+            0.0024479595595039427
+          ],
+          "ci95_median": [
+            0.001125037670135498,
+            0.0017499551177024841
+          ],
+          "bootstrap": {
+            "method": "percentile",
+            "resamples": 500,
+            "seed": 0,
+            "level": 0.95
+          }
+        }
+      },
+      "determinism": null,
+      "error": null
+    },
+    {
+      "id": "structured_read",
+      "kind": "structured_read",
+      "status": "ok",
+      "measurement_class": "synthetic",
+      "params": {
+        "items": 8,
+        "prompt_revision": 1,
+        "max_tokens": 64,
+        "temperature": 0.0
+      },
+      "wall_ms": [
+        0.006332993507385254,
+        0.0017075799405574799,
+        0.0012498348951339722,
+        0.0012498348951339722,
+        0.001084059476852417,
+        0.001125037670135498,
+        0.0010421499609947205,
+        0.0010416842997074127
+      ],
+      "cpu_ms": [],
+      "cold_wall_ms": null,
+      "warmup_wall_ms": [],
+      "memory": null,
+      "metrics": {
+        "rows": [
+          {
+            "key": "lsd:open:0.6:42",
+            "variant": "structured",
+            "reference": {
+              "mode": "open",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.006332993507385254,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "attractor": 1.7873,
+              "void": 1.5058,
+              "power": 2.6246
+            },
+            "mode_step_min": 1.5058,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:attractor:0.6:42",
+            "variant": "structured",
+            "reference": {
+              "mode": "attractor",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0017075799405574799,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.7873,
+              "void": 3.1373,
+              "power": 3.0763
+            },
+            "mode_step_min": 1.7873,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:void:0.6:42",
+            "variant": "structured",
+            "reference": {
+              "mode": "void",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"void\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0012498348951339722,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.5058,
+              "attractor": 3.1373,
+              "power": 3.0478
+            },
+            "mode_step_min": 1.5058,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:power:0.6:42",
+            "variant": "structured",
+            "reference": {
+              "mode": "power",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"power\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0012498348951339722,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 2.6246,
+              "attractor": 3.0763,
+              "void": 3.0478
+            },
+            "mode_step_min": 2.6246,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "dmt:open:0.6:42",
+            "variant": "structured",
+            "reference": {
+              "mode": "open",
+              "intensity": 0.6,
+              "substance": "dmt"
+            },
+            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.001084059476852417,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "attractor": 1.7644,
+              "void": 1.4854,
+              "power": 2.5888
+            },
+            "mode_step_min": 1.4854,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "dmt:attractor:0.6:42",
+            "variant": "structured",
+            "reference": {
+              "mode": "attractor",
+              "intensity": 0.6,
+              "substance": "dmt"
+            },
+            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.001125037670135498,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.7644,
+              "void": 3.1024,
+              "power": 3.0404
+            },
+            "mode_step_min": 1.7644,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "dmt:void:0.6:42",
+            "variant": "structured",
+            "reference": {
+              "mode": "void",
+              "intensity": 0.6,
+              "substance": "dmt"
+            },
+            "text": "{\"mode\": \"void\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0010421499609947205,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.4854,
+              "attractor": 3.1024,
+              "power": 3.0048
+            },
+            "mode_step_min": 1.4854,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "dmt:power:0.6:42",
+            "variant": "structured",
+            "reference": {
+              "mode": "power",
+              "intensity": 0.6,
+              "substance": "dmt"
+            },
+            "text": "{\"mode\": \"power\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0010416842997074127,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 2.5888,
+              "attractor": 3.0404,
+              "void": 3.0048
+            },
+            "mode_step_min": 2.5888,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          }
+        ],
+        "summary": {
+          "n": 8,
+          "parsed": 8,
+          "parse_rate": 1.0,
+          "provider_error_rate": 0.0,
+          "schema_violation_rate": 0.0,
+          "recoverable_format_violations": 0,
+          "extra_keys_rate": 0.0,
+          "violations": {},
+          "mode_accuracy": 1.0,
+          "intensity_mae": 0.0,
+          "fde_mean": 0.0,
+          "fde_median": 0.0,
+          "fde_ci95_mean": [
+            0.0,
+            0.0
+          ],
+          "fde_normalized_mean": 0.0,
+          "within_mode_step_rate": 1.0,
+          "fde_mode_only_mean": 0.0,
+          "fde_intensity_only_mean": 0.0,
+          "latency_ms": {
+            "n": 8,
+            "unit": "ms",
+            "mean": 0.0018541468307375908,
+            "median": 0.001187436282634735,
+            "min": 0.0010416842997074127,
+            "max": 0.006332993507385254,
+            "std": 0.0018227139975764872,
+            "cv": 0.983047279406346,
+            "mad": 0.00012433156371116638,
+            "p50": 0.001187436282634735,
+            "p90": 0.003095204010605811,
+            "p95": 0.00471409875899553,
+            "p99": 0.006009214557707308,
+            "ci95_mean": [
+              0.0011147349141538143,
+              0.0031613162718713284
+            ],
+            "ci95_median": [
+              0.0010623538400977859,
+              0.0017075799405574799
+            ],
+            "bootstrap": {
+              "method": "percentile",
+              "resamples": 2000,
+              "seed": 0,
+              "level": 0.95
+            }
+          },
+          "tokens": null,
+          "cost_total": null,
+          "cost_per_valid_result": null
+        },
+        "discriminability": {
+          "pairs": 28,
+          "spearman_rho": 0.9999999999999998,
+          "mean_field_distance": 2.5018678571428574,
+          "mean_reading_distance": 2.5018678571428574
+        },
+        "cross_modal": {
+          "pairs": 8,
+          "mode_agreement_rate": 1.0,
+          "intensity_mean_abs_delta": 0.0,
+          "reading_distance_mean": 0.0
+        }
+      },
+      "statistics": {
+        "latency_ms": {
+          "n": 8,
+          "unit": "ms",
+          "mean": 0.0018541468307375908,
+          "median": 0.001187436282634735,
+          "min": 0.0010416842997074127,
+          "max": 0.006332993507385254,
+          "std": 0.0018227139975764872,
+          "cv": 0.983047279406346,
+          "mad": 0.00012433156371116638,
+          "p50": 0.001187436282634735,
+          "p90": 0.003095204010605811,
+          "p95": 0.00471409875899553,
+          "p99": 0.006009214557707308,
+          "ci95_mean": [
+            0.0011148207704536617,
+            0.0031456307624466717
+          ],
+          "ci95_median": [
+            0.0010628718882799149,
+            0.001478707417845726
+          ],
+          "bootstrap": {
+            "method": "percentile",
+            "resamples": 500,
+            "seed": 0,
+            "level": 0.95
+          }
+        }
+      },
+      "determinism": null,
+      "error": null
+    },
+    {
+      "id": "perturbation",
+      "kind": "perturbation",
+      "status": "ok",
+      "measurement_class": "synthetic",
+      "params": {
+        "items": 8,
+        "prompt_revision": 1,
+        "max_tokens": 64,
+        "temperature": 0.0
+      },
+      "wall_ms": [
+        0.0031669624149799347,
+        0.0012498348951339722,
+        0.001166015863418579,
+        0.0010831281542778015,
+        0.0009587965905666351,
+        0.0009578652679920197,
+        0.0009578652679920197,
+        0.0009997747838497162
+      ],
+      "cpu_ms": [],
+      "cold_wall_ms": null,
+      "warmup_wall_ms": [],
+      "memory": null,
+      "metrics": {
+        "rows": [
+          {
+            "key": "lsd:open:0.6:42",
+            "variant": "noise",
+            "reference": {
+              "mode": "open",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0031669624149799347,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "attractor": 1.7873,
+              "void": 1.5058,
+              "power": 2.6246
+            },
+            "mode_step_min": 1.5058,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:open:0.6:42",
+            "variant": "flip_h",
+            "reference": {
+              "mode": "open",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0012498348951339722,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "attractor": 1.7873,
+              "void": 1.5058,
+              "power": 2.6246
+            },
+            "mode_step_min": 1.5058,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:attractor:0.6:42",
+            "variant": "noise",
+            "reference": {
+              "mode": "attractor",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.001166015863418579,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.7873,
+              "void": 3.1373,
+              "power": 3.0763
+            },
+            "mode_step_min": 1.7873,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:attractor:0.6:42",
+            "variant": "flip_h",
+            "reference": {
+              "mode": "attractor",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0010831281542778015,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.7873,
+              "void": 3.1373,
+              "power": 3.0763
+            },
+            "mode_step_min": 1.7873,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:void:0.6:42",
+            "variant": "noise",
+            "reference": {
+              "mode": "void",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"void\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0009587965905666351,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.5058,
+              "attractor": 3.1373,
+              "power": 3.0478
+            },
+            "mode_step_min": 1.5058,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:void:0.6:42",
+            "variant": "flip_h",
+            "reference": {
+              "mode": "void",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"void\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0009578652679920197,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.5058,
+              "attractor": 3.1373,
+              "power": 3.0478
+            },
+            "mode_step_min": 1.5058,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:power:0.6:42",
+            "variant": "noise",
+            "reference": {
+              "mode": "power",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"power\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0009578652679920197,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 2.6246,
+              "attractor": 3.0763,
+              "void": 3.0478
+            },
+            "mode_step_min": 2.6246,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:power:0.6:42",
+            "variant": "flip_h",
+            "reference": {
+              "mode": "power",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"power\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0009997747838497162,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 2.6246,
+              "attractor": 3.0763,
+              "void": 3.0478
+            },
+            "mode_step_min": 2.6246,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          }
+        ],
+        "summary": {
+          "n": 8,
+          "parsed": 8,
+          "parse_rate": 1.0,
+          "provider_error_rate": 0.0,
+          "schema_violation_rate": 0.0,
+          "recoverable_format_violations": 0,
+          "extra_keys_rate": 0.0,
+          "violations": {},
+          "mode_accuracy": 1.0,
+          "intensity_mae": 0.0,
+          "fde_mean": 0.0,
+          "fde_median": 0.0,
+          "fde_ci95_mean": [
+            0.0,
+            0.0
+          ],
+          "fde_normalized_mean": 0.0,
+          "within_mode_step_rate": 1.0,
+          "fde_mode_only_mean": 0.0,
+          "fde_intensity_only_mean": 0.0,
+          "latency_ms": {
+            "n": 8,
+            "unit": "ms",
+            "mean": 0.0013175304047763348,
+            "median": 0.0010414514690637589,
+            "min": 0.0009578652679920197,
+            "max": 0.0031669624149799347,
+            "std": 0.0007551025586915005,
+            "cv": 0.5731196456294968,
+            "mad": 8.35862010717392e-05,
+            "p50": 0.0010414514690637589,
+            "p90": 0.0018249731510877605,
+            "p95": 0.002495967783033847,
+            "p99": 0.003032763488590717,
+            "ci95_mean": [
+              0.0009997151209972799,
+              0.0018592138076201081
+            ],
+            "ci95_median": [
+              0.0009583309292793274,
+              0.0012498348951339722
+            ],
+            "bootstrap": {
+              "method": "percentile",
+              "resamples": 2000,
+              "seed": 0,
+              "level": 0.95
+            }
+          },
+          "tokens": null,
+          "cost_total": null,
+          "cost_per_valid_result": null
+        },
+        "invariance": {
+          "pairs": 8,
+          "mean_reading_distance_under_perturbation": 0.0,
+          "mode_flip_rate": 0.0,
+          "mean_reading_distance_across_fields": 2.5018678571428574,
+          "invariance_to_discriminability_ratio": null,
+          "perturbations": [
+            "noise",
+            "flip_h"
+          ]
+        }
+      },
+      "statistics": {
+        "latency_ms": {
+          "n": 8,
+          "unit": "ms",
+          "mean": 0.0013175304047763348,
+          "median": 0.0010414514690637589,
+          "min": 0.0009578652679920197,
+          "max": 0.0031669624149799347,
+          "std": 0.0007551025586915005,
+          "cv": 0.5731196456294968,
+          "mad": 8.35862010717392e-05,
+          "p50": 0.0010414514690637589,
+          "p90": 0.0018249731510877605,
+          "p95": 0.002495967783033847,
+          "p99": 0.003032763488590717,
+          "ci95_mean": [
+            0.0009947354556061327,
+            0.0018516249838285146
+          ],
+          "ci95_median": [
+            0.0009583309292793274,
+            0.0012079253792762756
+          ],
+          "bootstrap": {
+            "method": "percentile",
+            "resamples": 500,
+            "seed": 0,
+            "level": 0.95
+          }
+        }
+      },
+      "determinism": null,
+      "error": null
+    },
+    {
+      "id": "repeatability",
+      "kind": "repeatability",
+      "status": "ok",
+      "measurement_class": "synthetic",
+      "params": {
+        "items": 4,
+        "prompt_revision": 1,
+        "max_tokens": 64,
+        "temperature": 0.0
+      },
+      "wall_ms": [
+        0.0023329630494117737,
+        0.0015422701835632324,
+        0.0014170072972774506,
+        0.0012088567018508911
+      ],
+      "cpu_ms": [],
+      "cold_wall_ms": null,
+      "warmup_wall_ms": [],
+      "memory": null,
+      "metrics": {
+        "rows": [
+          {
+            "key": "lsd:open:0.6:42",
+            "variant": "repeat_0",
+            "reference": {
+              "mode": "open",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0023329630494117737,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "attractor": 1.7873,
+              "void": 1.5058,
+              "power": 2.6246
+            },
+            "mode_step_min": 1.5058,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:open:0.6:42",
+            "variant": "repeat_1",
+            "reference": {
+              "mode": "open",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0015422701835632324,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "attractor": 1.7873,
+              "void": 1.5058,
+              "power": 2.6246
+            },
+            "mode_step_min": 1.5058,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:attractor:0.6:42",
+            "variant": "repeat_0",
+            "reference": {
+              "mode": "attractor",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0014170072972774506,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.7873,
+              "void": 3.1373,
+              "power": 3.0763
+            },
+            "mode_step_min": 1.7873,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:attractor:0.6:42",
+            "variant": "repeat_1",
+            "reference": {
+              "mode": "attractor",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0012088567018508911,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.7873,
+              "void": 3.1373,
+              "power": 3.0763
+            },
+            "mode_step_min": 1.7873,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          }
+        ],
+        "summary": {
+          "n": 4,
+          "parsed": 4,
+          "parse_rate": 1.0,
+          "provider_error_rate": 0.0,
+          "schema_violation_rate": 0.0,
+          "recoverable_format_violations": 0,
+          "extra_keys_rate": 0.0,
+          "violations": {},
+          "mode_accuracy": 1.0,
+          "intensity_mae": 0.0,
+          "fde_mean": 0.0,
+          "fde_median": 0.0,
+          "fde_ci95_mean": [
+            0.0,
+            0.0
+          ],
+          "fde_normalized_mean": 0.0,
+          "within_mode_step_rate": 1.0,
+          "fde_mode_only_mean": 0.0,
+          "fde_intensity_only_mean": 0.0,
+          "latency_ms": {
+            "n": 4,
+            "unit": "ms",
+            "mean": 0.001625274308025837,
+            "median": 0.0014796387404203415,
+            "min": 0.0012088567018508911,
+            "max": 0.0023329630494117737,
+            "std": 0.0004914237173291346,
+            "cv": 0.30236355481804766,
+            "mad": 0.00016670674085617065,
+            "p50": 0.0014796387404203415,
+            "p90": 0.0020957551896572113,
+            "p95": 0.002214359119534492,
+            "p99": 0.0023092422634363174,
+            "ci95_mean": [
+              0.0012922100722789764,
+              0.002103974111378193
+            ],
+            "ci95_median": [
+              0.0012088567018508911,
+              0.0023329630494117737
+            ],
+            "bootstrap": {
+              "method": "percentile",
+              "resamples": 2000,
+              "seed": 0,
+              "level": 0.95
+            }
+          },
+          "tokens": null,
+          "cost_total": null,
+          "cost_per_valid_result": null
+        },
+        "repeatability": {
+          "items": 2,
+          "repeats": 2,
+          "exact_agreement_rate": 1.0,
+          "mode_agreement_rate": 1.0,
+          "intensity_std_mean": 0.0
+        }
+      },
+      "statistics": {
+        "latency_ms": {
+          "n": 4,
+          "unit": "ms",
+          "mean": 0.001625274308025837,
+          "median": 0.0014796387404203415,
+          "min": 0.0012088567018508911,
+          "max": 0.0023329630494117737,
+          "std": 0.0004914237173291346,
+          "cv": 0.30236355481804766,
+          "mad": 0.00016670674085617065,
+          "p50": 0.0014796387404203415,
+          "p90": 0.0020957551896572113,
+          "p95": 0.002214359119534492,
+          "p99": 0.0023092422634363174,
+          "ci95_mean": [
+            0.0012922100722789764,
+            0.0020792562281712877
+          ],
+          "ci95_median": [
+            0.0012088567018508911,
+            0.0023329630494117737
+          ],
+          "bootstrap": {
+            "method": "percentile",
+            "resamples": 500,
+            "seed": 0,
+            "level": 0.95
+          }
+        }
+      },
+      "determinism": null,
+      "error": null
+    }
+  ],
+  "metrics": {
+    "provider": {
+      "name": "oracle",
+      "model": "oracle",
+      "locality": "baseline",
+      "note": "reads the reference label; ceiling"
+    },
+    "locality": "baseline",
+    "prompt_revision": 1,
+    "corpus": {
+      "items": 8,
+      "image_size": 128,
+      "build_ms": 55.39387511089444,
+      "lock_ok": true
+    },
+    "tasks": {
+      "image_read": {
+        "n": 8,
+        "parsed": 8,
+        "parse_rate": 1.0,
+        "provider_error_rate": 0.0,
+        "schema_violation_rate": 0.0,
+        "recoverable_format_violations": 0,
+        "extra_keys_rate": 0.0,
+        "violations": {},
+        "mode_accuracy": 1.0,
+        "intensity_mae": 0.0,
+        "fde_mean": 0.0,
+        "fde_median": 0.0,
+        "fde_ci95_mean": [
+          0.0,
+          0.0
+        ],
+        "fde_normalized_mean": 0.0,
+        "within_mode_step_rate": 1.0,
+        "fde_mode_only_mean": 0.0,
+        "fde_intensity_only_mean": 0.0,
+        "latency_ms": {
+          "n": 8,
+          "unit": "ms",
+          "mean": 0.001713575329631567,
+          "median": 0.001312699168920517,
+          "min": 0.0010421499609947205,
+          "max": 0.004250090569257736,
+          "std": 0.0010708009042041996,
+          "cv": 0.6248928107726847,
+          "mad": 0.0001671724021434784,
+          "p50": 0.001312699168920517,
+          "p90": 0.002704374492168426,
+          "p95": 0.00347723253071308,
+          "p99": 0.004095518961548804,
+          "ci95_mean": [
+            0.0012030912330374122,
+            0.0024740598746575415
+          ],
+          "ci95_median": [
+            0.001125037670135498,
+            0.0020419247448444366
+          ],
+          "bootstrap": {
+            "method": "percentile",
+            "resamples": 2000,
+            "seed": 0,
+            "level": 0.95
+          }
+        },
+        "tokens": null,
+        "cost_total": null,
+        "cost_per_valid_result": null,
+        "discriminability": {
+          "pairs": 28,
+          "spearman_rho": 0.9999999999999998,
+          "mean_field_distance": 2.5018678571428574,
+          "mean_reading_distance": 2.5018678571428574
+        }
+      },
+      "structured_read": {
+        "n": 8,
+        "parsed": 8,
+        "parse_rate": 1.0,
+        "provider_error_rate": 0.0,
+        "schema_violation_rate": 0.0,
+        "recoverable_format_violations": 0,
+        "extra_keys_rate": 0.0,
+        "violations": {},
+        "mode_accuracy": 1.0,
+        "intensity_mae": 0.0,
+        "fde_mean": 0.0,
+        "fde_median": 0.0,
+        "fde_ci95_mean": [
+          0.0,
+          0.0
+        ],
+        "fde_normalized_mean": 0.0,
+        "within_mode_step_rate": 1.0,
+        "fde_mode_only_mean": 0.0,
+        "fde_intensity_only_mean": 0.0,
+        "latency_ms": {
+          "n": 8,
+          "unit": "ms",
+          "mean": 0.0018541468307375908,
+          "median": 0.001187436282634735,
+          "min": 0.0010416842997074127,
+          "max": 0.006332993507385254,
+          "std": 0.0018227139975764872,
+          "cv": 0.983047279406346,
+          "mad": 0.00012433156371116638,
+          "p50": 0.001187436282634735,
+          "p90": 0.003095204010605811,
+          "p95": 0.00471409875899553,
+          "p99": 0.006009214557707308,
+          "ci95_mean": [
+            0.0011147349141538143,
+            0.0031613162718713284
+          ],
+          "ci95_median": [
+            0.0010623538400977859,
+            0.0017075799405574799
+          ],
+          "bootstrap": {
+            "method": "percentile",
+            "resamples": 2000,
+            "seed": 0,
+            "level": 0.95
+          }
+        },
+        "tokens": null,
+        "cost_total": null,
+        "cost_per_valid_result": null,
+        "discriminability": {
+          "pairs": 28,
+          "spearman_rho": 0.9999999999999998,
+          "mean_field_distance": 2.5018678571428574,
+          "mean_reading_distance": 2.5018678571428574
+        },
+        "cross_modal": {
+          "pairs": 8,
+          "mode_agreement_rate": 1.0,
+          "intensity_mean_abs_delta": 0.0,
+          "reading_distance_mean": 0.0
+        }
+      },
+      "perturbation": {
+        "n": 8,
+        "parsed": 8,
+        "parse_rate": 1.0,
+        "provider_error_rate": 0.0,
+        "schema_violation_rate": 0.0,
+        "recoverable_format_violations": 0,
+        "extra_keys_rate": 0.0,
+        "violations": {},
+        "mode_accuracy": 1.0,
+        "intensity_mae": 0.0,
+        "fde_mean": 0.0,
+        "fde_median": 0.0,
+        "fde_ci95_mean": [
+          0.0,
+          0.0
+        ],
+        "fde_normalized_mean": 0.0,
+        "within_mode_step_rate": 1.0,
+        "fde_mode_only_mean": 0.0,
+        "fde_intensity_only_mean": 0.0,
+        "latency_ms": {
+          "n": 8,
+          "unit": "ms",
+          "mean": 0.0013175304047763348,
+          "median": 0.0010414514690637589,
+          "min": 0.0009578652679920197,
+          "max": 0.0031669624149799347,
+          "std": 0.0007551025586915005,
+          "cv": 0.5731196456294968,
+          "mad": 8.35862010717392e-05,
+          "p50": 0.0010414514690637589,
+          "p90": 0.0018249731510877605,
+          "p95": 0.002495967783033847,
+          "p99": 0.003032763488590717,
+          "ci95_mean": [
+            0.0009997151209972799,
+            0.0018592138076201081
+          ],
+          "ci95_median": [
+            0.0009583309292793274,
+            0.0012498348951339722
+          ],
+          "bootstrap": {
+            "method": "percentile",
+            "resamples": 2000,
+            "seed": 0,
+            "level": 0.95
+          }
+        },
+        "tokens": null,
+        "cost_total": null,
+        "cost_per_valid_result": null,
+        "invariance": {
+          "pairs": 8,
+          "mean_reading_distance_under_perturbation": 0.0,
+          "mode_flip_rate": 0.0,
+          "mean_reading_distance_across_fields": 2.5018678571428574,
+          "invariance_to_discriminability_ratio": null,
+          "perturbations": [
+            "noise",
+            "flip_h"
+          ]
+        }
+      },
+      "repeatability": {
+        "n": 4,
+        "parsed": 4,
+        "parse_rate": 1.0,
+        "provider_error_rate": 0.0,
+        "schema_violation_rate": 0.0,
+        "recoverable_format_violations": 0,
+        "extra_keys_rate": 0.0,
+        "violations": {},
+        "mode_accuracy": 1.0,
+        "intensity_mae": 0.0,
+        "fde_mean": 0.0,
+        "fde_median": 0.0,
+        "fde_ci95_mean": [
+          0.0,
+          0.0
+        ],
+        "fde_normalized_mean": 0.0,
+        "within_mode_step_rate": 1.0,
+        "fde_mode_only_mean": 0.0,
+        "fde_intensity_only_mean": 0.0,
+        "latency_ms": {
+          "n": 4,
+          "unit": "ms",
+          "mean": 0.001625274308025837,
+          "median": 0.0014796387404203415,
+          "min": 0.0012088567018508911,
+          "max": 0.0023329630494117737,
+          "std": 0.0004914237173291346,
+          "cv": 0.30236355481804766,
+          "mad": 0.00016670674085617065,
+          "p50": 0.0014796387404203415,
+          "p90": 0.0020957551896572113,
+          "p95": 0.002214359119534492,
+          "p99": 0.0023092422634363174,
+          "ci95_mean": [
+            0.0012922100722789764,
+            0.002103974111378193
+          ],
+          "ci95_median": [
+            0.0012088567018508911,
+            0.0023329630494117737
+          ],
+          "bootstrap": {
+            "method": "percentile",
+            "resamples": 2000,
+            "seed": 0,
+            "level": 0.95
+          }
+        },
+        "tokens": null,
+        "cost_total": null,
+        "cost_per_valid_result": null,
+        "repeatability": {
+          "items": 2,
+          "repeats": 2,
+          "exact_agreement_rate": 1.0,
+          "mode_agreement_rate": 1.0,
+          "intensity_std_mean": 0.0
+        }
+      }
+    },
+    "aborted": false,
+    "fde_mean": 0.0,
+    "within_mode_step_rate": 1.0,
+    "mode_accuracy": 1.0,
+    "parse_rate": 1.0
+  },
+  "determinism": {},
+  "failures": [],
+  "provenance": {
+    "git_commit": "7372d31eed042021aa866613deb1c62d72548a96",
+    "git_dirty": true,
+    "command": "scripts/export_bench_contracts.py",
+    "bench_version": "0.1.0",
+    "psyfi_version": "1.4.0",
+    "seed": null,
+    "notes": [
+      "prompt_revision=1",
+      "image_size=128",
+      "provider={\"name\": \"oracle\", \"model\": \"oracle\", \"locality\": \"baseline\", \"note\": \"reads the reference label; ceiling\"}"
+    ]
+  },
+  "non_claim": "Modeled phenomenology for research and visualization only. The benchmark measures computation, rendering, and model interpretation of modeled representations. It does not measure consciousness or subjective experience. Not medical advice.",
+  "result_hash": "dfbeefc210ed0bcabb28cc78a6b6e98b6ec4704aecfc2b05b554f76ed5363ead"
+}
