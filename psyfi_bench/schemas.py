@@ -214,6 +214,30 @@ class DeterminismRecord(BaseModel):
     inf_count: int = 0
 
 
+class PowerRecord(BaseModel):
+    """Sampled GPU power for one stage. Only what the sampler returned; absent tool means no record."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    source: str = Field(description="Sampler name, e.g. nvidia-smi.")
+    query: str = Field(description="Fields requested from the sampler.")
+    interval_s: float = Field(description="Requested polling interval; actual spacing is in the sample timestamps.")
+    sample_count: int
+    window_s: float = Field(description="Wall seconds the sampler was running around the measured repeats.")
+    sampled_span_s: float = Field(description="Seconds between the first and last sample (energy is integrated over this).")
+    power_w_mean: float | None = None
+    power_w_max: float | None = None
+    temperature_c_max: float | None = None
+    sm_clock_mhz_mean: float | None = None
+    sm_clock_mhz_max: float | None = None
+    energy_j: float | None = Field(default=None, description="Joules from the samples; None with unavailable_reason when under 2 samples.")
+    work_unit: str | None = Field(default=None, description="cell_step or frame.")
+    work_units: float | None = Field(default=None, description="Work units completed while sampling.")
+    energy_j_per_work_unit: float | None = None
+    derivation: str
+    unavailable_reason: str | None = None
+
+
 class StageRecord(BaseModel):
     """One measured stage: a workload point, a render pass, a model query batch…"""
 
@@ -232,6 +256,7 @@ class StageRecord(BaseModel):
     metrics: dict[str, Any] = Field(default_factory=dict)
     statistics: dict[str, Statistics] = Field(default_factory=dict)
     determinism: DeterminismRecord | None = None
+    power: PowerRecord | None = Field(default=None, description="Sampled GPU power; omitted when no sampler ran.")
     error: str | None = None
 
 

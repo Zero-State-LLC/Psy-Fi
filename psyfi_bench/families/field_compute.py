@@ -18,6 +18,7 @@ from psyfi_bench.compute.backends import (
     make_backend,
     validate_against_reference,
 )
+from psyfi_bench.power import make_power_sampler
 from psyfi_bench.registry import register_family
 from psyfi_bench.runner import FamilyOutput, RunContext, measure_stage
 from psyfi_bench.schemas import EnvironmentRecord, FailureRecord, StageRecord, WorkloadManifest
@@ -228,6 +229,8 @@ def run_field_compute(manifest: WorkloadManifest, ctx: RunContext, env: Environm
             digest_fn=_digest_of,
             metrics_fn=_throughput_metrics(pt["width"], pt["height"], pt["steps"]),
             cancel=ctx.cancel,
+            power_sampler=(ctx.power_sampler_factory or make_power_sampler)(),
+            power_work=("cell_step", float(pt["width"] * pt["height"] * pt["steps"])),
         )
         if stage.status == "ok" and not backend.canonical:
             try:
@@ -291,6 +294,11 @@ def run_field_compute(manifest: WorkloadManifest, ctx: RunContext, env: Environm
         "quantization": quantization,
     }
     metrics["determinism"] = det
+    if any(s.power and s.power.sample_count for s in stages):
+        # Only when samples exist: the host did have a working sampler, so the "no sampler" reason would be false.
+        env.unavailable.pop("power", None)
+        env.power = {"source": next(s.power.source for s in stages if s.power), "query": next(s.power.query for s in stages if s.power)}
+        notes.append("power sampled per stage (stage.power); energy derived from samples only")
     return FamilyOutput(stages=stages, metrics=metrics, determinism=det, failures=failures, notes=notes)
 
 

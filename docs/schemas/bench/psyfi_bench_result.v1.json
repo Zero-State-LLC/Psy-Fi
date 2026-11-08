@@ -391,6 +391,179 @@
       "title": "MemoryRecord",
       "type": "object"
     },
+    "PowerRecord": {
+      "additionalProperties": false,
+      "description": "Sampled GPU power for one stage. Only what the sampler returned; absent tool means no record.",
+      "properties": {
+        "source": {
+          "description": "Sampler name, e.g. nvidia-smi.",
+          "title": "Source",
+          "type": "string"
+        },
+        "query": {
+          "description": "Fields requested from the sampler.",
+          "title": "Query",
+          "type": "string"
+        },
+        "interval_s": {
+          "description": "Requested polling interval; actual spacing is in the sample timestamps.",
+          "title": "Interval S",
+          "type": "number"
+        },
+        "sample_count": {
+          "title": "Sample Count",
+          "type": "integer"
+        },
+        "window_s": {
+          "description": "Wall seconds the sampler was running around the measured repeats.",
+          "title": "Window S",
+          "type": "number"
+        },
+        "sampled_span_s": {
+          "description": "Seconds between the first and last sample (energy is integrated over this).",
+          "title": "Sampled Span S",
+          "type": "number"
+        },
+        "power_w_mean": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Power W Mean"
+        },
+        "power_w_max": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Power W Max"
+        },
+        "temperature_c_max": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Temperature C Max"
+        },
+        "sm_clock_mhz_mean": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sm Clock Mhz Mean"
+        },
+        "sm_clock_mhz_max": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sm Clock Mhz Max"
+        },
+        "energy_j": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Joules from the samples; None with unavailable_reason when under 2 samples.",
+          "title": "Energy J"
+        },
+        "work_unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "cell_step or frame.",
+          "title": "Work Unit"
+        },
+        "work_units": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Work units completed while sampling.",
+          "title": "Work Units"
+        },
+        "energy_j_per_work_unit": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Energy J Per Work Unit"
+        },
+        "derivation": {
+          "title": "Derivation",
+          "type": "string"
+        },
+        "unavailable_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unavailable Reason"
+        }
+      },
+      "required": [
+        "source",
+        "query",
+        "interval_s",
+        "sample_count",
+        "window_s",
+        "sampled_span_s",
+        "derivation"
+      ],
+      "title": "PowerRecord",
+      "type": "object"
+    },
     "Provenance": {
       "additionalProperties": true,
       "properties": {
@@ -576,6 +749,18 @@
             }
           ],
           "default": null
+        },
+        "power": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PowerRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Sampled GPU power; omitted when no sampler ran."
         },
         "error": {
           "anyOf": [
