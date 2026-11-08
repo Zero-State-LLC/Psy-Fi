@@ -25,6 +25,8 @@ Specs are the decision records. They use the Matt Pocock shape: problem, solutio
 | Cloudflare and NVIDIA | Implemented. Public host is `https://psy-fi.space` on Worker `psy-fi`. Issue #36 is Done. |
 | Vision bench | Implemented. Pull request #40 is merged. No public route. No receipt file until a person runs capture. |
 | Shell front page and workbench redesign | Implemented. Intent [`intent/shell-front-page-workbench.md`](intent/shell-front-page-workbench.md) is accepted and done: pull request #44 is merged and live; Worker version `3d97825f` serves it. It is not an open slice. |
+| FieldLoop benchmark platform | In review, not on `main`. Pull request #56 (Fable) carries `psyfi_bench`, its spec and the bench page. Pull requests #59 (power sampling, score formats) and #60 (WGSL kernel) are stacked on it. Issue #47 is the umbrella. |
+| GPU Lab tier switch | Fix in review: pull request #58 (issue #55). Until it is merged and deployed, a runtime tier switch on psy-fi.space breaks the present path. |
 
 The older Worker `psyfi` on workers.dev stays. Do not attach `psy-fi.space` to it, and do not delete it.
 
