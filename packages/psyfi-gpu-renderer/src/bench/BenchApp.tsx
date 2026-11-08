@@ -78,6 +78,7 @@ export function BenchApp() {
   const [payload, setPayload] = useState<CapturePayload | null>(null)
   const [postStatus, setPostStatus] = useState<string | null>(null)
   const [kernelRows, setKernelRows] = useState<KernelCaptureRecord[]>([])
+  const [canvasSuspended, setCanvasSuspended] = useState(false)
   const kernelMode = useMemo(() => parseKernelMode(window.location.search), [])
   const probe = useMemo(() => createProbeHandle(), [])
   const abortRef = useRef(false)
@@ -141,8 +142,17 @@ export function BenchApp() {
     try {
       if (kernelMode !== 'off') {
         // Own WebGPU device, run before any frame stage so it cannot perturb them. Unsupported -> explicit reason.
+        // A separate device does not isolate the GPU: unmount the frame canvas (and a previous run's scene)
+        // and let two frames pass so nothing renders while the dispatches are timed.
+        setSnapshot(null)
+        setCanvasSuspended(true)
+        await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
         setStatus('Kernel: WGSL Kuramoto step on the 32x32 seed-1337 fixture…')
-        kernels.push(await runKuramotoKernelStage())
+        try {
+          kernels.push(await runKuramotoKernelStage())
+        } finally {
+          setCanvasSuspended(false)
+        }
         setKernelRows([...kernels])
       }
       for (let i = 0; i < stages.length; i++) {
@@ -258,7 +268,9 @@ export function BenchApp() {
         <a href="/gpu/" style={{ marginLeft: 'auto', color: '#3ee7f2' }}>GPU lab</a>
       </header>
       <div style={{ position: 'relative', minHeight: 320 }}>
-        {caps.webgpu ? (
+        {caps.webgpu && canvasSuspended ? (
+          <p style={{ padding: 16 }}>Frame canvas unmounted while the compute kernel is timed.</p>
+        ) : caps.webgpu ? (
           <BenchCanvas key={stageIndex} snapshot={snapshot} tier={tier} trackTimestamp={wantTimestamps}>
             <BenchProbe handle={probe} enabled={measuring} trackTimestamp={wantTimestamps} />
           </BenchCanvas>
