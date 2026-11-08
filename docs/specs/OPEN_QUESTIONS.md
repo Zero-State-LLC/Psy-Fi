@@ -11,7 +11,7 @@ This register collects every open question from `intent.md`, `intent/*.md`, `HAN
 | 1 | [AI Gateway for production vision](#1-ai-gateway-for-production-vision) | Open. Recommend later, not now | Operator |
 | 2 | [Catalog reload](#2-catalog-reload) | Open. Recommend keep under this freeze | Operator |
 | 3 | [Hardware Ultra evidence (#10)](#3-hardware-ultra-evidence-10) | Open. Needs a physical desktop | Operator, with hardware |
-| 4 | [Vision-bench receipt and #49](#4-vision-bench-receipt-and-49) | Open. Needs a person with the key | Operator |
+| 4 | [Vision-bench receipt and #49](#4-vision-bench-receipt-and-49) | Open. Needs a person with the key: about 4 posts, then 28 (smoke) or 242 (full) | Operator |
 | 5 | [FieldLoop run endpoint (#54)](#5-fieldloop-run-endpoint-54) | Open. Recommend no | Operator |
 | 6 | [Discrete GPU, CUDA and power evidence (#48, #53, #50)](#6-discrete-gpu-cuda-and-power-evidence-48-53-50) | Open. Needs a cloud account | Operator |
 | 7 | [Per-frame energy (ADR 0011)](#7-per-frame-energy-adr-0011) | Open. Interval settled; acceptance pending | Operator |
@@ -85,14 +85,19 @@ Asked in: `intent.md`, `HANDOFF.md` §4, issue #49.
 
 **Found.**
 - **The vision-bench receipt** (`docs/specs/vision-bench.md`): one local capture of 4 fixed 64×64 images, about 4 posts, plus the oracle check that runs before any post.
-- **#49** (`interpretation.fieldread`):
-  - 6 images × 4 tasks, 4 perturbations over a subset of 8, and repeatability 2, so about 70 short posts at `max_tokens` 64;
-  - CPU-only providers already run the same workload offline (`--provider heuristic`, `oracle`).
+- **#49, the full `interpretation.fieldread` workload:**
+  - its corpus is 4 substances × 4 modes × 3 intensities × 2 seeds = 96 images;
+  - every image is read twice, once as an image read and once as a structured read;
+  - 4 perturbations over 8 images and 3 repeats over 6 images come on top;
+  - so a successful run is 96 + 96 + 32 + 18 = **242 posts** at `max_tokens` 64 (`run_interpretation` in `psyfi_bench/families/interpretation.py`).
+- **The smoke workload, `interpretation.fieldread.smoke`:** 8 images, so 8 + 8 + 8 + 4 = **28 posts**.
+- **Offline runs:** CPU-only providers already run both workloads offline (`--provider heuristic`, `oracle`).
 - **Both:** they spend the NVIDIA key and must be run by a person.
 
-**Recommend.** Do both in one sitting on the operator's machine, with the live vision-model id.
-- Commit the vision-bench receipt as the spec describes.
-- Keep the #49 result as a sealed result file.
+**Recommend.** Do it in one sitting on the operator's machine, with the live vision-model id.
+- Run the vision-bench receipt first (about 4 posts) and commit it as the spec describes.
+- Then run the smoke workload (28 posts) for #49, before the full one (242 posts). The workload stops after 3 consecutive provider errors (`abort_after_consecutive_errors`), which bounds a failing run.
+- Keep each #49 result as a sealed result file.
 - Never print the key or the model id.
 
 ## 5. FieldLoop run endpoint (#54)
