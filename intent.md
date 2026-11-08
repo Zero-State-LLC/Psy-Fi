@@ -59,10 +59,10 @@ Non-goals:
 
 ## Open questions
 
-- Whether production vision should later go through the AI Gateway described in the Call section of [`docs/specs/cloudflare-nvidia.md`](docs/specs/cloudflare-nvidia.md). The live host does not. That section was left in place.
+- Whether a later host should send production vision through an AI Gateway. The live host does not. The Call section of [`docs/specs/cloudflare-nvidia.md`](docs/specs/cloudflare-nvidia.md) records the direct call and leaves the gateway undecided.
 - Whether catalog reload stays, is renamed, or is removed. No ticket.
 - Hardware Ultra evidence (issue #10) and any later hardware-quality scaling. Not this host.
-- Whether the vision bench on the operator's local `main` (`dece192`) is published. It is not in the handoff branch. It adds no public route.
+- A committed vision-bench receipt. The bench is on `main` (pull request #40) and adds no public route. CI scores a receipt only after a person runs capture.
 
 ## Verified / assumed
 
@@ -72,10 +72,10 @@ Non-goals:
 | Worker `psy-fi` version `d27e5f06-fc86-432f-9f6b-b1b6815e46f9` is the current version, and the secret and the vision var are both set | `[verified: Worker settings and the secret-change version]` |
 | Worker `psyfi` still serves its workers.dev health route | `[verified: GET /health 200 at 2026-11-07T23:51:48Z]` |
 | A deploy from this `wrangler.jsonc` updates `psy-fi` and does not update `psyfi` | `[verified: the two hostnames after this deploy]` |
-| `origin/main` at `80fcfa2` still names script `psyfi` | `[verified: git show of that tree]` |
-| The live image includes vision-bench modules that have no public route | `[verified: the deploy ran from local main dece192]` |
+| `origin/main` at `bf5953b` names script `psy-fi` and includes the vision bench | `[verified: pull requests #39 and #40 are merged]` |
+| The bench modules add no public route | `[verified: pull request #40]` |
 | No image-reading POST was made for this deploy | `[verified: that call was not run]` |
-| The Call section's gateway requirement is still the written spec, and it disagrees with this host | `[verified: docs/specs/cloudflare-nvidia.md was not rewritten]` |
+| The Call section records a direct call to `https://integrate.api.nvidia.com`. An AI Gateway is not a requirement of this host | `[verified: docs/specs/cloudflare-nvidia.md Call section]` |
 
 ## Author / date
 

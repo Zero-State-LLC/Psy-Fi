@@ -15,7 +15,7 @@ Read in this order before changing behavior:
 5. [`context.md`](context.md) and [`intent.md`](intent.md) for the public host.
 6. [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md) before any deploy.
 
-Specs are the decision records. They use the Matt Pocock shape: problem, solution, user stories, implementation decisions, testing decisions, out of scope. An implemented spec is not a rebuild order.
+Specs are the decision records. They use the Matt Pocock shape: problem, solution, user stories, implementation decisions, testing decisions, out of scope. An implemented spec is not a rebuild order. If `context.md` or `intent.md` disagrees with a spec, the spec wins.
 
 ## 2. What is already built
 

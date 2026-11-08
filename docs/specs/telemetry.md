@@ -14,7 +14,7 @@ Telemetry does nothing unless the server flag is on and a client opts in. Events
 ## User Stories
 
 1. As an operator, I want telemetry off on a default process, so that running the instrument records nothing.
-2. As an operator, I want status to show the server flag, the opt-in, whether collection is active, and how many events are buffered.
+2. As an operator, I want status to show the server flag, the opt-in, whether collection is active, and how many events are buffered, so that I can see whether this process is recording before I read it.
 3. As an operator, I want opt-in to do nothing while the server flag is off, so that a browser click cannot enable collection alone.
 4. As an operator, I want opt-out to clear the buffer, so that turning it off forgets what was held.
 5. As an operator, I want to read the buffer only while I am diagnosing a local process, so that events are not an export.

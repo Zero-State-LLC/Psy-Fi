@@ -72,11 +72,11 @@ CI does not call Cloudflare and does not depend on DNS. Live `/health` and shell
 
 ## Git, as of this handoff
 
-`origin/main` was `80fcfa2380325e30c84f884f70f98a10210f9670`. That tree names the script `psyfi`. A deploy from GitHub `main` updates Worker `psyfi` and does not move `psy-fi.space`.
+`origin/main` is `bf5953b28ef7ef367c8231d5983d6f30d64b4a26`, the merge of pull request #40. That tree names script `psy-fi`. A deploy from GitHub `main` updates Worker `psy-fi` and does not update Worker `psyfi`.
 
-The operator's local `main` includes the vision-bench commits through `dece192823a4e110df0718dac880196f0033faad`. Those commits are not on `origin/main`. The handoff branch is cut from `origin/main` and does not include them.
+Pull request #39 put the hostname on `main`. Pull request #40 put the vision bench on `main`. The bench adds no public route. There is no receipt fixture until a person runs capture.
 
-The live container was built from that local tree, so the bench modules are in the running image until the next image build. They add no public route. A redeploy from the handoff branch rebuilds the image without those modules. The public shell, GPU lab, and API stay the product that is already on `origin/main`.
+The Call section of [`docs/specs/cloudflare-nvidia.md`](docs/specs/cloudflare-nvidia.md) records the direct call to `https://integrate.api.nvidia.com`. An AI Gateway is an open question. Do not add one.
 
 Direct push to `main` is rejected: one code-owner review, and admins are enforced. Do not force-push. Do not admin-merge unless a human asks.
 
@@ -85,7 +85,7 @@ Direct push to `main` is rejected: one code-owner review, and admins are enforce
 - Issue #10, hardware Ultra frame times. It stays Backlog. This Mac is a MacBook Air M4 with 10 GPU cores. Do not record it as Ultra evidence. Do not invent frame times.
 - Hardware-quality scaling. It was discussed and not written.
 - Catalog reload. The route stays as the app already implements it. No ticket.
-- The Call section in [`docs/specs/cloudflare-nvidia.md`](docs/specs/cloudflare-nvidia.md). It still says production vision goes through an AI Gateway custom provider. The live host does not. That section was not rewritten.
+- The Call section in [`docs/specs/cloudflare-nvidia.md`](docs/specs/cloudflare-nvidia.md). It records the direct integrate call on Worker `psy-fi`. An AI Gateway stays an open question. Do not add one.
 - A vision-bench receipt fixture. CI recomputes only after a human runs capture. Do not commit a receipt.
 - Login, an API-key check, an origin allowlist, a rate limit, and `www.psy-fi.space`.
 - The image-reading request: `reasoning_effort` `none`, `max_tokens` 256, and the not-medical-advice sentence. A reading does not write presets, the catalog, the master seed, hints, recipe rank, or planner text.
