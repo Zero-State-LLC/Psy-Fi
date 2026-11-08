@@ -19,9 +19,9 @@ Public site: https://psy-fi.space
 | --- | --- |
 | Worker script | `psy-fi` |
 | Account | Zer0state, `315fb44b61212825452aad0ca566ea42` |
-| Current version | `97b60aaf-8da3-4ee8-913a-a7896dff68b7` |
-| That version | Deploy of `main` at `09f9ce6` (GPU Lab tier-switch fix, #58, and the board sync, #62) with `--containers-rollout immediate --keep-vars`, 2026-11-08T09:27:33.128Z, 100%. Five static assets uploaded, all under `/gpu/`. New container image, tag `wrangler-mw7mff1s`. |
-| Previous versions | `3d97825f-cea6-41b5-b50c-4e83659aa723`, deploy of `main` at `bb7ee9a` (share card, #43), 2026-11-08T07:31:52.273Z. `363b5d70-0fca-425a-9a3b-9de45abcbe09`, redeploy of `main` at `c2c534a`, 2026-11-08T03:04:09.557Z. `7f79f732-3b1a-42a7-90a0-239ac1c5483d`, upload of `main` at `7372d31` (shell redesign, #44), 2026-11-08T02:50:04.993Z. `d27e5f06-fc86-432f-9f6b-b1b6815e46f9`, secret change, 2026-11-07T23:50:49.525Z. |
+| Current version | `94e47554-10d5-4d8e-ab2b-5cf346305857` |
+| That version | Deploy of `main` at `460e891` (FieldLoop, #56, and its slices #59, #60 and #65, plus #41, #63, #64, #66 and #67) with `--containers-rollout immediate --keep-vars`, 2026-11-08T21:59:31.375Z, 100%. 16 static assets uploaded: `/bench.html`, `/static/bench.css`, `/static/bench.js`, `/index.html` and 12 under `/gpu/`. New container image, tag `wrangler-mw8dg2xm`, digest `sha256:66be28f0…`. |
+| Previous versions | `97b60aaf-8da3-4ee8-913a-a7896dff68b7`, deploy of `main` at `09f9ce6` (GPU Lab tier-switch fix, #58, and the board sync, #62), 2026-11-08T09:27:33.128Z, image tag `wrangler-mw7mff1s`. `3d97825f-cea6-41b5-b50c-4e83659aa723`, deploy of `main` at `bb7ee9a` (share card, #43), 2026-11-08T07:31:52.273Z. `363b5d70-0fca-425a-9a3b-9de45abcbe09`, redeploy of `main` at `c2c534a`, 2026-11-08T03:04:09.557Z. `7f79f732-3b1a-42a7-90a0-239ac1c5483d`, upload of `main` at `7372d31` (shell redesign, #44), 2026-11-08T02:50:04.993Z. `d27e5f06-fc86-432f-9f6b-b1b6815e46f9`, secret change, 2026-11-07T23:50:49.525Z. |
 | First upload | `aac88ff4-79a1-4c00-b31e-19b87074b26a` (not the current version) |
 | Custom domain | `psy-fi.space` only. Certificate comes from that binding. |
 | `workers.dev` | Off. https://psy-fi.zer0state-noema.workers.dev/health returned 404. |
@@ -37,18 +37,22 @@ Public site: https://psy-fi.space
 
 `NVIDIA_VISION_MODEL` is a plain-text var on that Worker. It is set. Do not commit the id. `NVIDIA_API_BASE` is empty, so image reading calls `https://integrate.api.nvidia.com` directly. This host does not add an AI Gateway.
 
-Deploy checks for `97b60aaf`, with a browser user agent (a bare Python client gets Cloudflare 1010):
+Deploy checks for `94e47554`, with a browser user agent (a bare Python client gets Cloudflare 1010):
 
-- `GET /health` — 200, `psyfi-api` `1.4.0`, at 2026-11-08T09:28:07Z.
-- `GET /ready` — 200, `gpu_shell_mounted` true, at 2026-11-08T09:28:07Z.
+- `GET /health` — 200, `psyfi-api` `1.4.0`, at 2026-11-08T22:15:43Z.
+- `GET /ready` — 200, `gpu_shell_mounted` true, at 2026-11-08T22:15:43Z.
+- `GET /api/bench/v1/results` — 200, `{"schema":"psyfi.bench.index.v1","results":[]}`, at 2026-11-08T22:15:06Z; `GET /api/bench/docs` — 200.
+- `GET /bench` — 200, title "PsyFi bench results", `bench.js?v=1`. In the desktop app's browser it shows the empty state ("No results on this host.") and no error banner.
+- `GET /gpu/bench.html` — 307 to `/gpu/bench`, which is 200; in the browser it shows the runner, "Run (13 stages) + kernel", with no console errors.
 - `GET /` — 200, shell contains "Read image", `v1.4.0` and the front page headline; `GET /static/style.css?v=43` — 200.
 - `GET /` head carries the share card: 10 `og:` tags and 5 `twitter:` tags, title "PsyFi, a consciousness field simulator". `GET /static/images/psyfi-hero.jpg` — 200, JPEG.
-- `GET /gpu/` — 200, HTML, loading bundle `index-DTWr2rzT.js`. In the desktop app's browser, a fresh ultra load and ten runtime tier switches across all four tiers raised no errors (issue #55).
+- `GET /gpu/` — 200, HTML, loading bundle `main-DCGQ_YQm.js`. In the desktop app's browser it renders its canvas with no console errors.
 - `GET /sw.js` — `CACHE_NAME = 'psyfi-shell-v43'`.
-- Version `97b60aaf` still binds `NVIDIA_API_KEY` (secret) and `NVIDIA_VISION_MODEL` (plain text). Names were checked; values were not printed.
+- Version `94e47554` still binds `NVIDIA_API_KEY` (secret) and `NVIDIA_VISION_MODEL` (plain text). Names were checked; values were not printed.
+- A warm container keeps its old image across a deploy. The `PsyfiApi` object starts a container only when none is running, and each request restarts its 10-minute idle timer. The instance started at 2026-11-08T21:49:55Z, before this deploy, kept serving the old image, so `/api/bench/v1/results` returned FastAPI's 404 until no container route was called for 10 minutes. The next request cold-started the new image in 15 s, and instance `18898f4f…` reports created 2026-11-08T22:15:07.614Z. After a deploy that changes the image, either wait out the idle timer or check a route only the new image has.
 - No image-reading POST was made on this deploy. That call spends the key.
 
-The same checks, less the tier switch, answered the same way for `3d97825f` at 2026-11-08T07:40Z. Less the share card too, they answered the same way for `363b5d70` at 2026-11-08T03:05:32Z, for `7f79f732` at 2026-11-08T02:55Z, and for `d27e5f06` on 2026-11-07 with cache `psyfi-shell-v42`.
+The `/health`, `/ready`, `/`, share-card, `/gpu/` and `/sw.js` checks answered the same way for `97b60aaf` at 2026-11-08T09:28:07Z, where ten runtime tier switches across all four tiers also raised no errors (issue #55). Less the tier switch, they answered the same way for `3d97825f` at 2026-11-08T07:40Z. Less the share card too, they answered the same way for `363b5d70` at 2026-11-08T03:05:32Z, for `7f79f732` at 2026-11-08T02:55Z, and for `d27e5f06` on 2026-11-07 with cache `psyfi-shell-v42`.
 
 ## What stays up beside it
 
@@ -78,9 +82,9 @@ CI does not call Cloudflare and does not depend on DNS. Live `/health` and shell
 
 ## Git, as of this handoff
 
-`origin/main` is `d81483f`, the merge of pull request #63, as of 2026-11-08T09:52Z. It is ahead of the live host: #56 (FieldLoop) and #63 merged after the `97b60aaf` deploy, so `/api/bench` and `/gpu/bench.html` are not on psy-fi.space yet. That tree names script `psy-fi`. A deploy from GitHub `main` updates Worker `psy-fi` and does not update Worker `psyfi`.
+`origin/main` is `460e891`, the merge of pull request #67, as of 2026-11-08T21:49Z, and version `94e47554` serves it: `/api/bench`, `/gpu/bench.html` and `/bench` are live on psy-fi.space. That tree names script `psy-fi`. A deploy from GitHub `main` updates Worker `psy-fi` and does not update Worker `psyfi`.
 
-Pull request #44 (the shell redesign), #43 (the share card), #42 (the Fable handoff), #58 (the GPU Lab tier-switch fix), #56 (FieldLoop, by Fable), and #45, #46, #57, #62 and #63 (this map) were admin-merged at the operator's request. Version `7f79f732` was deployed from `7372d31` with `npx wrangler@4 deploy --keep-vars` (Wrangler 4.152.0); version `363b5d70` redeployed `c2c534a` with `--containers-rollout immediate --keep-vars`; version `3d97825f` deployed `bb7ee9a` the same way (Wrangler 4.158.0); version `97b60aaf` deployed `09f9ce6` the same way (Wrangler 4.158.0). `7f79f732` and `363b5d70` carry container base image `psy-fi-psyfiapi-base` `sha256:89ace427…`; `3d97825f` carries `sha256:68fc9db8…`, because the image copies `psyfi_api/` and the shell template changed. `97b60aaf` carries a new image, tag `wrangler-mw7mff1s` (its digest was not captured), because the GPU Lab build (#58) and `docs/` and `README.md` (#42, #62) changed. All of them are built from `main`, so the vision-bench modules in the running image are the ones on `main`. The live instance (`npx wrangler containers instances 224374f7189b4e3281bac784426c2f18`) was created 2026-11-08T09:27:55.541Z, 22 seconds after the `97b60aaf` deploy, so it runs that image. Container application `psy-fi-psyfiapi` still reports last modified 2026-11-07T23:50:32Z: that field did not move on any of these deploys, so it is not a rollout signal.
+Pull request #44 (the shell redesign), #43 (the share card), #42 (the Fable handoff), #58 (the GPU Lab tier-switch fix), #56 (FieldLoop, by Fable), #59, #60 and #65 (FieldLoop slices), #41 (one pull request template), #66 (the README linter's `minimatch`), #67 (the open-questions register), and #45, #46, #57, #62, #63 and #64 (this map) were admin-merged at the operator's request. Version `7f79f732` was deployed from `7372d31` with `npx wrangler@4 deploy --keep-vars` (Wrangler 4.152.0); version `363b5d70` redeployed `c2c534a` with `--containers-rollout immediate --keep-vars`; version `3d97825f` deployed `bb7ee9a` the same way (Wrangler 4.158.0); version `97b60aaf` deployed `09f9ce6` the same way (Wrangler 4.158.0); version `94e47554` deployed `460e891` the same way (Wrangler 4.158.0). `7f79f732` and `363b5d70` carry container base image `psy-fi-psyfiapi-base` `sha256:89ace427…`; `3d97825f` carries `sha256:68fc9db8…`, because the image copies `psyfi_api/` and the shell template changed. `97b60aaf` carries a new image, tag `wrangler-mw7mff1s` (its digest was not captured), because the GPU Lab build (#58) and `docs/` and `README.md` (#42, #62) changed. `94e47554` carries tag `wrangler-mw8dg2xm`, digest `sha256:66be28f0…`, because `psyfi_bench/`, `psyfi_api/`, `docs/` and the GPU Lab build changed. All of them are built from `main`, so the vision-bench modules in the running image are the ones on `main`. The live instance (`npx wrangler containers instances 224374f7189b4e3281bac784426c2f18`) was created 2026-11-08T22:15:07.614Z, after the `94e47554` deploy and a 10-minute idle stop, so it runs that image. Container application `psy-fi-psyfiapi` still reports last modified 2026-11-07T23:50:32Z: that field did not move on any of these deploys, so it is not a rollout signal.
 
 Pull request #39 put the hostname on `main`. Pull request #40 put the vision bench on `main`. The bench adds no public route. There is no receipt fixture until a person runs capture.
 
