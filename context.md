@@ -99,4 +99,4 @@ Direct push to `main` is rejected: one code-owner review, and admins are enforce
 - The image-reading request: `reasoning_effort` `none`, `max_tokens` 256, and the not-medical-advice sentence. A reading does not write presets, the catalog, the master seed, hints, recipe rank, or planner text.
 - Production-readiness headings. Tests assert them.
 - Org project #16 (Noema). The Psy-Fi board is org project #7.
-- The macOS case-collision on `.github/PULL_REQUEST_TEMPLATE.md`. Do not commit it.
+- The pull request template is `.github/pull_request_template.md`. GitHub's default name is that lowercase file. `.github/PULL_REQUEST_TEMPLATE/` is a directory for extra templates, not a second default file.
