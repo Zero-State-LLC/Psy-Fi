@@ -1,6 +1,6 @@
 {
   "schema": "psyfi.bench.gpu_capture.v1",
-  "captured_at": "2026-11-08T04:00:50.341512Z",
+  "captured_at": "2026-11-08T04:30:15.415737Z",
   "manifest_id": "render.webgpu.tiers",
   "manifest_hash": null,
   "measurement_class": "synthetic",

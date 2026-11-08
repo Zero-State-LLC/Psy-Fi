@@ -1,8 +1,8 @@
 {
   "schema": "psyfi.bench.result.v1",
   "bench_version": "0.1.0",
-  "run_id": "interpretation_1794110449_b92001b2",
-  "created_at": "2026-11-08T04:00:49.413884Z",
+  "run_id": "interpretation_1794112214_c3cd58fe",
+  "created_at": "2026-11-08T04:30:14.626408Z",
   "manifest": {
     "schema": "psyfi.bench.manifest.v1",
     "id": "interpretation.fieldread.smoke",
@@ -100,7 +100,7 @@
   "measurement_class": "synthetic",
   "status": "complete",
   "environment": {
-    "captured_at": "2026-11-08T04:00:48.905650Z",
+    "captured_at": "2026-11-08T04:30:14.100148Z",
     "hostname_hash": "225369c658b1",
     "platform": {
       "system": "Darwin",
@@ -148,7 +148,7 @@
         "mps": true,
         "devices": []
       },
-      "git_commit": "2f64e795c2c4dfda6d70d9b289727bc6f9754d27",
+      "git_commit": "e0a46bab2548a8629a2cfb9460134569774a811f",
       "git_dirty": true
     },
     "browser": null,
@@ -173,14 +173,14 @@
         "temperature": 0.0
       },
       "wall_ms": [
-        0.008750241249799728,
-        0.0021667219698429108,
-        0.0014170072972774506,
+        0.008082948625087738,
         0.0020419247448444366,
-        0.0014998950064182281,
-        0.00125030055642128,
-        0.001041218638420105,
-        0.001125037670135498
+        0.002166256308555603,
+        0.0013746321201324463,
+        0.001166015863418579,
+        0.001166015863418579,
+        0.0010407529771327972,
+        0.001000240445137024
       ],
       "cpu_ms": [],
       "cold_wall_ms": null,
@@ -202,7 +202,7 @@
             "violation": null,
             "recoverable": false,
             "extra_keys": 0,
-            "latency_ms": 0.008750241249799728,
+            "latency_ms": 0.008082948625087738,
             "usage": null,
             "cost": null,
             "reading": {
@@ -241,7 +241,7 @@
             "violation": null,
             "recoverable": false,
             "extra_keys": 0,
-            "latency_ms": 0.0021667219698429108,
+            "latency_ms": 0.0020419247448444366,
             "usage": null,
             "cost": null,
             "reading": {
@@ -269,6 +269,999 @@
           {
             "key": "lsd:void:0.6:42",
             "variant": "base",
+            "reference": {
+              "mode": "void",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"void\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.002166256308555603,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.5058,
+              "attractor": 3.1373,
+              "power": 3.0478
+            },
+            "mode_step_min": 1.5058,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:power:0.6:42",
+            "variant": "base",
+            "reference": {
+              "mode": "power",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"power\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0013746321201324463,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 2.6246,
+              "attractor": 3.0763,
+              "void": 3.0478
+            },
+            "mode_step_min": 2.6246,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "dmt:open:0.6:42",
+            "variant": "base",
+            "reference": {
+              "mode": "open",
+              "intensity": 0.6,
+              "substance": "dmt"
+            },
+            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.001166015863418579,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "attractor": 1.7644,
+              "void": 1.4854,
+              "power": 2.5888
+            },
+            "mode_step_min": 1.4854,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "dmt:attractor:0.6:42",
+            "variant": "base",
+            "reference": {
+              "mode": "attractor",
+              "intensity": 0.6,
+              "substance": "dmt"
+            },
+            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.001166015863418579,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.7644,
+              "void": 3.1024,
+              "power": 3.0404
+            },
+            "mode_step_min": 1.7644,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "dmt:void:0.6:42",
+            "variant": "base",
+            "reference": {
+              "mode": "void",
+              "intensity": 0.6,
+              "substance": "dmt"
+            },
+            "text": "{\"mode\": \"void\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0010407529771327972,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.4854,
+              "attractor": 3.1024,
+              "power": 3.0048
+            },
+            "mode_step_min": 1.4854,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "dmt:power:0.6:42",
+            "variant": "base",
+            "reference": {
+              "mode": "power",
+              "intensity": 0.6,
+              "substance": "dmt"
+            },
+            "text": "{\"mode\": \"power\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.001000240445137024,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 2.5888,
+              "attractor": 3.0404,
+              "void": 3.0048
+            },
+            "mode_step_min": 2.5888,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          }
+        ],
+        "summary": {
+          "n": 8,
+          "parsed": 8,
+          "parse_rate": 1.0,
+          "provider_error_rate": 0.0,
+          "schema_violation_rate": 0.0,
+          "recoverable_format_violations": 0,
+          "extra_keys_rate": 0.0,
+          "violations": {},
+          "mode_accuracy": 1.0,
+          "intensity_mae": 0.0,
+          "fde_mean": 0.0,
+          "fde_median": 0.0,
+          "fde_ci95_mean": [
+            0.0,
+            0.0
+          ],
+          "fde_normalized_mean": 0.0,
+          "within_mode_step_rate": 1.0,
+          "fde_mode_only_mean": 0.0,
+          "fde_intensity_only_mean": 0.0,
+          "latency_ms": {
+            "n": 8,
+            "unit": "ms",
+            "mean": 0.0022548483684659004,
+            "median": 0.0012703239917755127,
+            "min": 0.001000240445137024,
+            "max": 0.008082948625087738,
+            "std": 0.0023968401632230036,
+            "cv": 1.0629717708484798,
+            "mad": 0.0002498272806406021,
+            "p50": 0.0012703239917755127,
+            "p90": 0.003941264003515243,
+            "p95": 0.006012106314301487,
+            "p99": 0.007668780162930487,
+            "ci95_mean": [
+              0.0011924799764528873,
+              0.003963446943089364
+            ],
+            "ci95_median": [
+              0.0010820687748491784,
+              0.002166256308555603
+            ],
+            "bootstrap": {
+              "method": "percentile",
+              "resamples": 2000,
+              "seed": 0,
+              "level": 0.95
+            }
+          },
+          "tokens": null,
+          "cost_total": null,
+          "cost_per_valid_result": null
+        },
+        "discriminability": {
+          "pairs": 28,
+          "spearman_rho": 0.9999999999999998,
+          "mean_field_distance": 2.5018678571428574,
+          "mean_reading_distance": 2.5018678571428574
+        }
+      },
+      "statistics": {
+        "latency_ms": {
+          "n": 8,
+          "unit": "ms",
+          "mean": 0.0022548483684659004,
+          "median": 0.0012703239917755127,
+          "min": 0.001000240445137024,
+          "max": 0.008082948625087738,
+          "std": 0.0023968401632230036,
+          "cv": 1.0629717708484798,
+          "mad": 0.0002498272806406021,
+          "p50": 0.0012703239917755127,
+          "p90": 0.003941264003515243,
+          "p95": 0.006012106314301487,
+          "p99": 0.007668780162930487,
+          "ci95_mean": [
+            0.0012101212632842364,
+            0.00392961228499189
+          ],
+          "ci95_median": [
+            0.0010831281542778015,
+            0.00210409052670002
+          ],
+          "bootstrap": {
+            "method": "percentile",
+            "resamples": 500,
+            "seed": 0,
+            "level": 0.95
+          }
+        }
+      },
+      "determinism": null,
+      "error": null
+    },
+    {
+      "id": "structured_read",
+      "kind": "structured_read",
+      "status": "ok",
+      "measurement_class": "synthetic",
+      "params": {
+        "items": 8,
+        "prompt_revision": 1,
+        "max_tokens": 64,
+        "temperature": 0.0
+      },
+      "wall_ms": [
+        0.010790769010782242,
+        0.0015408731997013092,
+        0.001125037670135498,
+        0.0012498348951339722,
+        0.001125037670135498,
+        0.001125037670135498,
+        0.0009578652679920197,
+        0.0009997747838497162
+      ],
+      "cpu_ms": [],
+      "cold_wall_ms": null,
+      "warmup_wall_ms": [],
+      "memory": null,
+      "metrics": {
+        "rows": [
+          {
+            "key": "lsd:open:0.6:42",
+            "variant": "structured",
+            "reference": {
+              "mode": "open",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.010790769010782242,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "attractor": 1.7873,
+              "void": 1.5058,
+              "power": 2.6246
+            },
+            "mode_step_min": 1.5058,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:attractor:0.6:42",
+            "variant": "structured",
+            "reference": {
+              "mode": "attractor",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0015408731997013092,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.7873,
+              "void": 3.1373,
+              "power": 3.0763
+            },
+            "mode_step_min": 1.7873,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:void:0.6:42",
+            "variant": "structured",
+            "reference": {
+              "mode": "void",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"void\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.001125037670135498,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.5058,
+              "attractor": 3.1373,
+              "power": 3.0478
+            },
+            "mode_step_min": 1.5058,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:power:0.6:42",
+            "variant": "structured",
+            "reference": {
+              "mode": "power",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"power\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0012498348951339722,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 2.6246,
+              "attractor": 3.0763,
+              "void": 3.0478
+            },
+            "mode_step_min": 2.6246,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "dmt:open:0.6:42",
+            "variant": "structured",
+            "reference": {
+              "mode": "open",
+              "intensity": 0.6,
+              "substance": "dmt"
+            },
+            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.001125037670135498,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "attractor": 1.7644,
+              "void": 1.4854,
+              "power": 2.5888
+            },
+            "mode_step_min": 1.4854,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "dmt:attractor:0.6:42",
+            "variant": "structured",
+            "reference": {
+              "mode": "attractor",
+              "intensity": 0.6,
+              "substance": "dmt"
+            },
+            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.001125037670135498,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.7644,
+              "void": 3.1024,
+              "power": 3.0404
+            },
+            "mode_step_min": 1.7644,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "dmt:void:0.6:42",
+            "variant": "structured",
+            "reference": {
+              "mode": "void",
+              "intensity": 0.6,
+              "substance": "dmt"
+            },
+            "text": "{\"mode\": \"void\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0009578652679920197,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.4854,
+              "attractor": 3.1024,
+              "power": 3.0048
+            },
+            "mode_step_min": 1.4854,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "dmt:power:0.6:42",
+            "variant": "structured",
+            "reference": {
+              "mode": "power",
+              "intensity": 0.6,
+              "substance": "dmt"
+            },
+            "text": "{\"mode\": \"power\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0009997747838497162,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "power",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 2.5888,
+              "attractor": 3.0404,
+              "void": 3.0048
+            },
+            "mode_step_min": 2.5888,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          }
+        ],
+        "summary": {
+          "n": 8,
+          "parsed": 8,
+          "parse_rate": 1.0,
+          "provider_error_rate": 0.0,
+          "schema_violation_rate": 0.0,
+          "recoverable_format_violations": 0,
+          "extra_keys_rate": 0.0,
+          "violations": {},
+          "mode_accuracy": 1.0,
+          "intensity_mae": 0.0,
+          "fde_mean": 0.0,
+          "fde_median": 0.0,
+          "fde_ci95_mean": [
+            0.0,
+            0.0
+          ],
+          "fde_normalized_mean": 0.0,
+          "within_mode_step_rate": 1.0,
+          "fde_mode_only_mean": 0.0,
+          "fde_intensity_only_mean": 0.0,
+          "latency_ms": {
+            "n": 8,
+            "unit": "ms",
+            "mean": 0.002364278770983219,
+            "median": 0.001125037670135498,
+            "min": 0.0009578652679920197,
+            "max": 0.010790769010782242,
+            "std": 0.0034094981876067122,
+            "cv": 1.4420880606176671,
+            "mad": 0.000125030055642128,
+            "p50": 0.001125037670135498,
+            "p90": 0.004315841943025587,
+            "p95": 0.00755330547690391,
+            "p99": 0.010143276304006573,
+            "ci95_mean": [
+              0.0010830117389559746,
+              0.004796500434167682
+            ],
+            "ci95_median": [
+              0.0010404095519334095,
+              0.0015408731997013092
+            ],
+            "bootstrap": {
+              "method": "percentile",
+              "resamples": 2000,
+              "seed": 0,
+              "level": 0.95
+            }
+          },
+          "tokens": null,
+          "cost_total": null,
+          "cost_per_valid_result": null
+        },
+        "discriminability": {
+          "pairs": 28,
+          "spearman_rho": 0.9999999999999998,
+          "mean_field_distance": 2.5018678571428574,
+          "mean_reading_distance": 2.5018678571428574
+        },
+        "cross_modal": {
+          "pairs": 8,
+          "mode_agreement_rate": 1.0,
+          "intensity_mean_abs_delta": 0.0,
+          "reading_distance_mean": 0.0
+        }
+      },
+      "statistics": {
+        "latency_ms": {
+          "n": 8,
+          "unit": "ms",
+          "mean": 0.002364278770983219,
+          "median": 0.001125037670135498,
+          "min": 0.0009578652679920197,
+          "max": 0.010790769010782242,
+          "std": 0.0034094981876067122,
+          "cv": 1.4420880606176671,
+          "mad": 0.000125030055642128,
+          "p50": 0.001125037670135498,
+          "p90": 0.004315841943025587,
+          "p95": 0.00755330547690391,
+          "p99": 0.010143276304006573,
+          "ci95_mean": [
+            0.0010752308298833668,
+            0.004780803283210844
+          ],
+          "ci95_median": [
+            0.0010624062269926071,
+            0.0013953540474176407
+          ],
+          "bootstrap": {
+            "method": "percentile",
+            "resamples": 500,
+            "seed": 0,
+            "level": 0.95
+          }
+        }
+      },
+      "determinism": null,
+      "error": null
+    },
+    {
+      "id": "perturbation",
+      "kind": "perturbation",
+      "status": "ok",
+      "measurement_class": "synthetic",
+      "params": {
+        "items": 8,
+        "prompt_revision": 1,
+        "max_tokens": 64,
+        "temperature": 0.0
+      },
+      "wall_ms": [
+        0.00800006091594696,
+        0.001666136085987091,
+        0.001375097781419754,
+        0.0011674128472805023,
+        0.0022919848561286926,
+        0.0014170072972774506,
+        0.0012088567018508911,
+        0.0012079253792762756
+      ],
+      "cpu_ms": [],
+      "cold_wall_ms": null,
+      "warmup_wall_ms": [],
+      "memory": null,
+      "metrics": {
+        "rows": [
+          {
+            "key": "lsd:open:0.6:42",
+            "variant": "noise",
+            "reference": {
+              "mode": "open",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.00800006091594696,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "attractor": 1.7873,
+              "void": 1.5058,
+              "power": 2.6246
+            },
+            "mode_step_min": 1.5058,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:open:0.6:42",
+            "variant": "flip_h",
+            "reference": {
+              "mode": "open",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.001666136085987091,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "open",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "attractor": 1.7873,
+              "void": 1.5058,
+              "power": 2.6246
+            },
+            "mode_step_min": 1.5058,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:attractor:0.6:42",
+            "variant": "noise",
+            "reference": {
+              "mode": "attractor",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.001375097781419754,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.7873,
+              "void": 3.1373,
+              "power": 3.0763
+            },
+            "mode_step_min": 1.7873,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:attractor:0.6:42",
+            "variant": "flip_h",
+            "reference": {
+              "mode": "attractor",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0011674128472805023,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "attractor",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.7873,
+              "void": 3.1373,
+              "power": 3.0763
+            },
+            "mode_step_min": 1.7873,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:void:0.6:42",
+            "variant": "noise",
+            "reference": {
+              "mode": "void",
+              "intensity": 0.6,
+              "substance": "lsd"
+            },
+            "text": "{\"mode\": \"void\", \"intensity\": 0.6}",
+            "provider_error": null,
+            "parse_ok": true,
+            "violation": null,
+            "recoverable": false,
+            "extra_keys": 0,
+            "latency_ms": 0.0022919848561286926,
+            "usage": null,
+            "cost": null,
+            "reading": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "reading_lenient": {
+              "mode": "void",
+              "intensity": 0.6
+            },
+            "fde": 0.0,
+            "mode_steps": {
+              "open": 1.5058,
+              "attractor": 3.1373,
+              "power": 3.0478
+            },
+            "mode_step_min": 1.5058,
+            "fde_normalized": 0.0,
+            "within_mode_step": true,
+            "fde_mode_only": 0.0,
+            "fde_intensity_only": 0.0,
+            "mode_match": true,
+            "intensity_abs_error": 0.0
+          },
+          {
+            "key": "lsd:void:0.6:42",
+            "variant": "flip_h",
             "reference": {
               "mode": "void",
               "intensity": 0.6,
@@ -307,7 +1300,7 @@
           },
           {
             "key": "lsd:power:0.6:42",
-            "variant": "base",
+            "variant": "noise",
             "reference": {
               "mode": "power",
               "intensity": 0.6,
@@ -319,7 +1312,7 @@
             "violation": null,
             "recoverable": false,
             "extra_keys": 0,
-            "latency_ms": 0.0020419247448444366,
+            "latency_ms": 0.0012088567018508911,
             "usage": null,
             "cost": null,
             "reading": {
@@ -337,402 +1330,6 @@
               "void": 3.0478
             },
             "mode_step_min": 2.6246,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "dmt:open:0.6:42",
-            "variant": "base",
-            "reference": {
-              "mode": "open",
-              "intensity": 0.6,
-              "substance": "dmt"
-            },
-            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.0014998950064182281,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "open",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "open",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "attractor": 1.7644,
-              "void": 1.4854,
-              "power": 2.5888
-            },
-            "mode_step_min": 1.4854,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "dmt:attractor:0.6:42",
-            "variant": "base",
-            "reference": {
-              "mode": "attractor",
-              "intensity": 0.6,
-              "substance": "dmt"
-            },
-            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.00125030055642128,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "attractor",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "attractor",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "open": 1.7644,
-              "void": 3.1024,
-              "power": 3.0404
-            },
-            "mode_step_min": 1.7644,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "dmt:void:0.6:42",
-            "variant": "base",
-            "reference": {
-              "mode": "void",
-              "intensity": 0.6,
-              "substance": "dmt"
-            },
-            "text": "{\"mode\": \"void\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.001041218638420105,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "void",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "void",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "open": 1.4854,
-              "attractor": 3.1024,
-              "power": 3.0048
-            },
-            "mode_step_min": 1.4854,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "dmt:power:0.6:42",
-            "variant": "base",
-            "reference": {
-              "mode": "power",
-              "intensity": 0.6,
-              "substance": "dmt"
-            },
-            "text": "{\"mode\": \"power\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.001125037670135498,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "power",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "power",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "open": 2.5888,
-              "attractor": 3.0404,
-              "void": 3.0048
-            },
-            "mode_step_min": 2.5888,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          }
-        ],
-        "summary": {
-          "n": 8,
-          "parsed": 8,
-          "parse_rate": 1.0,
-          "provider_error_rate": 0.0,
-          "schema_violation_rate": 0.0,
-          "recoverable_format_violations": 0,
-          "extra_keys_rate": 0.0,
-          "violations": {},
-          "mode_accuracy": 1.0,
-          "intensity_mae": 0.0,
-          "fde_mean": 0.0,
-          "fde_median": 0.0,
-          "fde_ci95_mean": [
-            0.0,
-            0.0
-          ],
-          "fde_normalized_mean": 0.0,
-          "within_mode_step_rate": 1.0,
-          "fde_mode_only_mean": 0.0,
-          "fde_intensity_only_mean": 0.0,
-          "latency_ms": {
-            "n": 8,
-            "unit": "ms",
-            "mean": 0.0024115433916449547,
-            "median": 0.0014584511518478394,
-            "min": 0.001041218638420105,
-            "max": 0.008750241249799728,
-            "std": 0.0025933217158703634,
-            "cv": 1.0753784173468321,
-            "mad": 0.00037532299757003784,
-            "p50": 0.0014584511518478394,
-            "p90": 0.004141777753829954,
-            "p95": 0.006446009501814839,
-            "p99": 0.00828939490020275,
-            "ci95_mean": [
-              0.0013071679859422147,
-              0.004281348083168268
-            ],
-            "ci95_median": [
-              0.0011452415492385635,
-              0.0021667219698429108
-            ],
-            "bootstrap": {
-              "method": "percentile",
-              "resamples": 2000,
-              "seed": 0,
-              "level": 0.95
-            }
-          },
-          "tokens": null,
-          "cost_total": null,
-          "cost_per_valid_result": null
-        },
-        "discriminability": {
-          "pairs": 28,
-          "spearman_rho": 0.9999999999999998,
-          "mean_field_distance": 2.5018678571428574,
-          "mean_reading_distance": 2.5018678571428574
-        }
-      },
-      "statistics": {
-        "latency_ms": {
-          "n": 8,
-          "unit": "ms",
-          "mean": 0.0024115433916449547,
-          "median": 0.0014584511518478394,
-          "min": 0.001041218638420105,
-          "max": 0.008750241249799728,
-          "std": 0.0025933217158703634,
-          "cv": 1.0753784173468321,
-          "mad": 0.00037532299757003784,
-          "p50": 0.0014584511518478394,
-          "p90": 0.004141777753829954,
-          "p95": 0.006446009501814839,
-          "p99": 0.00828939490020275,
-          "ci95_mean": [
-            0.0013021330232731998,
-            0.0042556217522360384
-          ],
-          "ci95_median": [
-            0.001187669113278389,
-            0.0021043233573436737
-          ],
-          "bootstrap": {
-            "method": "percentile",
-            "resamples": 500,
-            "seed": 0,
-            "level": 0.95
-          }
-        }
-      },
-      "determinism": null,
-      "error": null
-    },
-    {
-      "id": "structured_read",
-      "kind": "structured_read",
-      "status": "ok",
-      "measurement_class": "synthetic",
-      "params": {
-        "items": 8,
-        "prompt_revision": 1,
-        "max_tokens": 64,
-        "temperature": 0.0
-      },
-      "wall_ms": [
-        0.007458962500095367,
-        0.0017499551177024841,
-        0.0029159709811210632,
-        0.0015832483768463135,
-        0.0012079253792762756,
-        0.0017080456018447876,
-        0.0012917444109916687,
-        0.0014579854905605316
-      ],
-      "cpu_ms": [],
-      "cold_wall_ms": null,
-      "warmup_wall_ms": [],
-      "memory": null,
-      "metrics": {
-        "rows": [
-          {
-            "key": "lsd:open:0.6:42",
-            "variant": "structured",
-            "reference": {
-              "mode": "open",
-              "intensity": 0.6,
-              "substance": "lsd"
-            },
-            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.007458962500095367,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "open",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "open",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "attractor": 1.7873,
-              "void": 1.5058,
-              "power": 2.6246
-            },
-            "mode_step_min": 1.5058,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "lsd:attractor:0.6:42",
-            "variant": "structured",
-            "reference": {
-              "mode": "attractor",
-              "intensity": 0.6,
-              "substance": "lsd"
-            },
-            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.0017499551177024841,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "attractor",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "attractor",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "open": 1.7873,
-              "void": 3.1373,
-              "power": 3.0763
-            },
-            "mode_step_min": 1.7873,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "lsd:void:0.6:42",
-            "variant": "structured",
-            "reference": {
-              "mode": "void",
-              "intensity": 0.6,
-              "substance": "lsd"
-            },
-            "text": "{\"mode\": \"void\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.0029159709811210632,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "void",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "void",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "open": 1.5058,
-              "attractor": 3.1373,
-              "power": 3.0478
-            },
-            "mode_step_min": 1.5058,
             "fde_normalized": 0.0,
             "within_mode_step": true,
             "fde_mode_only": 0.0,
@@ -742,52 +1339,13 @@
           },
           {
             "key": "lsd:power:0.6:42",
-            "variant": "structured",
+            "variant": "flip_h",
             "reference": {
               "mode": "power",
               "intensity": 0.6,
               "substance": "lsd"
             },
             "text": "{\"mode\": \"power\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.0015832483768463135,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "power",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "power",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "open": 2.6246,
-              "attractor": 3.0763,
-              "void": 3.0478
-            },
-            "mode_step_min": 2.6246,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "dmt:open:0.6:42",
-            "variant": "structured",
-            "reference": {
-              "mode": "open",
-              "intensity": 0.6,
-              "substance": "dmt"
-            },
-            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
             "provider_error": null,
             "parse_ok": true,
             "violation": null,
@@ -797,564 +1355,6 @@
             "usage": null,
             "cost": null,
             "reading": {
-              "mode": "open",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "open",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "attractor": 1.7644,
-              "void": 1.4854,
-              "power": 2.5888
-            },
-            "mode_step_min": 1.4854,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "dmt:attractor:0.6:42",
-            "variant": "structured",
-            "reference": {
-              "mode": "attractor",
-              "intensity": 0.6,
-              "substance": "dmt"
-            },
-            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.0017080456018447876,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "attractor",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "attractor",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "open": 1.7644,
-              "void": 3.1024,
-              "power": 3.0404
-            },
-            "mode_step_min": 1.7644,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "dmt:void:0.6:42",
-            "variant": "structured",
-            "reference": {
-              "mode": "void",
-              "intensity": 0.6,
-              "substance": "dmt"
-            },
-            "text": "{\"mode\": \"void\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.0012917444109916687,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "void",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "void",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "open": 1.4854,
-              "attractor": 3.1024,
-              "power": 3.0048
-            },
-            "mode_step_min": 1.4854,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "dmt:power:0.6:42",
-            "variant": "structured",
-            "reference": {
-              "mode": "power",
-              "intensity": 0.6,
-              "substance": "dmt"
-            },
-            "text": "{\"mode\": \"power\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.0014579854905605316,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "power",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "power",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "open": 2.5888,
-              "attractor": 3.0404,
-              "void": 3.0048
-            },
-            "mode_step_min": 2.5888,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          }
-        ],
-        "summary": {
-          "n": 8,
-          "parsed": 8,
-          "parse_rate": 1.0,
-          "provider_error_rate": 0.0,
-          "schema_violation_rate": 0.0,
-          "recoverable_format_violations": 0,
-          "extra_keys_rate": 0.0,
-          "violations": {},
-          "mode_accuracy": 1.0,
-          "intensity_mae": 0.0,
-          "fde_mean": 0.0,
-          "fde_median": 0.0,
-          "fde_ci95_mean": [
-            0.0,
-            0.0
-          ],
-          "fde_normalized_mean": 0.0,
-          "within_mode_step_rate": 1.0,
-          "fde_mode_only_mean": 0.0,
-          "fde_intensity_only_mean": 0.0,
-          "latency_ms": {
-            "n": 8,
-            "unit": "ms",
-            "mean": 0.0024217297323048115,
-            "median": 0.0016456469893455505,
-            "min": 0.0012079253792762756,
-            "max": 0.007458962500095367,
-            "std": 0.002103081287763603,
-            "cv": 0.8684211370531657,
-            "mad": 0.0002707820385694504,
-            "p50": 0.0016456469893455505,
-            "p90": 0.004278868436813354,
-            "p95": 0.005868915468454358,
-            "p99": 0.007140953093767164,
-            "ci95_mean": [
-              0.0014528632164001465,
-              0.003917051071766762
-            ],
-            "ci95_median": [
-              0.0012917444109916687,
-              0.0029159709811210632
-            ],
-            "bootstrap": {
-              "method": "percentile",
-              "resamples": 2000,
-              "seed": 0,
-              "level": 0.95
-            }
-          },
-          "tokens": null,
-          "cost_total": null,
-          "cost_per_valid_result": null
-        },
-        "discriminability": {
-          "pairs": 28,
-          "spearman_rho": 0.9999999999999998,
-          "mean_field_distance": 2.5018678571428574,
-          "mean_reading_distance": 2.5018678571428574
-        },
-        "cross_modal": {
-          "pairs": 8,
-          "mode_agreement_rate": 1.0,
-          "intensity_mean_abs_delta": 0.0,
-          "reading_distance_mean": 0.0
-        }
-      },
-      "statistics": {
-        "latency_ms": {
-          "n": 8,
-          "unit": "ms",
-          "mean": 0.0024217297323048115,
-          "median": 0.0016456469893455505,
-          "min": 0.0012079253792762756,
-          "max": 0.007458962500095367,
-          "std": 0.002103081287763603,
-          "cv": 0.8684211370531657,
-          "mad": 0.0002707820385694504,
-          "p50": 0.0016456469893455505,
-          "p90": 0.004278868436813354,
-          "p95": 0.005868915468454358,
-          "p99": 0.007140953093767164,
-          "ci95_mean": [
-            0.0014450764865614474,
-            0.0039037971873767674
-          ],
-          "ci95_median": [
-            0.0013748649507761002,
-            0.0023329630494117737
-          ],
-          "bootstrap": {
-            "method": "percentile",
-            "resamples": 500,
-            "seed": 0,
-            "level": 0.95
-          }
-        }
-      },
-      "determinism": null,
-      "error": null
-    },
-    {
-      "id": "perturbation",
-      "kind": "perturbation",
-      "status": "ok",
-      "measurement_class": "synthetic",
-      "params": {
-        "items": 8,
-        "prompt_revision": 1,
-        "max_tokens": 64,
-        "temperature": 0.0
-      },
-      "wall_ms": [
-        0.005125068128108978,
-        0.0013331882655620575,
-        0.0012079253792762756,
-        0.0010407529771327972,
-        0.001125037670135498,
-        0.001084059476852417,
-        0.001125037670135498,
-        0.0009997747838497162
-      ],
-      "cpu_ms": [],
-      "cold_wall_ms": null,
-      "warmup_wall_ms": [],
-      "memory": null,
-      "metrics": {
-        "rows": [
-          {
-            "key": "lsd:open:0.6:42",
-            "variant": "noise",
-            "reference": {
-              "mode": "open",
-              "intensity": 0.6,
-              "substance": "lsd"
-            },
-            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.005125068128108978,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "open",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "open",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "attractor": 1.7873,
-              "void": 1.5058,
-              "power": 2.6246
-            },
-            "mode_step_min": 1.5058,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "lsd:open:0.6:42",
-            "variant": "flip_h",
-            "reference": {
-              "mode": "open",
-              "intensity": 0.6,
-              "substance": "lsd"
-            },
-            "text": "{\"mode\": \"open\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.0013331882655620575,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "open",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "open",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "attractor": 1.7873,
-              "void": 1.5058,
-              "power": 2.6246
-            },
-            "mode_step_min": 1.5058,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "lsd:attractor:0.6:42",
-            "variant": "noise",
-            "reference": {
-              "mode": "attractor",
-              "intensity": 0.6,
-              "substance": "lsd"
-            },
-            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.0012079253792762756,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "attractor",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "attractor",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "open": 1.7873,
-              "void": 3.1373,
-              "power": 3.0763
-            },
-            "mode_step_min": 1.7873,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "lsd:attractor:0.6:42",
-            "variant": "flip_h",
-            "reference": {
-              "mode": "attractor",
-              "intensity": 0.6,
-              "substance": "lsd"
-            },
-            "text": "{\"mode\": \"attractor\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.0010407529771327972,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "attractor",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "attractor",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "open": 1.7873,
-              "void": 3.1373,
-              "power": 3.0763
-            },
-            "mode_step_min": 1.7873,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "lsd:void:0.6:42",
-            "variant": "noise",
-            "reference": {
-              "mode": "void",
-              "intensity": 0.6,
-              "substance": "lsd"
-            },
-            "text": "{\"mode\": \"void\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.001125037670135498,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "void",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "void",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "open": 1.5058,
-              "attractor": 3.1373,
-              "power": 3.0478
-            },
-            "mode_step_min": 1.5058,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "lsd:void:0.6:42",
-            "variant": "flip_h",
-            "reference": {
-              "mode": "void",
-              "intensity": 0.6,
-              "substance": "lsd"
-            },
-            "text": "{\"mode\": \"void\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.001084059476852417,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "void",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "void",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "open": 1.5058,
-              "attractor": 3.1373,
-              "power": 3.0478
-            },
-            "mode_step_min": 1.5058,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "lsd:power:0.6:42",
-            "variant": "noise",
-            "reference": {
-              "mode": "power",
-              "intensity": 0.6,
-              "substance": "lsd"
-            },
-            "text": "{\"mode\": \"power\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.001125037670135498,
-            "usage": null,
-            "cost": null,
-            "reading": {
-              "mode": "power",
-              "intensity": 0.6
-            },
-            "reading_lenient": {
-              "mode": "power",
-              "intensity": 0.6
-            },
-            "fde": 0.0,
-            "mode_steps": {
-              "open": 2.6246,
-              "attractor": 3.0763,
-              "void": 3.0478
-            },
-            "mode_step_min": 2.6246,
-            "fde_normalized": 0.0,
-            "within_mode_step": true,
-            "fde_mode_only": 0.0,
-            "fde_intensity_only": 0.0,
-            "mode_match": true,
-            "intensity_abs_error": 0.0
-          },
-          {
-            "key": "lsd:power:0.6:42",
-            "variant": "flip_h",
-            "reference": {
-              "mode": "power",
-              "intensity": 0.6,
-              "substance": "lsd"
-            },
-            "text": "{\"mode\": \"power\", \"intensity\": 0.6}",
-            "provider_error": null,
-            "parse_ok": true,
-            "violation": null,
-            "recoverable": false,
-            "extra_keys": 0,
-            "latency_ms": 0.0009997747838497162,
-            "usage": null,
-            "cost": null,
-            "reading": {
               "mode": "power",
               "intensity": 0.6
             },
@@ -1401,24 +1401,24 @@
           "latency_ms": {
             "n": 8,
             "unit": "ms",
-            "mean": 0.0016301055438816547,
-            "median": 0.001125037670135498,
-            "min": 0.0009997747838497162,
-            "max": 0.005125068128108978,
-            "std": 0.0014159381626517255,
-            "cv": 0.8686174757004091,
-            "mad": 8.35862010717392e-05,
-            "p50": 0.001125037670135498,
-            "p90": 0.002470752224326133,
-            "p95": 0.0037979101762175543,
-            "p99": 0.004859636537730693,
+            "mean": 0.0022918102331459522,
+            "median": 0.0013960525393486023,
+            "min": 0.0011674128472805023,
+            "max": 0.00800006091594696,
+            "std": 0.002335841852862901,
+            "cv": 1.0192125940796184,
+            "mad": 0.00020838342607021332,
+            "p50": 0.0013960525393486023,
+            "p90": 0.004004407674074172,
+            "p95": 0.006002234295010563,
+            "p99": 0.00760049559175968,
             "ci95_mean": [
-              0.0010781805031001568,
-              0.0026406487450003624
+              0.0013023935025557876,
+              0.003968774399254471
             ],
             "ci95_median": [
-              0.0010419171303510666,
-              0.0013331882655620575
+              0.0012083910405635834,
+              0.0022919848561286926
             ],
             "bootstrap": {
               "method": "percentile",
@@ -1447,24 +1447,24 @@
         "latency_ms": {
           "n": 8,
           "unit": "ms",
-          "mean": 0.0016301055438816547,
-          "median": 0.001125037670135498,
-          "min": 0.0009997747838497162,
-          "max": 0.005125068128108978,
-          "std": 0.0014159381626517255,
-          "cv": 0.8686174757004091,
-          "mad": 8.35862010717392e-05,
-          "p50": 0.001125037670135498,
-          "p90": 0.002470752224326133,
-          "p95": 0.0037979101762175543,
-          "p99": 0.004859636537730693,
+          "mean": 0.0022918102331459522,
+          "median": 0.0013960525393486023,
+          "min": 0.0011674128472805023,
+          "max": 0.00800006091594696,
+          "std": 0.002335841852862901,
+          "cv": 1.0192125940796184,
+          "mad": 0.00020838342607021332,
+          "p50": 0.0013960525393486023,
+          "p90": 0.004004407674074172,
+          "p95": 0.006002234295010563,
+          "p99": 0.00760049559175968,
           "ci95_mean": [
-            0.0010804753401316702,
-            0.00263523543253541
+            0.0013023964129388332,
+            0.003906685742549598
           ],
           "ci95_median": [
-            0.0010413059499114752,
-            0.0012705568224191666
+            0.0012079253792762756,
+            0.001979060471057892
           ],
           "bootstrap": {
             "method": "percentile",
@@ -1489,10 +1489,10 @@
         "temperature": 0.0
       },
       "wall_ms": [
-        0.0017080456018447876,
-        0.001291278749704361,
-        0.0015003606677055359,
-        0.0012088567018508911
+        0.001959037035703659,
+        0.0014170072972774506,
+        0.0014170072972774506,
+        0.0012917444109916687
       ],
       "cpu_ms": [],
       "cold_wall_ms": null,
@@ -1514,7 +1514,7 @@
             "violation": null,
             "recoverable": false,
             "extra_keys": 0,
-            "latency_ms": 0.0017080456018447876,
+            "latency_ms": 0.001959037035703659,
             "usage": null,
             "cost": null,
             "reading": {
@@ -1553,7 +1553,7 @@
             "violation": null,
             "recoverable": false,
             "extra_keys": 0,
-            "latency_ms": 0.001291278749704361,
+            "latency_ms": 0.0014170072972774506,
             "usage": null,
             "cost": null,
             "reading": {
@@ -1592,7 +1592,7 @@
             "violation": null,
             "recoverable": false,
             "extra_keys": 0,
-            "latency_ms": 0.0015003606677055359,
+            "latency_ms": 0.0014170072972774506,
             "usage": null,
             "cost": null,
             "reading": {
@@ -1631,7 +1631,7 @@
             "violation": null,
             "recoverable": false,
             "extra_keys": 0,
-            "latency_ms": 0.0012088567018508911,
+            "latency_ms": 0.0012917444109916687,
             "usage": null,
             "cost": null,
             "reading": {
@@ -1681,24 +1681,24 @@
           "latency_ms": {
             "n": 4,
             "unit": "ms",
-            "mean": 0.0014271354302763939,
-            "median": 0.0013958197087049484,
-            "min": 0.0012088567018508911,
-            "max": 0.0017080456018447876,
-            "std": 0.00022388620683005045,
-            "cv": 0.15687803839800285,
-            "mad": 0.0001457519829273224,
-            "p50": 0.0013958197087049484,
-            "p90": 0.001645740121603012,
-            "p95": 0.0016768928617238998,
-            "p99": 0.00170181505382061,
+            "mean": 0.0015211990103125572,
+            "median": 0.0014170072972774506,
+            "min": 0.0012917444109916687,
+            "max": 0.001959037035703659,
+            "std": 0.0002978049561700122,
+            "cv": 0.19576988556469208,
+            "mad": 6.263144314289093e-05,
+            "p50": 0.0014170072972774506,
+            "p90": 0.0017964281141757965,
+            "p95": 0.0018777325749397276,
+            "p99": 0.0019427761435508726,
             "ci95_mean": [
-              0.001250067725777626,
-              0.0016042031347751617
+              0.0013230601325631142,
+              0.001823529601097107
             ],
             "ci95_median": [
-              0.0012088567018508911,
-              0.0017080456018447876
+              0.0012917444109916687,
+              0.001959037035703659
             ],
             "bootstrap": {
               "method": "percentile",
@@ -1723,24 +1723,24 @@
         "latency_ms": {
           "n": 4,
           "unit": "ms",
-          "mean": 0.0014271354302763939,
-          "median": 0.0013958197087049484,
-          "min": 0.0012088567018508911,
-          "max": 0.0017080456018447876,
-          "std": 0.00022388620683005045,
-          "cv": 0.15687803839800285,
-          "mad": 0.0001457519829273224,
-          "p50": 0.0013958197087049484,
-          "p90": 0.001645740121603012,
-          "p95": 0.0016768928617238998,
-          "p99": 0.00170181505382061,
+          "mean": 0.0015211990103125572,
+          "median": 0.0014170072972774506,
+          "min": 0.0012917444109916687,
+          "max": 0.001959037035703659,
+          "std": 0.0002978049561700122,
+          "cv": 0.19576988556469208,
+          "mad": 6.263144314289093e-05,
+          "p50": 0.0014170072972774506,
+          "p90": 0.0017964281141757965,
+          "p95": 0.0018777325749397276,
+          "p99": 0.0019427761435508726,
           "ci95_mean": [
-            0.001250067725777626,
-            0.0016042031347751617
+            0.0013230601325631142,
+            0.0018086546333506697
           ],
           "ci95_median": [
-            0.0012088567018508911,
-            0.0017080456018447876
+            0.0012917444109916687,
+            0.001959037035703659
           ],
           "bootstrap": {
             "method": "percentile",
@@ -1766,7 +1766,7 @@
     "corpus": {
       "items": 8,
       "image_size": 128,
-      "build_ms": 58.33095824345946,
+      "build_ms": 59.26041677594185,
       "lock_ok": true
     },
     "tasks": {
@@ -1794,24 +1794,24 @@
         "latency_ms": {
           "n": 8,
           "unit": "ms",
-          "mean": 0.0024115433916449547,
-          "median": 0.0014584511518478394,
-          "min": 0.001041218638420105,
-          "max": 0.008750241249799728,
-          "std": 0.0025933217158703634,
-          "cv": 1.0753784173468321,
-          "mad": 0.00037532299757003784,
-          "p50": 0.0014584511518478394,
-          "p90": 0.004141777753829954,
-          "p95": 0.006446009501814839,
-          "p99": 0.00828939490020275,
+          "mean": 0.0022548483684659004,
+          "median": 0.0012703239917755127,
+          "min": 0.001000240445137024,
+          "max": 0.008082948625087738,
+          "std": 0.0023968401632230036,
+          "cv": 1.0629717708484798,
+          "mad": 0.0002498272806406021,
+          "p50": 0.0012703239917755127,
+          "p90": 0.003941264003515243,
+          "p95": 0.006012106314301487,
+          "p99": 0.007668780162930487,
           "ci95_mean": [
-            0.0013071679859422147,
-            0.004281348083168268
+            0.0011924799764528873,
+            0.003963446943089364
           ],
           "ci95_median": [
-            0.0011452415492385635,
-            0.0021667219698429108
+            0.0010820687748491784,
+            0.002166256308555603
           ],
           "bootstrap": {
             "method": "percentile",
@@ -1854,24 +1854,24 @@
         "latency_ms": {
           "n": 8,
           "unit": "ms",
-          "mean": 0.0024217297323048115,
-          "median": 0.0016456469893455505,
-          "min": 0.0012079253792762756,
-          "max": 0.007458962500095367,
-          "std": 0.002103081287763603,
-          "cv": 0.8684211370531657,
-          "mad": 0.0002707820385694504,
-          "p50": 0.0016456469893455505,
-          "p90": 0.004278868436813354,
-          "p95": 0.005868915468454358,
-          "p99": 0.007140953093767164,
+          "mean": 0.002364278770983219,
+          "median": 0.001125037670135498,
+          "min": 0.0009578652679920197,
+          "max": 0.010790769010782242,
+          "std": 0.0034094981876067122,
+          "cv": 1.4420880606176671,
+          "mad": 0.000125030055642128,
+          "p50": 0.001125037670135498,
+          "p90": 0.004315841943025587,
+          "p95": 0.00755330547690391,
+          "p99": 0.010143276304006573,
           "ci95_mean": [
-            0.0014528632164001465,
-            0.003917051071766762
+            0.0010830117389559746,
+            0.004796500434167682
           ],
           "ci95_median": [
-            0.0012917444109916687,
-            0.0029159709811210632
+            0.0010404095519334095,
+            0.0015408731997013092
           ],
           "bootstrap": {
             "method": "percentile",
@@ -1920,24 +1920,24 @@
         "latency_ms": {
           "n": 8,
           "unit": "ms",
-          "mean": 0.0016301055438816547,
-          "median": 0.001125037670135498,
-          "min": 0.0009997747838497162,
-          "max": 0.005125068128108978,
-          "std": 0.0014159381626517255,
-          "cv": 0.8686174757004091,
-          "mad": 8.35862010717392e-05,
-          "p50": 0.001125037670135498,
-          "p90": 0.002470752224326133,
-          "p95": 0.0037979101762175543,
-          "p99": 0.004859636537730693,
+          "mean": 0.0022918102331459522,
+          "median": 0.0013960525393486023,
+          "min": 0.0011674128472805023,
+          "max": 0.00800006091594696,
+          "std": 0.002335841852862901,
+          "cv": 1.0192125940796184,
+          "mad": 0.00020838342607021332,
+          "p50": 0.0013960525393486023,
+          "p90": 0.004004407674074172,
+          "p95": 0.006002234295010563,
+          "p99": 0.00760049559175968,
           "ci95_mean": [
-            0.0010781805031001568,
-            0.0026406487450003624
+            0.0013023935025557876,
+            0.003968774399254471
           ],
           "ci95_median": [
-            0.0010419171303510666,
-            0.0013331882655620575
+            0.0012083910405635834,
+            0.0022919848561286926
           ],
           "bootstrap": {
             "method": "percentile",
@@ -1985,24 +1985,24 @@
         "latency_ms": {
           "n": 4,
           "unit": "ms",
-          "mean": 0.0014271354302763939,
-          "median": 0.0013958197087049484,
-          "min": 0.0012088567018508911,
-          "max": 0.0017080456018447876,
-          "std": 0.00022388620683005045,
-          "cv": 0.15687803839800285,
-          "mad": 0.0001457519829273224,
-          "p50": 0.0013958197087049484,
-          "p90": 0.001645740121603012,
-          "p95": 0.0016768928617238998,
-          "p99": 0.00170181505382061,
+          "mean": 0.0015211990103125572,
+          "median": 0.0014170072972774506,
+          "min": 0.0012917444109916687,
+          "max": 0.001959037035703659,
+          "std": 0.0002978049561700122,
+          "cv": 0.19576988556469208,
+          "mad": 6.263144314289093e-05,
+          "p50": 0.0014170072972774506,
+          "p90": 0.0017964281141757965,
+          "p95": 0.0018777325749397276,
+          "p99": 0.0019427761435508726,
           "ci95_mean": [
-            0.001250067725777626,
-            0.0016042031347751617
+            0.0013230601325631142,
+            0.001823529601097107
           ],
           "ci95_median": [
-            0.0012088567018508911,
-            0.0017080456018447876
+            0.0012917444109916687,
+            0.001959037035703659
           ],
           "bootstrap": {
             "method": "percentile",
@@ -2032,7 +2032,7 @@
   "determinism": {},
   "failures": [],
   "provenance": {
-    "git_commit": "2f64e795c2c4dfda6d70d9b289727bc6f9754d27",
+    "git_commit": "e0a46bab2548a8629a2cfb9460134569774a811f",
     "git_dirty": true,
     "command": "scripts/export_bench_contracts.py",
     "bench_version": "0.1.0",
@@ -2045,5 +2045,5 @@
     ]
   },
   "non_claim": "Modeled phenomenology for research and visualization only. The benchmark measures computation, rendering, and model interpretation of modeled representations. It does not measure consciousness or subjective experience. Not medical advice.",
-  "result_hash": "e6c0e866488dc30cd8b249260c359369783080537375e0760f1409676f292cf5"
+  "result_hash": "9ce5304de369f1147abaa6ef6ca393d5498d0c24df58b21aba5013b9db573844"
 }
