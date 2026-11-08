@@ -81,4 +81,35 @@ On the CPU loop the raster is 82 to 86 % of the end-to-end time; a live remote p
 
 ## Family B: WebGPU capture (browser, this Mac)
 
-See the section appended below after the first browser capture was scored. Frame times from `requestAnimationFrame` are capped by the display's refresh rate (60 Hz here), so a 60 fps reading means "the display is being fed", not "the GPU needs 16.7 ms". GPU timestamp queries are needed for GPU cost; they are recorded when the adapter and browser expose them.
+Runner: `/gpu/bench.html` in the Claude desktop app's embedded Chromium 152 (WebGPU on Metal 3), viewport 1024×768 at device pixel ratio 2. Adapter string reported by WebGPU: `apple`, architecture `metal-3`, classified `integrated`, perf band `high`. Five captures were taken while the runner was hardened; the cleanest (per-stage renderer remount, warm-up ≥ 120 frames and ≥ 5 s, GPU timestamps off) is `render_1794111319_e35f89b7`.
+
+What the numbers mean here: frame times are `requestAnimationFrame` spacing, capped by the 60 Hz display, so 16.7 ms at p50 means "the display is fed every refresh", not "the GPU needs 16.7 ms". The Ultra budget of 8.3 ms can never be met under a 60 Hz cap, so `budget_ok` is false for every tier except battery by construction on this display. GPU timestamp queries are the right instrument for GPU cost; see the timestamps note below.
+
+| stage (tier) | status | fps avg | 1 % low | p50 ms | p95 ms | max ms | stutters (> 2× median) | draw calls / frame |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| lsd_open_42 ultra | failed (241 uncaught errors) | 60.0 | 53.2 | 16.7 | 18.1 | 19.5 | 0 | 8 |
+| lsd_open_42 high | failed (241 uncaught errors) | 53.9 | 32.6 | 16.7 | 18.5 | 435.9 | 1 | 12 |
+| lsd_open_42 balanced | ok | 58.8 | 30.2 | 16.7 | 18.5 | 48.0 | 3 | 25 |
+| lsd_open_42 battery | ok | 60.0 | 53.6 | 16.7 | 18.4 | 21.2 | 0 | 14 |
+| psilocybin_attractor_7 ultra | failed | 59.5 | 50.7 | 16.7 | 18.5 | 49.9 | 1 | 8 |
+| psilocybin_attractor_7 high | failed | 58.8 | 53.3 | 16.6 | 18.5 | 86.1 | 2 | 12 |
+| psilocybin_attractor_7 balanced | ok | 56.5 | 14.5 | 16.6 | 18.4 | 85.0 | 5 | 25 |
+| psilocybin_attractor_7 battery | ok | 60.0 | 53.6 | 16.7 | 18.4 | 42.7 | 1 | 14 |
+| dmt_void_99 ultra | failed | 60.0 | 52.7 | 16.6 | 18.2 | 19.1 | 0 | 8 |
+| dmt_void_99 high | failed | 57.4 | 53.9 | 16.7 | 18.2 | 130.0 | 2 | 12 |
+| dmt_void_99 balanced | ok | 60.0 | 54.1 | 16.7 | 18.2 | 18.7 | 0 | 25 |
+| dmt_void_99 battery | ok | 60.0 | 54.1 | 16.7 | 18.1 | 18.5 | 0 | 14 |
+| sustained lsd_open_42 ultra (1800 frames) | failed | 60.0 | 52.6 | 16.7 | 18.4 | 19.4 | 0 | 8 |
+
+Per tier (valid stages only): balanced fps avg median 58.8, 1 % low median 30.2, p95 18.4 ms; battery 60.0 / 53.6 / 18.4 ms, `budget_ok` true.
+
+Readings:
+
+- Balanced and battery are measured cleanly on this integrated GPU: both feed the 60 Hz display, battery with no stutter, balanced with a few 40 to 85 ms frames (the 1 % low of 14 to 30 fps on two balanced stages is those frames).
+- Ultra and high are **not measured** under the runner on this configuration: every frame raised an uncaught error inside the three.js WebGPU backend (`usedTimes` of undefined during object disposal), so the scorer fails those stages by design and their frame numbers are not evidence. The GPU lab's own page renders tier ultra from the query without errors but throws the same error on every frame after a runtime tier change (issue #55). The runner was changed to remount the renderer per stage and to publish the snapshot after an empty-scene mount, and the errors persisted; the remaining difference to the lab page is still open and is part of #55. A discrete-GPU capture (#48) will show whether this is adapter-specific.
+- The sustained Ultra stage inherits the same failure, so no drift number is reported for this device.
+- Thumbnails read back for balanced and battery only. Tier fidelity needs the Ultra thumbnail as reference, so `ssim_vs_ultra` is null on this device (reported as missing, not as 1.0).
+
+GPU timestamps: with `?timestamps=1` (capture `render_1794110812_5c4d6351`) the adapter exposed `timestamp-query` and three resolved per-frame GPU times: balanced p50 11.7 to 17.4 ms, battery p50 0.5 to 0.9 ms. That capture also showed one ~1 s frame in most stages, which the timestamps-off capture does not have, so per-frame `resolveTimestampsAsync` is itself a measurable disturbance on this adapter; timestamps therefore stay opt-in and the capture records whether they were requested. Chrome quantizes timestamp values unless the WebGPU developer-features flag is on.
+
+Runs in the store on this machine: `render_1794109871_1672195e` (first capture, one renderer across tiers, no error counting: its ultra/high rows are contaminated and should not be read), `render_1794110365_8d3bd334` (error counting on, timestamps on), `render_1794110812_5c4d6351` (per-stage remount, timestamps on), `render_1794111319_e35f89b7` (timestamps off, the table above), and a fifth with two-phase mounts.

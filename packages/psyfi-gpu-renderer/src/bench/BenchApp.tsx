@@ -135,9 +135,13 @@ export function BenchApp() {
         const effective = resolveTier(stage.tier, caps)
         setStatus(`Stage ${i + 1}/${stages.length}: ${stage.id} (tier ${effective}) · loading snapshot…`)
         const snap = await fetchSnapshot(c, effective, !!manifest.params.include_simulation, i + 1)
+        // Mount this stage's canvas empty first (renderer init on an empty scene, as the GPU lab does),
+        // then publish the snapshot on a later frame.
+        setSnapshot(null)
         setTier(effective)
-        setSnapshot(snap)
         setStageIndex(i)
+        await new Promise<void>((resolve) => setTimeout(resolve, 600))
+        setSnapshot(snap)
         probe.reset()
         setPhase('running')
         const t0 = performance.now()
