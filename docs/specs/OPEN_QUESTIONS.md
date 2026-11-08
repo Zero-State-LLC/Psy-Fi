@@ -168,7 +168,7 @@ Asked in: ADR 0011 (proposed, merged with #59) and issue #50.
 Asked in: `intent/bench-results-page.md` (#65).
 
 **Found.**
-- The live container has no results store contents, and run and ingest are off, so `/bench` there would show the empty state.
+- The live container has no results store contents, and run and ingest are off, so `/bench` on psy-fi.space shows the empty state (checked after version `94e47554`, 2026-11-08).
 - The only results that exist are integrated-class Apple runs, which are never Ultra evidence.
 - Ultra and high WebGPU stages on the M5 were not measured because of #55, which is now fixed and live.
 
