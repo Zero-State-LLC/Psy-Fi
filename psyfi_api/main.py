@@ -78,6 +78,12 @@ async def root(request: Request):
     return templates.TemplateResponse(request, "index.html")
 
 
+@app.get("/bench", include_in_schema=False)
+async def bench_results_page(request: Request):
+    """FieldLoop results page over the read-only bench API. The Worker serves the staged copy."""
+    return templates.TemplateResponse(request, "bench.html")
+
+
 @app.get("/sw.js")
 async def service_worker() -> FileResponse:
     """Serve the PWA service worker with a root scope allowlist.

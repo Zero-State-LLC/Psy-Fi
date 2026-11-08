@@ -27,6 +27,9 @@ def stage() -> Path:
     PUBLIC.mkdir()
     template = ROOT / "psyfi_api" / "templates" / "index.html"
     (PUBLIC / "index.html").write_text(template.read_text(encoding="utf-8"), encoding="utf-8")
+    # The bench results page has no template variables; the Worker serves public/bench.html at /bench.
+    bench = ROOT / "psyfi_api" / "templates" / "bench.html"
+    (PUBLIC / "bench.html").write_text(bench.read_text(encoding="utf-8"), encoding="utf-8")
     _copy_tree(ROOT / "psyfi_api" / "static", PUBLIC / "static")
     shutil.copy2(ROOT / "psyfi_api" / "static" / "sw.js", PUBLIC / "sw.js")
     icons = ROOT / "docs" / "icons"
