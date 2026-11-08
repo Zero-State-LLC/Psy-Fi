@@ -21,7 +21,7 @@ A stranger can check these without the chat:
 
 - https://psy-fi.space/health returns HTTP 200 for `psyfi-api` `1.4.0`.
 - https://psy-fi.space/ready returns HTTP 200 with the GPU shell mounted.
-- https://psy-fi.space/ serves the shell, including "Read image" and `v1.4.0`, and `/sw.js` names cache `psyfi-shell-v42`.
+- https://psy-fi.space/ serves the shell, including "Read image" and `v1.4.0`, and `/sw.js` names the shell cache (`psyfi-shell-v43` since the 2026-11-08 redesign deploy).
 - https://psy-fi.space/gpu/ serves the GPU lab HTML.
 - https://psy-fi.zer0state-noema.workers.dev/health is not this Worker (`workers.dev` is off).
 - https://psyfi.zer0state-noema.workers.dev/health still returns HTTP 200. The older script was not deleted and does not own the domain.
@@ -68,8 +68,8 @@ Non-goals:
 
 | Claim | Label |
 | --- | --- |
-| https://psy-fi.space/health, `/ready`, `/`, `/gpu/`, and `/sw.js` answered as the outcome says on 2026-11-07 | `[verified: deploy checks against the live host]` |
-| Worker `psy-fi` version `d27e5f06-fc86-432f-9f6b-b1b6815e46f9` is the current version, and the secret and the vision var are both set | `[verified: Worker settings and the secret-change version]` |
+| https://psy-fi.space/health, `/ready`, `/`, `/gpu/`, and `/sw.js` answered as the outcome says on 2026-11-07, and again on 2026-11-08 after version `7f79f732` | `[verified: deploy checks against the live host]` |
+| Worker `psy-fi` version `7f79f732-3b1a-42a7-90a0-239ac1c5483d` (2026-11-08, after `d27e5f06`) is the current version, and the secret and the vision var are both set | `[verified: wrangler deployments list and the version's binding names]` |
 | Worker `psyfi` still serves its workers.dev health route | `[verified: GET /health 200 at 2026-11-07T23:51:48Z]` |
 | A deploy from this `wrangler.jsonc` updates `psy-fi` and does not update `psyfi` | `[verified: the two hostnames after this deploy]` |
 | `origin/main` at `80fcfa2` still names script `psyfi` | `[verified: git show of that tree]` |
