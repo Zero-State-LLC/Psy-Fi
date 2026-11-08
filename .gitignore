@@ -79,3 +79,9 @@ logs/
 
 # Workers static assets staged by scripts/stage_cloudflare_assets.py
 /public/
+
+# psyfi_bench local artifact store (results are evidence, not source)
+/bench_results/
+
+# local dev-server launch config for the Claude desktop app
+/.claude/launch.json

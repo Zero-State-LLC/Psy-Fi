@@ -1,0 +1,423 @@
+{
+  "schema": "psyfi.bench.scorecard.v1",
+  "generated_at": "2026-11-08T08:06:11.717022Z",
+  "family": "interpretation",
+  "manifest_id": "interpretation.fieldread.smoke",
+  "manifest_hash": "3bfe42d860230106",
+  "subjects": [
+    {
+      "label": "oracle",
+      "run_id": "interpretation_1794125171_fef91529",
+      "created_at": "2026-11-08T08:06:11.395306Z",
+      "measurement_class": "synthetic",
+      "status": "complete",
+      "hardware_class": "integrated",
+      "cpu": "Apple M5",
+      "gpus": [
+        "Apple M5"
+      ],
+      "provider": "oracle",
+      "backend": null
+    },
+    {
+      "label": "heuristic",
+      "run_id": "interpretation_1794125171_22f1c944",
+      "created_at": "2026-11-08T08:06:11.715213Z",
+      "measurement_class": "synthetic",
+      "status": "complete",
+      "hardware_class": "integrated",
+      "cpu": "Apple M5",
+      "gpus": [
+        "Apple M5"
+      ],
+      "provider": "recommend_mode_intensity",
+      "backend": null
+    }
+  ],
+  "dimensions": {
+    "cost_per_valid_result": {
+      "oracle": {
+        "value": null,
+        "unit": "currency",
+        "better": "lower",
+        "ci95": null,
+        "source": "tasks.image_read.cost_per_valid_result",
+        "missing_reason": "no pricing supplied"
+      },
+      "heuristic": {
+        "value": null,
+        "unit": "currency",
+        "better": "lower",
+        "ci95": null,
+        "source": "tasks.image_read.cost_per_valid_result",
+        "missing_reason": "no pricing supplied"
+      }
+    },
+    "cross_modal_mode_agreement": {
+      "oracle": {
+        "value": 1.0,
+        "unit": "rate",
+        "better": "higher",
+        "ci95": null,
+        "source": "tasks.structured_read.cross_modal",
+        "missing_reason": null
+      },
+      "heuristic": {
+        "value": 0.0,
+        "unit": "rate",
+        "better": "higher",
+        "ci95": null,
+        "source": "tasks.structured_read.cross_modal",
+        "missing_reason": null
+      }
+    },
+    "discriminability_rho": {
+      "oracle": {
+        "value": 0.9999999999999998,
+        "unit": "rho",
+        "better": "higher",
+        "ci95": null,
+        "source": "tasks.image_read.discriminability",
+        "missing_reason": null
+      },
+      "heuristic": {
+        "value": -0.010134213226736634,
+        "unit": "rho",
+        "better": "higher",
+        "ci95": null,
+        "source": "tasks.image_read.discriminability",
+        "missing_reason": null
+      }
+    },
+    "fde_mean": {
+      "oracle": {
+        "value": 0.0,
+        "unit": "field L1",
+        "better": "lower",
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "source": "tasks.image_read.fde_mean",
+        "missing_reason": null
+      },
+      "heuristic": {
+        "value": 2.6010375,
+        "unit": "field L1",
+        "better": "lower",
+        "ci95": [
+          1.8123321874999998,
+          3.334540625
+        ],
+        "source": "tasks.image_read.fde_mean",
+        "missing_reason": null
+      }
+    },
+    "fde_normalized_mean": {
+      "oracle": {
+        "value": 0.0,
+        "unit": "mode steps",
+        "better": "lower",
+        "ci95": null,
+        "source": "tasks.image_read.fde_normalized_mean",
+        "missing_reason": null
+      },
+      "heuristic": {
+        "value": 1.6130375,
+        "unit": "mode steps",
+        "better": "lower",
+        "ci95": null,
+        "source": "tasks.image_read.fde_normalized_mean",
+        "missing_reason": null
+      }
+    },
+    "intensity_mae": {
+      "oracle": {
+        "value": 0.0,
+        "unit": "intensity",
+        "better": "lower",
+        "ci95": null,
+        "source": "tasks.image_read.intensity_mae",
+        "missing_reason": null
+      },
+      "heuristic": {
+        "value": 0.1177375,
+        "unit": "intensity",
+        "better": "lower",
+        "ci95": null,
+        "source": "tasks.image_read.intensity_mae",
+        "missing_reason": null
+      }
+    },
+    "invariance_to_discriminability_ratio": {
+      "oracle": {
+        "value": null,
+        "unit": "ratio",
+        "better": "higher",
+        "ci95": null,
+        "source": "tasks.perturbation.invariance",
+        "missing_reason": "perturbation not run or zero perturbation distance"
+      },
+      "heuristic": {
+        "value": 438.5076741440379,
+        "unit": "ratio",
+        "better": "higher",
+        "ci95": null,
+        "source": "tasks.perturbation.invariance",
+        "missing_reason": null
+      }
+    },
+    "latency_ms_p50": {
+      "oracle": {
+        "value": 0.0011455267667770386,
+        "unit": "ms",
+        "better": "lower",
+        "ci95": null,
+        "source": "tasks.image_read.latency_ms.p50",
+        "missing_reason": null
+      },
+      "heuristic": {
+        "value": 0.21279184147715569,
+        "unit": "ms",
+        "better": "lower",
+        "ci95": null,
+        "source": "tasks.image_read.latency_ms.p50",
+        "missing_reason": null
+      }
+    },
+    "mode_accuracy": {
+      "oracle": {
+        "value": 1.0,
+        "unit": "rate",
+        "better": "higher",
+        "ci95": null,
+        "source": "tasks.image_read.mode_accuracy",
+        "missing_reason": null
+      },
+      "heuristic": {
+        "value": 0.25,
+        "unit": "rate",
+        "better": "higher",
+        "ci95": null,
+        "source": "tasks.image_read.mode_accuracy",
+        "missing_reason": null
+      }
+    },
+    "parse_rate": {
+      "oracle": {
+        "value": 1.0,
+        "unit": "rate",
+        "better": "higher",
+        "ci95": null,
+        "source": "tasks.image_read.parse_rate",
+        "missing_reason": null
+      },
+      "heuristic": {
+        "value": 1.0,
+        "unit": "rate",
+        "better": "higher",
+        "ci95": null,
+        "source": "tasks.image_read.parse_rate",
+        "missing_reason": null
+      }
+    },
+    "perturbation_mode_flip_rate": {
+      "oracle": {
+        "value": 0.0,
+        "unit": "rate",
+        "better": "lower",
+        "ci95": null,
+        "source": "tasks.perturbation.invariance",
+        "missing_reason": null
+      },
+      "heuristic": {
+        "value": 0.0,
+        "unit": "rate",
+        "better": "lower",
+        "ci95": null,
+        "source": "tasks.perturbation.invariance",
+        "missing_reason": null
+      }
+    },
+    "repeat_exact_agreement": {
+      "oracle": {
+        "value": 1.0,
+        "unit": "rate",
+        "better": "higher",
+        "ci95": null,
+        "source": "tasks.repeatability",
+        "missing_reason": null
+      },
+      "heuristic": {
+        "value": 1.0,
+        "unit": "rate",
+        "better": "higher",
+        "ci95": null,
+        "source": "tasks.repeatability",
+        "missing_reason": null
+      }
+    },
+    "schema_violation_rate": {
+      "oracle": {
+        "value": 0.0,
+        "unit": "rate",
+        "better": "lower",
+        "ci95": null,
+        "source": "tasks.image_read.schema_violation_rate",
+        "missing_reason": null
+      },
+      "heuristic": {
+        "value": 0.0,
+        "unit": "rate",
+        "better": "lower",
+        "ci95": null,
+        "source": "tasks.image_read.schema_violation_rate",
+        "missing_reason": null
+      }
+    },
+    "structured_fde_mean": {
+      "oracle": {
+        "value": 0.0,
+        "unit": "field L1",
+        "better": "lower",
+        "ci95": null,
+        "source": "tasks.structured_read.fde_mean",
+        "missing_reason": null
+      },
+      "heuristic": {
+        "value": 1.6197124999999999,
+        "unit": "field L1",
+        "better": "lower",
+        "ci95": null,
+        "source": "tasks.structured_read.fde_mean",
+        "missing_reason": null
+      }
+    },
+    "within_mode_step_rate": {
+      "oracle": {
+        "value": 1.0,
+        "unit": "rate",
+        "better": "higher",
+        "ci95": null,
+        "source": "tasks.image_read.within_mode_step_rate",
+        "missing_reason": null
+      },
+      "heuristic": {
+        "value": 0.25,
+        "unit": "rate",
+        "better": "higher",
+        "ci95": null,
+        "source": "tasks.image_read.within_mode_step_rate",
+        "missing_reason": null
+      }
+    }
+  },
+  "composites": {
+    "oracle": {
+      "valid_in_step_per_second": {
+        "formula": "valid_in_step_per_second = within_mode_step_rate * parse_rate / (latency_ms_p50 / 1000)",
+        "weights": "none (product/ratio of raw rates)",
+        "normalization": "none; units are valid readings within one mode step per second",
+        "inputs": {
+          "within_mode_step_rate": 1.0,
+          "parse_rate": 1.0,
+          "latency_ms_p50": 0.0011455267667770386
+        },
+        "missing_data_rule": "null when any input is missing or latency is zero",
+        "valid_comparison": "same manifest_hash, same prompt_revision, same image_size",
+        "value": 872960.8325203252,
+        "sensitivity": {
+          "delta": 0.1,
+          "base": 872960.8325203252,
+          "per_input": {
+            "within_mode_step_rate": {
+              "minus": 785664.7492682927,
+              "plus": 960256.9157723578
+            },
+            "parse_rate": {
+              "minus": 785664.7492682927,
+              "plus": 960256.9157723578
+            },
+            "latency_ms_p50": {
+              "minus": 969956.4805781391,
+              "plus": 793600.7568366593
+            }
+          }
+        }
+      },
+      "fidelity_per_currency": {
+        "formula": "fidelity_per_currency = max(0, 1 - fde_normalized_mean) / cost_per_valid_result",
+        "weights": "none",
+        "normalization": "fde_normalized is in mode steps; 1 - that is clipped at 0",
+        "inputs": {
+          "fde_normalized_mean": 0.0,
+          "cost_per_valid_result": null
+        },
+        "missing_data_rule": "null without pricing",
+        "valid_comparison": "same manifest_hash; prices must be stated per provider",
+        "value": null
+      }
+    },
+    "heuristic": {
+      "valid_in_step_per_second": {
+        "formula": "valid_in_step_per_second = within_mode_step_rate * parse_rate / (latency_ms_p50 / 1000)",
+        "weights": "none (product/ratio of raw rates)",
+        "normalization": "none; units are valid readings within one mode step per second",
+        "inputs": {
+          "within_mode_step_rate": 0.25,
+          "parse_rate": 1.0,
+          "latency_ms_p50": 0.21279184147715569
+        },
+        "missing_data_rule": "null when any input is missing or latency is zero",
+        "valid_comparison": "same manifest_hash, same prompt_revision, same image_size",
+        "value": 1174.8570728302043,
+        "sensitivity": {
+          "delta": 0.1,
+          "base": 1174.8570728302043,
+          "per_input": {
+            "within_mode_step_rate": {
+              "minus": 1057.371365547184,
+              "plus": 1292.342780113225
+            },
+            "parse_rate": {
+              "minus": 1057.371365547184,
+              "plus": 1292.342780113225
+            },
+            "latency_ms_p50": {
+              "minus": 1305.396747589116,
+              "plus": 1068.0518843910947
+            }
+          }
+        }
+      },
+      "fidelity_per_currency": {
+        "formula": "fidelity_per_currency = max(0, 1 - fde_normalized_mean) / cost_per_valid_result",
+        "weights": "none",
+        "normalization": "fde_normalized is in mode steps; 1 - that is clipped at 0",
+        "inputs": {
+          "fde_normalized_mean": 1.6130375,
+          "cost_per_valid_result": null
+        },
+        "missing_data_rule": "null without pricing",
+        "valid_comparison": "same manifest_hash; prices must be stated per provider",
+        "value": null
+      }
+    }
+  },
+  "validity": {
+    "comparable": true,
+    "reasons": [],
+    "manifest_hashes": [
+      "3bfe42d860230106"
+    ],
+    "measurement_classes": [
+      "synthetic"
+    ],
+    "rule": "compare only identical manifest hashes; pixel fidelity only within one device; synthetic and replay results are never hardware or model evidence"
+  },
+  "recommendations": [
+    "Best fde_mean (lower is better, gate parse_rate >= 0.9): oracle at 0 field L1",
+    "Ranking: oracle (0) > heuristic (2.601)"
+  ],
+  "non_claim": "Modeled phenomenology for research and visualization only. The benchmark measures computation, rendering, and model interpretation of modeled representations. It does not measure consciousness or subjective experience. Not medical advice."
+}

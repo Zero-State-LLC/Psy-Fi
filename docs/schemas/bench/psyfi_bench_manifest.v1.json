@@ -1,0 +1,205 @@
+{
+  "$defs": {
+    "Protocol": {
+      "additionalProperties": false,
+      "description": "Experimental protocol for one workload.",
+      "properties": {
+        "warmup_runs": {
+          "default": 1,
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Warmup Runs",
+          "type": "integer"
+        },
+        "repeats": {
+          "default": 5,
+          "maximum": 10000,
+          "minimum": 1,
+          "title": "Repeats",
+          "type": "integer"
+        },
+        "cold_start": {
+          "default": true,
+          "description": "Record the first (cold) run separately.",
+          "title": "Cold Start",
+          "type": "boolean"
+        },
+        "timeout_s": {
+          "default": 120.0,
+          "exclusiveMinimum": 0.0,
+          "maximum": 86400.0,
+          "title": "Timeout S",
+          "type": "number"
+        },
+        "min_duration_s": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "For sustained stages: keep repeating until this wall time has elapsed.",
+          "title": "Min Duration S"
+        },
+        "memory_probe": {
+          "default": true,
+          "description": "Run one extra repeat under tracemalloc for peak allocation.",
+          "title": "Memory Probe",
+          "type": "boolean"
+        },
+        "bootstrap_resamples": {
+          "default": 2000,
+          "maximum": 100000,
+          "minimum": 100,
+          "title": "Bootstrap Resamples",
+          "type": "integer"
+        },
+        "bootstrap_seed": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Bootstrap Seed",
+          "type": "integer"
+        }
+      },
+      "title": "Protocol",
+      "type": "object"
+    },
+    "Tolerances": {
+      "additionalProperties": true,
+      "description": "Reproducibility tolerances the result is checked against.",
+      "properties": {
+        "timing_cv_max": {
+          "default": 0.25,
+          "description": "Max coefficient of variation for wall time.",
+          "minimum": 0.0,
+          "title": "Timing Cv Max",
+          "type": "number"
+        },
+        "quantization": {
+          "default": 1e-05,
+          "description": "Rounding step for the quantized output hash.",
+          "exclusiveMinimum": 0.0,
+          "title": "Quantization",
+          "type": "number"
+        },
+        "accelerator_atol": {
+          "default": 0.0001,
+          "description": "Max abs error of an accelerator vs numpy reference.",
+          "minimum": 0.0,
+          "title": "Accelerator Atol",
+          "type": "number"
+        },
+        "accelerator_rtol": {
+          "default": 0.0001,
+          "minimum": 0.0,
+          "title": "Accelerator Rtol",
+          "type": "number"
+        },
+        "reference_atol": {
+          "default": 0.001,
+          "description": "Max abs error of the output summary statistics vs the locked reference summary (cross-platform check).",
+          "minimum": 0.0,
+          "title": "Reference Atol",
+          "type": "number"
+        }
+      },
+      "title": "Tolerances",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Versioned workload definition. ``manifest_hash`` locks params + protocol + references.",
+  "properties": {
+    "schema": {
+      "default": "psyfi.bench.manifest.v1",
+      "title": "Schema",
+      "type": "string"
+    },
+    "id": {
+      "minLength": 3,
+      "pattern": "^[a-z0-9][a-z0-9_.-]*$",
+      "title": "Id",
+      "type": "string"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "family": {
+      "enum": [
+        "field_compute",
+        "render",
+        "interpretation",
+        "fieldloop"
+      ],
+      "title": "Family",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "description": {
+      "default": "",
+      "title": "Description",
+      "type": "string"
+    },
+    "execution": {
+      "default": "python",
+      "enum": [
+        "python",
+        "browser",
+        "python+provider",
+        "python+browser+provider"
+      ],
+      "title": "Execution",
+      "type": "string"
+    },
+    "params": {
+      "additionalProperties": true,
+      "title": "Params",
+      "type": "object"
+    },
+    "protocol": {
+      "$ref": "#/$defs/Protocol"
+    },
+    "references": {
+      "additionalProperties": true,
+      "description": "Locked reference values (hashes, oracle labels). A mismatch is a lock failure.",
+      "title": "References",
+      "type": "object"
+    },
+    "tolerances": {
+      "$ref": "#/$defs/Tolerances"
+    },
+    "requires": {
+      "description": "Capabilities needed: webgpu, provider, torch\u2026",
+      "items": {
+        "type": "string"
+      },
+      "title": "Requires",
+      "type": "array"
+    },
+    "tags": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "family",
+    "title"
+  ],
+  "title": "WorkloadManifest",
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

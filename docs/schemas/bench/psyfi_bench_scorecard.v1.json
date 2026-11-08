@@ -1,0 +1,164 @@
+{
+  "$defs": {
+    "ScoreDimension": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        },
+        "unit": {
+          "title": "Unit",
+          "type": "string"
+        },
+        "better": {
+          "enum": [
+            "lower",
+            "higher"
+          ],
+          "title": "Better",
+          "type": "string"
+        },
+        "ci95": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ci95"
+        },
+        "source": {
+          "description": "Which result/stage the value came from.",
+          "title": "Source",
+          "type": "string"
+        },
+        "missing_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Missing Reason"
+        }
+      },
+      "required": [
+        "value",
+        "unit",
+        "better",
+        "source"
+      ],
+      "title": "ScoreDimension",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Multidimensional scorecard. No universal score.",
+  "properties": {
+    "schema": {
+      "default": "psyfi.bench.scorecard.v1",
+      "title": "Schema",
+      "type": "string"
+    },
+    "generated_at": {
+      "title": "Generated At",
+      "type": "string"
+    },
+    "family": {
+      "enum": [
+        "field_compute",
+        "render",
+        "interpretation",
+        "fieldloop"
+      ],
+      "title": "Family",
+      "type": "string"
+    },
+    "manifest_id": {
+      "title": "Manifest Id",
+      "type": "string"
+    },
+    "manifest_hash": {
+      "title": "Manifest Hash",
+      "type": "string"
+    },
+    "subjects": {
+      "description": "One entry per compared result: run_id, label, hardware_class, model\u2026",
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Subjects",
+      "type": "array"
+    },
+    "dimensions": {
+      "additionalProperties": {
+        "additionalProperties": {
+          "$ref": "#/$defs/ScoreDimension"
+        },
+        "type": "object"
+      },
+      "description": "dimension name -> subject label -> ScoreDimension",
+      "title": "Dimensions",
+      "type": "object"
+    },
+    "composites": {
+      "additionalProperties": true,
+      "description": "Optional named composites with formula, weights, normalization, sensitivity, missing-data rule.",
+      "title": "Composites",
+      "type": "object"
+    },
+    "validity": {
+      "additionalProperties": true,
+      "title": "Validity",
+      "type": "object"
+    },
+    "recommendations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Recommendations",
+      "type": "array"
+    },
+    "non_claim": {
+      "title": "Non Claim",
+      "type": "string"
+    }
+  },
+  "required": [
+    "generated_at",
+    "family",
+    "manifest_id",
+    "manifest_hash",
+    "subjects",
+    "dimensions",
+    "non_claim"
+  ],
+  "title": "Scorecard",
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

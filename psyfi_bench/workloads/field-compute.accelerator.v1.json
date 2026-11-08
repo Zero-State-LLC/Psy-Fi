@@ -1,0 +1,49 @@
+{
+  "schema": "psyfi.bench.manifest.v1",
+  "id": "field-compute.accelerator",
+  "version": 1,
+  "family": "field_compute",
+  "title": "Experimental accelerator port of the field pipeline (torch)",
+  "description": "Same workload points as the scaling manifest plus 512x512, run on the torch backend (CUDA, MPS or CPU) and validated against the NumPy authority with a declared tolerance. Skips with an explicit reason when torch is absent. CPU simulation stays the authority.",
+  "execution": "python",
+  "params": {
+    "kind": "scaling",
+    "grid_sizes": [
+      64,
+      128,
+      256,
+      512
+    ],
+    "steps": 20,
+    "seed": 1337,
+    "coupling_strength": 0.5,
+    "pipeline": "field",
+    "backend": "torch"
+  },
+  "protocol": {
+    "warmup_runs": 2,
+    "repeats": 5,
+    "cold_start": true,
+    "timeout_s": 600.0,
+    "min_duration_s": null,
+    "memory_probe": false,
+    "bootstrap_resamples": 2000,
+    "bootstrap_seed": 0
+  },
+  "references": {},
+  "tolerances": {
+    "timing_cv_max": 0.3,
+    "quantization": 0.0001,
+    "accelerator_atol": 0.001,
+    "accelerator_rtol": 0.001,
+    "reference_atol": 0.001
+  },
+  "requires": [
+    "torch"
+  ],
+  "tags": [
+    "accelerator",
+    "experimental"
+  ],
+  "manifest_hash": "9720ff6e599f7995"
+}

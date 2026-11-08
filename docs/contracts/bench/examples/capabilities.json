@@ -1,0 +1,236 @@
+{
+  "schema": "psyfi.bench.capabilities.v1",
+  "bench_version": "0.1.0",
+  "families": [
+    "field_compute",
+    "render",
+    "interpretation",
+    "fieldloop"
+  ],
+  "workloads": [
+    {
+      "id": "field-compute.accelerator",
+      "version": 1,
+      "family": "field_compute",
+      "execution": "python",
+      "requires": [
+        "torch"
+      ],
+      "manifest_hash": "9720ff6e599f7995",
+      "title": "Experimental accelerator port of the field pipeline (torch)"
+    },
+    {
+      "id": "field-compute.presets",
+      "version": 1,
+      "family": "field_compute",
+      "execution": "python",
+      "requires": [],
+      "manifest_hash": "c579aeed8cfdb959",
+      "title": "Full API-equivalent simulation for every substance preset"
+    },
+    {
+      "id": "field-compute.scaling",
+      "version": 1,
+      "family": "field_compute",
+      "execution": "python",
+      "requires": [],
+      "manifest_hash": "ebe01d8150c791ec",
+      "title": "ABX-Core field pipeline: scaling with grid size"
+    },
+    {
+      "id": "field-compute.steps",
+      "version": 1,
+      "family": "field_compute",
+      "execution": "python",
+      "requires": [],
+      "manifest_hash": "3fe20fd4c3c3ec39",
+      "title": "ABX-Core field pipeline: scaling with simulation steps"
+    },
+    {
+      "id": "field-compute.sustained",
+      "version": 1,
+      "family": "field_compute",
+      "execution": "python",
+      "requires": [],
+      "manifest_hash": "d286190985cb61ca",
+      "title": "ABX-Core field pipeline: sustained throughput"
+    },
+    {
+      "id": "fieldloop.signature",
+      "version": 1,
+      "family": "fieldloop",
+      "execution": "python+provider",
+      "requires": [
+        "provider"
+      ],
+      "manifest_hash": "d11630c6fa207639",
+      "title": "FieldLoop: simulate, snapshot, render, interpret, reconstruct"
+    },
+    {
+      "id": "interpretation.fieldread.smoke",
+      "version": 1,
+      "family": "interpretation",
+      "execution": "python+provider",
+      "requires": [
+        "provider"
+      ],
+      "manifest_hash": "3bfe42d860230106",
+      "title": "Field reading smoke corpus (8 items) for CI and provider checks"
+    },
+    {
+      "id": "interpretation.fieldread",
+      "version": 1,
+      "family": "interpretation",
+      "execution": "python+provider",
+      "requires": [
+        "provider"
+      ],
+      "manifest_hash": "746506c7d9774a0f",
+      "title": "Field reading: model interpretation of rendered and structured field states"
+    },
+    {
+      "id": "render.soft.g4",
+      "version": 1,
+      "family": "render",
+      "execution": "python",
+      "requires": [],
+      "manifest_hash": "b42835e69a0ab4ef",
+      "title": "Soft raster of the G4 canonical seeds across tiers and sizes"
+    },
+    {
+      "id": "render.webgpu.tiers",
+      "version": 1,
+      "family": "render",
+      "execution": "browser",
+      "requires": [
+        "browser",
+        "webgpu"
+      ],
+      "manifest_hash": "34dbc9ae5f5d02ce",
+      "title": "WebGPU present path: frame times and tier fidelity on one device"
+    }
+  ],
+  "providers": [
+    {
+      "spec": "oracle",
+      "locality": "baseline",
+      "available": true
+    },
+    {
+      "spec": "constant",
+      "locality": "baseline",
+      "available": true
+    },
+    {
+      "spec": "random",
+      "locality": "baseline",
+      "available": true
+    },
+    {
+      "spec": "heuristic",
+      "locality": "baseline",
+      "available": true
+    },
+    {
+      "spec": "replay:<receipt.json>",
+      "locality": "replay",
+      "available": true
+    },
+    {
+      "spec": "nvidia",
+      "locality": "remote",
+      "available": false,
+      "env": [
+        "NVIDIA_API_KEY",
+        "NVIDIA_VISION_MODEL",
+        "NVIDIA_API_BASE"
+      ]
+    },
+    {
+      "spec": "anthropic:<model>",
+      "locality": "remote",
+      "available": false,
+      "env": [
+        "ANTHROPIC_API_KEY",
+        "ANTHROPIC_MODEL"
+      ]
+    },
+    {
+      "spec": "openai:<base_url>#<model>",
+      "locality": "local|remote",
+      "available": true,
+      "env": [
+        "OPENAI_API_KEY (remote only)"
+      ],
+      "note": "vLLM, llama.cpp server, Ollama, LM Studio, any OpenAI-compatible endpoint"
+    }
+  ],
+  "accelerators": {
+    "numpy": true,
+    "torch": true
+  },
+  "environment": {
+    "captured_at": "2026-11-08T08:06:10.176828Z",
+    "hostname_hash": "225369c658b1",
+    "platform": {
+      "system": "Darwin",
+      "release": "25.5.0",
+      "version": "Darwin Kernel Version 25.5.0: Mon Apr 27 20:39:29 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T8142",
+      "machine": "arm64"
+    },
+    "cpu": {
+      "brand": "Apple M5",
+      "architecture": "arm64",
+      "logical_cores": 10,
+      "physical_cores": 10,
+      "performance_cores": 4,
+      "efficiency_cores": 6
+    },
+    "memory": {
+      "total_bytes": 17179869184
+    },
+    "gpus": [
+      {
+        "vendor": "apple",
+        "name": "Apple M5",
+        "memory_bytes": null,
+        "driver": null,
+        "cores": 8,
+        "source": "system_profiler",
+        "hardware_class": "integrated"
+      }
+    ],
+    "software": {
+      "python": "3.12.13",
+      "python_implementation": "CPython",
+      "numpy": "2.5.4",
+      "bench_version": "0.1.0",
+      "scipy": "1.18.1",
+      "psyfi_version": "1.4.0",
+      "blas": {
+        "name": "accelerate",
+        "version": "unknown"
+      },
+      "env_threads": {},
+      "accelerators": {
+        "torch": "2.15.0",
+        "cuda": false,
+        "mps": true,
+        "devices": []
+      },
+      "git_commit": "210b78062f1d699f4c2f918b7e72a5f55b060b7b",
+      "git_dirty": true
+    },
+    "browser": null,
+    "power": null,
+    "hardware_class": "integrated",
+    "unavailable": {
+      "gpu.memory": "Apple unified memory: GPU memory is shared with system RAM",
+      "power": "no power sampler on this host (nvidia-smi absent or not sampled)",
+      "thermal": "no thermal sensor API without elevated privileges"
+    }
+  },
+  "ingest_enabled": false,
+  "run_enabled": false,
+  "non_claim": "Modeled phenomenology for research and visualization only. The benchmark measures computation, rendering, and model interpretation of modeled representations. It does not measure consciousness or subjective experience. Not medical advice."
+}

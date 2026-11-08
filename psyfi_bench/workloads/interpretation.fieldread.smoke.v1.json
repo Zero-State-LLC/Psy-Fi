@@ -1,0 +1,94 @@
+{
+  "schema": "psyfi.bench.manifest.v1",
+  "id": "interpretation.fieldread.smoke",
+  "version": 1,
+  "family": "interpretation",
+  "title": "Field reading smoke corpus (8 items) for CI and provider checks",
+  "description": "2 substances x 4 modes x 1 intensity x 1 seed at 128 px with every task on a tiny subset. Meant for CI with baselines and for a first live-provider check; it is not a leaderboard corpus.",
+  "execution": "python+provider",
+  "params": {
+    "corpus": {
+      "substances": [
+        "lsd",
+        "dmt"
+      ],
+      "modes": [
+        "open",
+        "attractor",
+        "void",
+        "power"
+      ],
+      "intensities": [
+        0.6
+      ],
+      "seeds": [
+        42
+      ],
+      "phase_t": 0.4,
+      "tier": "balanced"
+    },
+    "image_size": 128,
+    "tasks": [
+      "image_read",
+      "structured_read",
+      "perturbation",
+      "repeatability"
+    ],
+    "perturbations": [
+      "noise",
+      "flip_h"
+    ],
+    "perturbation_subset": 4,
+    "perturbation_amount": 0.02,
+    "repeatability": {
+      "subset": 2,
+      "repeats": 2
+    },
+    "max_tokens": 64,
+    "temperature": 0.0,
+    "abort_after_consecutive_errors": 3,
+    "provider": "heuristic",
+    "pricing": null
+  },
+  "protocol": {
+    "warmup_runs": 0,
+    "repeats": 1,
+    "cold_start": false,
+    "timeout_s": 1200.0,
+    "min_duration_s": null,
+    "memory_probe": false,
+    "bootstrap_resamples": 500,
+    "bootstrap_seed": 0
+  },
+  "references": {
+    "corpus_sha256": "9b0bb5c5df879270eaabc9e9de3340c244a4489064422a4f477b0645e1a887ff",
+    "corpus_items": 8,
+    "oracle_modes": [
+      "attractor",
+      "open",
+      "power",
+      "void"
+    ],
+    "locked_with": {
+      "raster": "psyfi_bench.render.soft_raster",
+      "prompt_revision": 1
+    }
+  },
+  "tolerances": {
+    "timing_cv_max": 1.0,
+    "quantization": 1.0,
+    "accelerator_atol": 0.0,
+    "accelerator_rtol": 0.0,
+    "reference_atol": 0.001
+  },
+  "requires": [
+    "provider"
+  ],
+  "tags": [
+    "model",
+    "multimodal",
+    "fde",
+    "smoke"
+  ],
+  "manifest_hash": "3bfe42d860230106"
+}
