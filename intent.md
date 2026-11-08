@@ -68,8 +68,8 @@ Non-goals:
 
 | Claim | Label |
 | --- | --- |
-| https://psy-fi.space/health, `/ready`, `/`, `/gpu/`, and `/sw.js` answered as the outcome says on 2026-11-07, and again on 2026-11-08 after versions `7f79f732`, `363b5d70` and `3d97825f` | `[verified: deploy checks against the live host]` |
-| Worker `psy-fi` version `3d97825f-cea6-41b5-b50c-4e83659aa723` (2026-11-08, after `363b5d70`, `7f79f732` and `d27e5f06`) is the current version, and the secret and the vision var are both set | `[verified: wrangler deployments list and the version's binding names]` |
+| https://psy-fi.space/health, `/ready`, `/`, `/gpu/`, and `/sw.js` answered as the outcome says on 2026-11-07, and again on 2026-11-08 after versions `7f79f732`, `363b5d70`, `3d97825f` and `97b60aaf` | `[verified: deploy checks against the live host]` |
+| Worker `psy-fi` version `97b60aaf-8da3-4ee8-913a-a7896dff68b7` (2026-11-08, after `3d97825f`, `363b5d70`, `7f79f732` and `d27e5f06`) is the current version, and the secret and the vision var are both set | `[verified: wrangler deployments list and the version's binding names]` |
 | Worker `psyfi` still serves its workers.dev health route | `[verified: GET /health 200 at 2026-11-07T23:51:48Z]` |
 | A deploy from this `wrangler.jsonc` updates `psy-fi` and does not update `psyfi` | `[verified: the two hostnames after this deploy]` |
 | `origin/main` at `bf5953b` names script `psy-fi` and includes the vision bench | `[verified: pull requests #39 and #40 are merged]` |
