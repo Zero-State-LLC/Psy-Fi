@@ -1,0 +1,113 @@
+{
+  "schema": "psyfi.bench.manifest.v1",
+  "id": "render.soft.g4",
+  "version": 1,
+  "family": "render",
+  "title": "Soft raster of the G4 canonical seeds across tiers and sizes",
+  "description": "Deterministic CPU raster (bit-identical to the TS soft-present) of the three G4 visual seeds at 64, 128 and 256 px for every quality tier. Reports snapshot build time, raster time per megapixel, output SHA locks, cross-language parity with the TS goldens, and tier fidelity (SSIM, RMSE, histogram L1) against the Ultra raster.",
+  "execution": "python",
+  "params": {
+    "execution_class": "soft",
+    "cases": [
+      {
+        "key": "lsd_open_42",
+        "substance": "lsd",
+        "mode": "open",
+        "seed": 42,
+        "intensity": 0.75
+      },
+      {
+        "key": "psilocybin_attractor_7",
+        "substance": "psilocybin",
+        "mode": "attractor",
+        "seed": 7,
+        "intensity": 0.6
+      },
+      {
+        "key": "dmt_void_99",
+        "substance": "dmt",
+        "mode": "void",
+        "seed": 99,
+        "intensity": 0.85
+      }
+    ],
+    "sizes": [
+      64,
+      128,
+      256
+    ],
+    "tiers": [
+      "ultra",
+      "high",
+      "balanced",
+      "battery"
+    ]
+  },
+  "protocol": {
+    "warmup_runs": 1,
+    "repeats": 5,
+    "cold_start": true,
+    "timeout_s": 300.0,
+    "min_duration_s": null,
+    "memory_probe": true,
+    "bootstrap_resamples": 1000,
+    "bootstrap_seed": 0
+  },
+  "references": {
+    "sha256": {
+      "lsd_open_42.ultra.64": "432aa771bcd05f0a5bcef761f61ecfe85cc6c5864795c46bbeb806586a5d7e59",
+      "lsd_open_42.high.64": "7ae7107560e6e030ec96b7689e4f43148edc7d499a6caa845b9440af6fb57a07",
+      "lsd_open_42.balanced.64": "ad21a0a191c445d1e18b2bcaf18e1bcca0007471f2be2240f495c874f20a6112",
+      "lsd_open_42.battery.64": "ad49654266ba535a7e11d5a075f385c0d5db074b315c0c972cf037eea088f5c3",
+      "lsd_open_42.ultra.128": "03cdd00353c85e039190be3a20394be14d328952a4528075b6401a95b8aab148",
+      "lsd_open_42.high.128": "6e78f584810cd0bde156ab2e743479fa030f4401ee5442461350a7d96f109ec2",
+      "lsd_open_42.balanced.128": "8970b7771c1245e39c3a616d310f93077c5523b4f2f20e50c14489d6df938ff5",
+      "lsd_open_42.battery.128": "0d929e0666e39ae830384260c69d3e103255ef46d713f0a16820b33fa7774859",
+      "lsd_open_42.ultra.256": "05b429c47370f28dfcc09b5dbb2aeeea3ad7964807e882cfbae8c252fbd312bc",
+      "lsd_open_42.high.256": "81b2d50f90ffa55347742db8a25a1fab912e45b81180723708add30192c829fb",
+      "lsd_open_42.balanced.256": "6cc7b0690420bde0005ee805d60067d03c3e89cb714de54c985bf7e7e76ebd0c",
+      "lsd_open_42.battery.256": "b968d3b8bb7093f7da4731a3737590908b92cd6a923e8d875e9ff44e63176df5",
+      "psilocybin_attractor_7.ultra.64": "04b61f8c5615c455c413b7abff507b9945b943c93643f053093bf9768467c0d3",
+      "psilocybin_attractor_7.high.64": "71707eeec7ab8d9998bba67b9ce484f82ab067938075fda99b9e2b7b4ce8abb0",
+      "psilocybin_attractor_7.balanced.64": "1f92cbe0e5040fd7ff8f18c984e360c4c68d7367a55d393eaf432aacfcc05bf6",
+      "psilocybin_attractor_7.battery.64": "9124f59707d14c5a7f1a7fea1250e4df1c529dc931e5f16f0380f0621e4025a5",
+      "psilocybin_attractor_7.ultra.128": "0fb750afa7c01fc4271d4e58180d071f0cdd57dd93381a90c4c8283bb3829e47",
+      "psilocybin_attractor_7.high.128": "c356293db9a75b2801fcad940d0d1fd21bb5c02eaa4432dad1afd9e8da38c4fc",
+      "psilocybin_attractor_7.balanced.128": "04da7ce2dd33fe5ff63092a257275f67f3edc526515647dfeece2676aab3952d",
+      "psilocybin_attractor_7.battery.128": "c1cc5bfad2fae16c10a4a29db312d4919b0d6ff29ef1c0f31436086117053c3a",
+      "psilocybin_attractor_7.ultra.256": "e4096a9c9ce04d9b6a9d54e82e184d44a04364f9562498070ac0154a16351367",
+      "psilocybin_attractor_7.high.256": "4f7623fccb9ef809ba5a98e95113cb126bc566190685ff0a4cec8111548db97c",
+      "psilocybin_attractor_7.balanced.256": "dafd06cc8d9d05f6178cac19b2b4ae1021e6b302d18c481e92e3b006aad3e5e2",
+      "psilocybin_attractor_7.battery.256": "2a00aa2d9faabd6b895320328706d5179222fb39d76744464ac903654196203a",
+      "dmt_void_99.ultra.64": "dc63a9ec0d25843f20c69d9b7d72732550a2a2c26949a816629a434d4b9f2cb4",
+      "dmt_void_99.high.64": "b227eacd2d86748b2cb0fa6a896fb212ef7293db240f74f42d0fbeb6bdce9df0",
+      "dmt_void_99.balanced.64": "aa1882095e26742054b8f4a0134fa81475fe5c945ac02b3bced09f6f63eb7fa0",
+      "dmt_void_99.battery.64": "ad496998748c0ec3dbbbef46c90db4a2435e6897f32bb5300c900925d0ba19cb",
+      "dmt_void_99.ultra.128": "973ebbdc7ebf5ae9a19a74bd0ad9fdef46ee95c13084e56d860542b923d6a606",
+      "dmt_void_99.high.128": "9526d43f9e70f77b6e54f27d03e47367357b2b0bf1c8df8a8e247aac44ebb1d8",
+      "dmt_void_99.balanced.128": "c718e1380655e2efdb45df3a18d87be92631f259bde2638cb14007dad77cd792",
+      "dmt_void_99.battery.128": "064b9afa35098d9f63fc58ab61f4a69d740da538ddd5ef889345b3ef5509f783",
+      "dmt_void_99.ultra.256": "2fc80734abb6d51bda49d806b78732f898298d60bac15ccd8bd5860df24aea71",
+      "dmt_void_99.high.256": "17e575fd7e8251a99684ace82e4b6cfd07468270bfec6cc807ab2a34dc4b20ae",
+      "dmt_void_99.balanced.256": "eaaede3c70661378f484215820c3e1bd591b5e5569913183a7808c4cc7e45e50",
+      "dmt_void_99.battery.256": "812f3fd735d4c2c4963f7a1ae5cf43be9d8427b5d540abe6ebbc022ae734edd3"
+    },
+    "locked_with": {
+      "raster": "psyfi_bench.render.soft_raster",
+      "parity": "packages/psyfi-gpu-renderer/src/goldens/softPresent.ts"
+    }
+  },
+  "tolerances": {
+    "timing_cv_max": 0.3,
+    "quantization": 1.0,
+    "accelerator_atol": 0.0,
+    "accelerator_rtol": 0.0
+  },
+  "requires": [],
+  "tags": [
+    "cpu",
+    "render",
+    "deterministic"
+  ],
+  "manifest_hash": "13c0d51f868e73fb"
+}

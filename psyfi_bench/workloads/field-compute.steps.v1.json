@@ -1,0 +1,56 @@
+{
+  "schema": "psyfi.bench.manifest.v1",
+  "id": "field-compute.steps",
+  "version": 1,
+  "family": "field_compute",
+  "title": "ABX-Core field pipeline: scaling with simulation steps",
+  "description": "64x64 grid, 10 / 50 / 200 Kuramoto steps. Separates the per-step evolution cost from the fixed normalization cost.",
+  "execution": "python",
+  "params": {
+    "kind": "steps",
+    "grid": 64,
+    "steps_list": [
+      10,
+      50,
+      200
+    ],
+    "seed": 1337,
+    "coupling_strength": 0.5,
+    "pipeline": "field",
+    "backend": "numpy"
+  },
+  "protocol": {
+    "warmup_runs": 1,
+    "repeats": 5,
+    "cold_start": true,
+    "timeout_s": 300.0,
+    "min_duration_s": null,
+    "memory_probe": true,
+    "bootstrap_resamples": 2000,
+    "bootstrap_seed": 0
+  },
+  "references": {
+    "quantized_sha256": {
+      "steps_10": "a1ac72f1fb0b11414b7630d6e6dd3ff38f5a2eeed49fac17686cc44caa4415fa",
+      "steps_50": "f99bf522f1cbda4f2ceacd837bc6adf47caf2e2becf07cb806ad158318d82767",
+      "steps_200": "1ec1d062dd8d68e5951cd586f382db76e6f451851395cf7f2155569288ab0cc7"
+    },
+    "locked_with": {
+      "backend": "numpy",
+      "quantization": 0.0001
+    }
+  },
+  "tolerances": {
+    "timing_cv_max": 0.25,
+    "quantization": 0.0001,
+    "accelerator_atol": 0.0001,
+    "accelerator_rtol": 0.0001
+  },
+  "requires": [],
+  "tags": [
+    "cpu",
+    "deterministic",
+    "scaling"
+  ],
+  "manifest_hash": "09f5b56ddb8dfcbb"
+}

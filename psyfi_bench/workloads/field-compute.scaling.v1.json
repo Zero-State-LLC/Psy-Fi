@@ -1,0 +1,60 @@
+{
+  "schema": "psyfi.bench.manifest.v1",
+  "id": "field-compute.scaling",
+  "version": 1,
+  "family": "field_compute",
+  "title": "ABX-Core field pipeline: scaling with grid size",
+  "description": "Seeded Kuramoto evolution plus divisive normalization on square grids from 32x32 to 256x256, 20 steps. Reports wall/CPU time, peak memory, cell-steps per second, the log-log scaling exponent, and exact plus quantized output digests.",
+  "execution": "python",
+  "params": {
+    "kind": "scaling",
+    "grid_sizes": [
+      32,
+      64,
+      128,
+      256
+    ],
+    "steps": 20,
+    "seed": 1337,
+    "coupling_strength": 0.5,
+    "normalization_P": 1.0,
+    "normalization_V": 1.0,
+    "pipeline": "field",
+    "backend": "numpy"
+  },
+  "protocol": {
+    "warmup_runs": 1,
+    "repeats": 5,
+    "cold_start": true,
+    "timeout_s": 300.0,
+    "min_duration_s": null,
+    "memory_probe": true,
+    "bootstrap_resamples": 2000,
+    "bootstrap_seed": 0
+  },
+  "references": {
+    "quantized_sha256": {
+      "grid_32x32": "2fe7a888a24661a9a42b07f45b1dbf077cf8913f0b6f4bb4c30c8e51e0f542cf",
+      "grid_64x64": "aa52ae2468cb0714200cdb2f3bd4a539525aeb62773d9c8dfe2f42c45a402551",
+      "grid_128x128": "2f94400df830f5c90bde320a0b82d6fe99e3c13ad870d6ebe929df13d856b20e",
+      "grid_256x256": "866bf569a700c086fc7541cdcfbdef76293d976090ba4200fd047868c7593fac"
+    },
+    "locked_with": {
+      "backend": "numpy",
+      "quantization": 0.0001
+    }
+  },
+  "tolerances": {
+    "timing_cv_max": 0.25,
+    "quantization": 0.0001,
+    "accelerator_atol": 0.0001,
+    "accelerator_rtol": 0.0001
+  },
+  "requires": [],
+  "tags": [
+    "cpu",
+    "deterministic",
+    "scaling"
+  ],
+  "manifest_hash": "038432cccf3bf058"
+}

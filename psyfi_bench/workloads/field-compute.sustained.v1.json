@@ -1,0 +1,15 @@
+{
+  "schema": "psyfi.bench.manifest.v1",
+  "id": "field-compute.sustained",
+  "version": 1,
+  "family": "field_compute",
+  "title": "ABX-Core field pipeline: sustained throughput",
+  "description": "128x128 grid, 50 steps, repeated for at least 20 seconds. Reports throughput drift (slope, last/first quartile ratio) as a thermal and scheduling stability signal.",
+  "execution": "python",
+  "params": {"kind": "sustained", "grid": 128, "steps": 50, "seed": 1337, "pipeline": "field", "backend": "numpy"},
+  "protocol": {"warmup_runs": 2, "repeats": 10, "cold_start": true, "timeout_s": 600, "min_duration_s": 20, "memory_probe": false, "bootstrap_resamples": 2000, "bootstrap_seed": 0},
+  "references": {},
+  "tolerances": {"timing_cv_max": 0.25, "quantization": 0.0001, "accelerator_atol": 0.0001, "accelerator_rtol": 0.0001},
+  "requires": [],
+  "tags": ["cpu", "sustained"]
+}

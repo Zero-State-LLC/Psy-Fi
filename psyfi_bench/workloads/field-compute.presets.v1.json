@@ -1,0 +1,71 @@
+{
+  "schema": "psyfi.bench.manifest.v1",
+  "id": "field-compute.presets",
+  "version": 1,
+  "family": "field_compute",
+  "title": "Full API-equivalent simulation for every substance preset",
+  "description": "run_simulation (session document + bounded visualization) for every preset in the registry at 64x64 x 20 steps, seed 1337. Locks the quantized visualization digest per preset and records the valence metrics.",
+  "execution": "python",
+  "params": {
+    "kind": "presets",
+    "presets": "all",
+    "grid": 64,
+    "steps": 20,
+    "seed": 1337,
+    "pipeline": "full"
+  },
+  "protocol": {
+    "warmup_runs": 1,
+    "repeats": 3,
+    "cold_start": true,
+    "timeout_s": 600.0,
+    "min_duration_s": null,
+    "memory_probe": true,
+    "bootstrap_resamples": 1000,
+    "bootstrap_seed": 0
+  },
+  "references": {
+    "quantized_sha256": {
+      "preset_2c-b": "3497153c4f89c992a5413a46fede38fd03d0dedf59607a75d0471a4f5ad790d8",
+      "preset_2c-e": "68af78be9903514d2079909461d03b589d5277f76b0b43512ed4337887647609",
+      "preset_5-meo-dmt": "2136d15a6ae20248182c067012bdd4a8a40c3ff4e0c6b4f82f1079f2d18bb2fe",
+      "preset_al-lad": "d7ef66c6c28236f66c50dfc502e2da0da5e28d1ca7d2fa9f62dcb1d5805b1d3e",
+      "preset_amphetamine": "75e74d8c8efc815f91b5e85f15f97107923e4bb4b41ddd07f267e1db02a589ab",
+      "preset_baseline": "fa8576a2be47bf6f14c803f0d04ccd6c3941664d6ae7f97fa0628209f22e68d3",
+      "preset_cocaine": "6d7b7d4f115c25fe509611f8313d1fdce33567438c457e71e4775e30be432602",
+      "preset_dmt": "8ab06f21306079d799b2372edf21f3005af2e42c58c0d4d790f0cc06c75759ec",
+      "preset_dph": "4e697778ea3377b87560046b37a85cc1a4333c7d1e5f48bff8a2180f880d3dda",
+      "preset_dxm": "f0be34123dcb663fba970f01190ce5766f134b4066718cc28ddf9719ebbc3618",
+      "preset_eth-lad": "4501aac7245bdbc469495e337471f4078105906d74442954cb0fb593c74c8e6d",
+      "preset_harmalas": "c626b82739fa11e989f29d72124a919a4ea45c82beddc8be1b6d88e49e9e7e62",
+      "preset_jhana": "3fc5a88e8a7aaa6e602c52d7d4eec669447744d3c64bc9655719ba1373f3c5da",
+      "preset_ketamine": "a3ddcf4fb687df4a8036bffecbb8005b3195148e91602d2db4314b185fd2bf1a",
+      "preset_lsd": "704db5cfc2221638a3494b8f6c1091df8e7b481b00cbe5c05c77b8e04f7bd143",
+      "preset_mda": "4779d1e2f10043d7d91b6ba05d3c3c326ff0024f6f21968a25fa90dc3c3d0f69",
+      "preset_mdma": "728a3dbe681c9fc48cdb1e4966cde7192612da94a5833306fed432eb6da91303",
+      "preset_mescaline": "0c9ab7951a8a564749823d3a9d52e314a38ab2838f13fc14a269add7bd18b821",
+      "preset_methylphenidate": "eb4bea3001d1ddd1cbfaa836f4c8847acfd84389f4dbd9eca32fed938f4cd6ee",
+      "preset_mxe": "670058a70f9da1fb530d69a5953723f2fdb3e9d265d64ea560db184baa2a4e95",
+      "preset_psilocybin": "4329e1366592c2712b90c5fc35daffaa96ead550b00c74a1efcfc67146c996aa",
+      "preset_rem_dream": "b36929b95b8d109b651ccdff94159c66dbe3ec9bb9cd3ab6a34eaad8dbf456e8",
+      "preset_scopolamine": "e4e2874ab2e8368525d38d88b068bb698d6398c6e14a8aed22edd8ef71a30a8f"
+    },
+    "locked_with": {
+      "backend": "numpy",
+      "quantization": 0.0001
+    }
+  },
+  "tolerances": {
+    "timing_cv_max": 0.3,
+    "quantization": 0.0001,
+    "accelerator_atol": 0.0001,
+    "accelerator_rtol": 0.0001
+  },
+  "requires": [],
+  "tags": [
+    "cpu",
+    "deterministic",
+    "api-equivalent"
+  ],
+  "manifest_hash": "588823acb17c9a7c"
+}
