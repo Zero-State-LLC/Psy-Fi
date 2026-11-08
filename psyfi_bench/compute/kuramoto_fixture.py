@@ -32,7 +32,12 @@ from psyfi_core.simulation import SimulationSettings, initial_field
 
 FIXTURE_SCHEMA = "psyfi.bench.kuramoto_fixture.v1"
 FIXTURE_ID = "kuramoto.symmetric.32x32.seed1337.steps10"
-FIXTURE_PATH = REPO_ROOT / "packages" / "psyfi-gpu-renderer" / "src" / "bench" / "fixtures" / "kuramoto.seed1337.32x32.v1.json"
+FIXTURE_NAME = "kuramoto.seed1337.32x32.v1.json"
+# The scorer's copy ships as package data (psyfi_bench/fixtures/*.json), so an installed
+# psyfi_bench can validate captures without the repo checkout.
+FIXTURE_PATH = Path(__file__).resolve().parents[1] / "fixtures" / FIXTURE_NAME
+# The bench page bundles its own copy; the generator writes both and a test keeps them identical.
+BENCH_PAGE_FIXTURE_PATH = REPO_ROOT / "packages" / "psyfi-gpu-renderer" / "src" / "bench" / "fixtures" / FIXTURE_NAME
 WIDTH = 32
 HEIGHT = 32
 SEED = 1337
@@ -132,5 +137,6 @@ def write_fixture(path: Path = FIXTURE_PATH) -> Path:
 
 
 if __name__ == "__main__":  # pragma: no cover
-    out = write_fixture(Path(sys.argv[1]) if len(sys.argv) > 1 else FIXTURE_PATH)
-    print(f"written {out}", file=sys.stderr)
+    targets = [Path(sys.argv[1])] if len(sys.argv) > 1 else [FIXTURE_PATH, BENCH_PAGE_FIXTURE_PATH]
+    for target in targets:
+        print(f"written {write_fixture(target)}", file=sys.stderr)

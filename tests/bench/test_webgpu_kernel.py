@@ -165,3 +165,21 @@ def test_kernel_field_is_additive_to_frame_captures() -> None:
     assert result.status == "complete", result.failures
     kinds = [s.kind for s in result.stages]
     assert kinds[-1] == KERNEL_STAGE_KIND and kinds.count("webgpu_frames") == len(frames_only.stages)
+
+
+def test_scorer_fixture_ships_as_package_data_and_matches_the_page_copy() -> None:
+    import psyfi_bench
+    from psyfi_bench.compute.kuramoto_fixture import BENCH_PAGE_FIXTURE_PATH
+
+    assert FIXTURE_PATH.is_relative_to(Path(psyfi_bench.__file__).resolve().parent)
+    assert FIXTURE_PATH.read_bytes() == BENCH_PAGE_FIXTURE_PATH.read_bytes()
+
+
+def test_missing_reference_fixture_fails_instead_of_passing_on_trust(monkeypatch) -> None:
+    from psyfi_bench.render import webgpu_kernel
+    from psyfi_bench.schemas import CaptureKernel
+
+    monkeypatch.setattr(webgpu_kernel, "_committed_fixture", lambda: None)
+    stage = webgpu_kernel.score_kernel(CaptureKernel.model_validate(_kernel()))
+    assert stage.status == "failed"
+    assert "reference fixture unavailable" in (stage.error or "")

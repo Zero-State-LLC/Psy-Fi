@@ -66,12 +66,18 @@ def score_kernel(k: CaptureKernel, *, measurement_class: str = "measured", resam
         stage.error = f"RuntimeError: kernel failed in the browser: {k.error or 'unknown error'}"
         return stage
 
-    if fixture is not None:
-        stage.metrics["fixture_hash"] = fixture.get("content_hash")
-        if k.fixture_hash != fixture.get("content_hash") or k.fixture_id != fixture.get("id"):
-            stage.status = "failed"
-            stage.error = f"ValueError: capture ran fixture {k.fixture_id}@{k.fixture_hash}, committed fixture is {fixture.get('id')}@{fixture.get('content_hash')}"
-            return stage
+    if fixture is None:
+        # Without the reference there is nothing to check the fixture id/hash against: never pass on trust.
+        from psyfi_bench.compute.kuramoto_fixture import FIXTURE_PATH
+
+        stage.status = "failed"
+        stage.error = f"ValueError: reference fixture unavailable ({FIXTURE_PATH.name} not found); the capture cannot be validated"
+        return stage
+    stage.metrics["fixture_hash"] = fixture.get("content_hash")
+    if k.fixture_hash != fixture.get("content_hash") or k.fixture_id != fixture.get("id"):
+        stage.status = "failed"
+        stage.error = f"ValueError: capture ran fixture {k.fixture_id}@{k.fixture_hash}, committed fixture is {fixture.get('id')}@{fixture.get('content_hash')}"
+        return stage
 
     # Timing first so a failed numeric check still shows what was measured.
     wall = [float(v) for v in k.wall_dispatch_ms if math.isfinite(v) and v >= 0]
