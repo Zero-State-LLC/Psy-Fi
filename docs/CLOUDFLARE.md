@@ -20,12 +20,14 @@ This repo does not deploy from CI. An operator with the Cloudflare account runs 
 | `/simulate`, `/simulate/…` | Container |
 | `/health`, `/ready`, `/docs`, `/redoc`, `/openapi.json` | Container |
 | `/`, `/static/…`, `/gpu/…`, `/sw.js`, `/assets/icons/…` | Static assets |
+| `/privacy`, `/robots.txt`, `/sitemap.xml`, `/favicon.ico` | Static assets |
+| Any other path | Static assets: `404.html` with status 404 (`not_found_handling`) |
 
 The Container class is `PsyfiApi`. It listens on port 8000, uses instance type `standard-1`, allows outbound internet so the process can reach the NVIDIA API, and sleeps after 10 minutes idle. The image is the repo `Dockerfile`.
 
 ## Assets
 
-The shell template has no template variables. Stage it with the static files, the service worker, icons, and the built GPU lab. `/gpu/` is a static asset, so the container image cannot stand in for a missing build. Staging stops when `packages/psyfi-gpu-renderer/dist/index.html` is absent.
+The shell, `privacy.html` and `404.html` templates have no template variables. Stage them with the static files, the root files (`sw.js`, `robots.txt`, `sitemap.xml`, `favicon.ico`), icons, and the built GPU lab. `/gpu/` is a static asset, so the container image cannot stand in for a missing build. Staging stops when `packages/psyfi-gpu-renderer/dist/index.html` is absent.
 
 ```bash
 npm run gpu:build

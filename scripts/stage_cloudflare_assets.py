@@ -1,4 +1,4 @@
-"""Copy the shell, static files, icons, and GPU dist into public/ for the Worker."""
+"""Copy the shell, site pages, static files, icons, and GPU dist into public/ for the Worker."""
 
 from __future__ import annotations
 
@@ -8,6 +8,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC = ROOT / "public"
 GPU_DIST = ROOT / "packages" / "psyfi-gpu-renderer" / "dist"
+# Templates without template variables, staged as-is. The Worker serves bench.html at /bench;
+# 404.html is its not_found_handling page.
+PAGES = ("index.html", "privacy.html", "bench.html", "404.html")
+# Files the site must answer at its root; their sources live in psyfi_api/static/.
+ROOT_FILES = ("sw.js", "robots.txt", "sitemap.xml", "favicon.ico")
 
 
 def _copy_tree(src: Path, dest: Path) -> None:
@@ -25,13 +30,12 @@ def stage() -> Path:
     if PUBLIC.exists():
         shutil.rmtree(PUBLIC)
     PUBLIC.mkdir()
-    template = ROOT / "psyfi_api" / "templates" / "index.html"
-    (PUBLIC / "index.html").write_text(template.read_text(encoding="utf-8"), encoding="utf-8")
-    # The bench results page has no template variables; the Worker serves public/bench.html at /bench.
-    bench = ROOT / "psyfi_api" / "templates" / "bench.html"
-    (PUBLIC / "bench.html").write_text(bench.read_text(encoding="utf-8"), encoding="utf-8")
+    for page in PAGES:
+        template = ROOT / "psyfi_api" / "templates" / page
+        (PUBLIC / page).write_text(template.read_text(encoding="utf-8"), encoding="utf-8")
     _copy_tree(ROOT / "psyfi_api" / "static", PUBLIC / "static")
-    shutil.copy2(ROOT / "psyfi_api" / "static" / "sw.js", PUBLIC / "sw.js")
+    for name in ROOT_FILES:
+        shutil.copy2(ROOT / "psyfi_api" / "static" / name, PUBLIC / name)
     icons = ROOT / "docs" / "icons"
     if icons.is_dir():
         _copy_tree(icons, PUBLIC / "assets" / "icons")

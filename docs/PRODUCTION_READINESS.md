@@ -25,7 +25,7 @@ Scope: web app / PWA / API — native iOS deferred (`IOS_MIGRATION.md`).
 | GPU | G4 cutover ship gates | **done** | parity CI · structure goldens · soft pixel goldens · `G4_CUTOVER.md` |
 | GPU | Present/FX dispose + particle budget quantize | **done** | Ultra leak hardening · worker abort listener cleanup |
 | PWA | Installable shell + SW + IndexedDB | **done** | device QA 2026-07-25 · root-scoped `/sw.js` (see `sw.js` CACHE_NAME) |
-| PWA | `/gpu/` separate-route decision | **done** | `PWA_GPU_ROUTE.md` · SW v43 · shell→GPU handoff |
+| PWA | `/gpu/` separate-route decision | **done** | `PWA_GPU_ROUTE.md` · SW v44 · shell→GPU handoff |
 | Safety | Intensity/Neutral/WebGL/job/GPU present hardening | **done** | strictest caps · timeline Neutral · WebGL SafetyPass · job caps · no raw present |
 | Deploy | Docker-only path | **done** | `DEPLOYMENT.md` · multi-stage GPU `dist/` |
 | Deploy | Compose healthcheck (no curl) | **done** | urllib |

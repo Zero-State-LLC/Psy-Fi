@@ -84,7 +84,7 @@ def test_template_wires_cancel_recovery_and_renderer() -> None:
 
 def test_service_worker_precaches_renderer_assets() -> None:
     sw = (STATIC / "sw.js").read_text(encoding="utf-8")
-    assert "psyfi-shell-v43" in sw
+    assert "psyfi-shell-v44" in sw
     assert "/static/viz/transitionSurface.js" in sw
     assert ".woff2" in sw
     assert "/assets/icons/pf-icon-reset-24.svg" in sw
@@ -123,28 +123,36 @@ def test_pwa_gpu_route_decision_documented() -> None:
 
 def test_homepage_social_preview_uses_the_launch_image() -> None:
     html = TEMPLATE.read_text(encoding="utf-8")
-    image = "https://psy-fi.space/static/images/psyfi-hero.jpg"
+    # The card is a 1200 x 630 crop of the launch image (owner checklist, 2026-11-08).
+    image = "https://psy-fi.space/static/images/psyfi-og.jpg"
     assert 'property="og:type" content="website"' in html
     assert 'property="og:url" content="https://psy-fi.space/"' in html
     # The card reuses the page title, so a later title change cannot leave the card behind.
     title = html.split("<title>", 1)[1].split("</title>", 1)[0]
     assert f'property="og:title" content="{title}"' in html
     assert f'name="twitter:title" content="{title}"' in html
-    assert 'property="og:description" content="Modular consciousness field simulation engine with ABX-Core v1.3"' in html
+    # The card reuses the meta description the same way.
+    description = html.split('<meta name="description" content="', 1)[1].split('"', 1)[0]
+    assert "not medical advice" in description
+    assert f'property="og:description" content="{description}"' in html
+    assert f'name="twitter:description" content="{description}"' in html
     assert f'property="og:image" content="{image}"' in html
-    assert 'property="og:image:width" content="1400"' in html
-    assert 'property="og:image:height" content="933"' in html
+    assert 'property="og:image:width" content="1200"' in html
+    assert 'property="og:image:height" content="630"' in html
     assert 'name="twitter:card" content="summary_large_image"' in html
     assert f'name="twitter:image" content="{image}"' in html
     assert 'rel="canonical" href="https://psy-fi.space/"' in html
     hero = STATIC / "images" / "psyfi-hero.jpg"
     assert hero.exists()
+    card = STATIC / "images" / "psyfi-og.jpg"
     # JPEG start, and the declared card size matches the file.
-    assert hero.read_bytes()[:3] == b"\xff\xd8\xff"
+    assert card.read_bytes()[:3] == b"\xff\xd8\xff"
     from PIL import Image
 
     with Image.open(hero) as im:
         assert im.size == (1400, 933)
+    with Image.open(card) as im:
+        assert im.size == (1200, 630)
 
 
 def test_pwa_png_icons_exist() -> None:

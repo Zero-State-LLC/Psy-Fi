@@ -29,9 +29,10 @@ The operator needs the instrument in a browser, including a phone, without a sto
 ## Implementation Decisions
 
 - The worker script is served from `/sw.js` with `Service-Worker-Allowed: /` and `Cache-Control: no-cache`.
-- Cache name is the shell version recorded in the worker. Current decision: `psyfi-shell-v43`.
+- Cache name is the shell version recorded in the worker. Current decision: `psyfi-shell-v44`.
 - The entry fold is the field photograph above a full-width paper strip with the headline, the lede, the live scan status and the device scan drawer (closed). Enter and Skip scan sit in a fixed bar. Then the front page sections, then the workbench.
 - GPU documents are not precached as shell HTML.
+- Site basics ([`intent/site-basics-checklist.md`](../../intent/site-basics-checklist.md)): `/privacy` and a branded 404 page are zero-build templates beside the shell; `robots.txt`, `sitemap.xml` and `favicon.ico` live in `static/` and are answered at the site root. Every page carries its own title, description and a 1200 x 630 share card. Unknown site paths answer 404 HTML; API paths keep JSON errors.
 - The shell is zero-build. It is the Jinja page plus static scripts.
 - Design tokens stay the existing `--pf-*` set. The lab mirrors neutrals. It does not replace them.
 

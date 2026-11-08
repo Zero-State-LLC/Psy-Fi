@@ -39,3 +39,9 @@ test("container env copies only set nvidia fields", () => {
   assert.deepEqual(containerEnv({ NVIDIA_VISION_MODEL: "", NVIDIA_API_KEY: "  " }), {});
   assert.deepEqual(containerEnv(undefined), {});
 });
+
+test("site pages and root files stay on assets", () => {
+  for (const path of ["/privacy", "/robots.txt", "/sitemap.xml", "/favicon.ico", "/no-such-page"]) {
+    assert.equal(routeTarget(path), "assets", path);
+  }
+});

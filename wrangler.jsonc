@@ -14,7 +14,9 @@
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
-    "run_worker_first": true
+    "run_worker_first": true,
+    // A path with no asset answers 404 with public/404.html. API paths never reach assets.
+    "not_found_handling": "404-page"
   },
   "containers": [
     {
