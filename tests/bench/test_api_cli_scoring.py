@@ -164,3 +164,23 @@ def test_workload_route_rejects_path_like_ids() -> None:
         assert client.get(f"/api/bench/v1/workloads/{bad}").status_code in (404, 422)
     assert is_registry_ref("field-compute.scaling") and is_registry_ref("field-compute.scaling@1")
     assert not is_registry_ref("../x") and not is_registry_ref("a/b") and not is_registry_ref("")
+
+
+def test_dockerfile_copies_every_first_party_package_the_api_imports() -> None:
+    """The image must carry every psyfi_* package `psyfi_api.main` imports, or uvicorn never boots.
+
+    Regression guard for the unconditional ``psyfi_bench`` import (review on PR #56).
+    """
+    import re
+    import sys
+    from pathlib import Path
+
+    import psyfi_api.main  # noqa: F401  (ensures its imports are loaded)
+
+    root = Path(__file__).resolve().parents[2]
+    dockerfile = (root / "Dockerfile").read_text(encoding="utf-8")
+    copied = set(re.findall(r"^COPY (psyfi_[a-z_]+)/ \./\1/\s*$", dockerfile, flags=re.M))
+    imported = {name.split(".")[0] for name in sys.modules if name.startswith("psyfi_") and (root / name.split(".")[0]).is_dir()}
+    assert imported >= {"psyfi_core", "psyfi_api", "psyfi_bench"}
+    missing = sorted(imported - copied)
+    assert not missing, f"Dockerfile does not COPY first-party packages the API imports: {missing}"

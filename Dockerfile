@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY pyproject.toml README.md ./
 COPY psyfi_core/ ./psyfi_core/
 COPY psyfi_api/ ./psyfi_api/
+COPY psyfi_bench/ ./psyfi_bench/
 COPY docs/ ./docs/
 COPY data/ ./data/
 RUN pip install --upgrade pip && \
