@@ -1,6 +1,6 @@
 # Open questions — register
 
-Researched: 2026-11-08, against `main` at `d81483f` and the open pull requests #59, #60, #64, #65 and #66. Prices and terms were rechecked the same day against official sources where they exist.
+Researched: 2026-11-08, against `main` at `d81483f` and pull requests #59, #60, #64, #65 and #66, which were open then and merged the same day (`main` `460e891`). Prices and terms were rechecked the same day against official sources where they exist.
 
 This register collects every open question from `intent.md`, `intent/*.md`, `HANDOFF.md` §4, ADR 0011 and the tracker in one place. Each entry gives the evidence and a recommendation. A recommendation is not a decision. Where an entry says "Decides: operator", nothing changes until a human says so in an accepted intent or in the issue. When a question is settled, mark it in its source document and here.
 
@@ -119,7 +119,7 @@ Asked in: `intent/benchmark-platform.md`, issue #54, ADR 0009.
 
 ## 6. Discrete GPU, CUDA and power evidence (#48, #53, #50)
 
-Asked in: issues #48, #53, #50 and the open half of #59.
+Asked in: issues #48, #53 and #50, and the part of #50 that #59 left open.
 
 **Found.**
 - **#53 and #50:** any rented NVIDIA Linux GPU, for example RunPod, vast.ai, Colab or an AWS g4dn Linux box, runs `--backend torch-cuda` in minutes. Check that `nvidia-smi --query-gpu=power.draw.instant` returns a number before paying; vGPU slices return "Not Supported".
@@ -145,14 +145,14 @@ Asked in: issues #48, #53, #50 and the open half of #59.
 
 ## 7. Per-frame energy (ADR 0011)
 
-Asked in: ADR 0011 (proposed, in #59) and issue #50.
+Asked in: ADR 0011 (proposed, merged with #59) and issue #50.
 
 **Found.**
 - **What `nvidia-smi` reports:**
   - on Ampere and newer, `power.draw` is the average over the last second;
   - `power.draw.instant` is a short window (25 ms on A100 and H100);
   - the board sensor updates about every 100 ms and samples about 25% of runtime on A100 and H100 (Yang et al., [arXiv:2312.02741](https://arxiv.org/html/2312.02741v2)).
-- **What #59 does now** (commit `1310971`):
+- **What `main` does now** (from #59, commit `1310971`):
   - one `nvidia-smi -lms 100` process reading the instant field;
   - each reading stamped with `nvidia-smi`'s own time;
   - per-unit energy only for stages of at least 1 s.
@@ -191,7 +191,7 @@ Asked in: `intent/bench-results-page.md` (#65).
 
 ## 10. README linter advisories
 
-Asked in: #66 (open) and `npm audit`.
+Asked in: #66 (merged) and `npm audit`.
 
 **Found.**
 - **Remaining findings:** after #66, `npm audit` reports 5 high findings, all from one advisory: `parse-git-config` GHSA-8g77-54rh-46hx. The other 4 packages are flagged only because they depend on it.
@@ -219,7 +219,7 @@ Asked in: #66 (open) and `npm audit`.
   - the mentions in `README.md`, `AGENTS.md`, `PROJECT_INDEX.md`, `docs/PRODUCTION_READINESS.md`, `docs/bench/DISCOVERY.md` and `docs/specs/AUDIT.md`.
 - **What a switch loses:** `hallmark fix`, which has no one-to-one replacement. The unrelated Hallmark design skill under `.agents/skills/hallmark/` stays.
 
-**Recommend.** Switch to `remark-cli`. It is checked as equivalent on the README, it gives a clean `npm audit`, and upstream shows no sign of a fix. If you would rather keep hallmark, accept the finding with the rationale above, since the code path is unreachable. Either way, merge #66, which fixes the moderate findings.
+**Recommend.** Switch to `remark-cli`. It is checked as equivalent on the README, it gives a clean `npm audit`, and upstream shows no sign of a fix. If you would rather keep hallmark, accept the finding with the rationale above, since the code path is unreachable. Either way, #66 (merged) already fixed the moderate findings.
 
 ## 16. NVIDIA API terms for the live image reading
 
@@ -239,13 +239,13 @@ Asked in: this register, found while checking the cost of entry 4.
 
 Asked in: `intent/benchmark-platform.md`.
 
-**Answered.** Yes. #60 implements it and validated it live on an Apple GPU: max abs error 7.2e-7 against a 1e-3 tolerance, GPU-timed through timestamp-query, scored `ok` with a valid seal. It closes #51 when merged.
+**Answered.** Yes. #60 implements it and validated it live on an Apple GPU: max abs error 7.2e-7 against a 1e-3 tolerance, GPU-timed through timestamp-query, scored `ok` with a valid seal. It is merged, and #51 is closed.
 
 ## 12. Answered: where FieldLoop results live
 
 Asked in: `intent/benchmark-platform.md`, issue #52.
 
-**Answered** by the operator on 2026-11-08: a shell page at `/bench`, for the local operator first. #65 implements it (`intent/bench-results-page.md`).
+**Answered** by the operator on 2026-11-08: a shell page at `/bench`, for the local operator first. #65, merged, implements it (`intent/bench-results-page.md`); #52 is closed.
 
 ## 13. Answered: GPU frame-time bench
 
