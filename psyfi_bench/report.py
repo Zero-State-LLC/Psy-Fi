@@ -96,3 +96,21 @@ def scorecard_markdown(card: Scorecard) -> str:
         lines += ["", "## Recommendations", ""] + [f"- {r}" for r in card.recommendations]
     lines += ["", f"_{card.non_claim}_", ""]
     return "\n".join(lines)
+
+
+SCORECARD_CSV_COLUMNS = ("dimension", "unit", "better", "label", "value", "ci95_low", "ci95_high", "source", "missing_reason")
+
+
+def scorecard_csv(card: Scorecard) -> str:
+    """One row per (dimension, subject). Missing values stay empty with ``missing_reason`` set; nothing is imputed."""
+    import csv
+    import io
+
+    buf = io.StringIO()
+    writer = csv.writer(buf, lineterminator="\n")
+    writer.writerow(SCORECARD_CSV_COLUMNS)
+    for name, row in card.dimensions.items():
+        for label, d in row.items():
+            lo, hi = d.ci95 if d.ci95 else (None, None)
+            writer.writerow(["" if v is None else v for v in (name, d.unit, d.better, label, d.value, lo, hi, d.source, d.missing_reason)])
+    return buf.getvalue()

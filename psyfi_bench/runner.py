@@ -49,6 +49,8 @@ class RunContext:
     command: str | None = None
     notes: list[str] = field(default_factory=list)
     inputs: dict[str, Any] = field(default_factory=dict)
+    # Returns a PowerSampler or None. None (default) means "use nvidia-smi when present"; tests inject a fake.
+    power_sampler_factory: Callable[[], Any] | None = None
 
     RESERVED_INPUTS = ("capture", "_receipt")
 
@@ -126,6 +128,8 @@ def measure_stage(
     metrics_fn: Callable[[Any, list[float]], dict[str, Any]] | None = None,
     cancel: Callable[[], bool] | None = None,
     measurement_class: str = "measured",
+    power_sampler: Any = None,
+    power_work: tuple[str, float] | None = None,
 ) -> StageRecord:
     """Run ``fn(should_cancel)`` under the protocol and summarize.
 
@@ -150,6 +154,8 @@ def measure_stage(
         import time as _time
 
         started = _time.perf_counter()
+        if power_sampler is not None:
+            power_sampler.start()
         while True:
             deadline.check()
             t = time_call(lambda: fn(deadline.should_cancel))
@@ -174,6 +180,17 @@ def measure_stage(
                     break
             elif repeats_done >= protocol.repeats:
                 break
+
+        if power_sampler is not None:
+            window_s = _time.perf_counter() - started
+            samples = power_sampler.stop()
+            from psyfi_bench.power import NVIDIA_SMI_QUERY, build_power_record
+
+            unit, per_repeat = power_work or (None, None)
+            stage.power = build_power_record(
+                samples, source=power_sampler.name, interval_s=power_sampler.interval_s, window_s=window_s,
+                window_start_s=started, work_unit=unit, query=getattr(power_sampler, "query", NVIDIA_SMI_QUERY), work_units=(per_repeat * repeats_done) if per_repeat is not None else None,
+            )
 
         if protocol.memory_probe:
             deadline.check()
@@ -206,6 +223,8 @@ def measure_stage(
             stage.metrics.update(metrics_fn(last_result, stage.wall_ms))
         stage.status = "ok"
     except BaseException as exc:  # noqa: BLE001 — every failure becomes evidence
+        if power_sampler is not None:
+            power_sampler.stop()  # a failed stage reports no power
         if isinstance(exc, KeyboardInterrupt):
             stage.status = "cancelled"
         else:

@@ -57,6 +57,7 @@ Browser GPU bench: start the API, open `http://localhost:8000/gpu/bench.html` in
 ```bash
 python3 -m psyfi_bench ingest ~/Downloads/psyfi-fieldloop-gpu-capture-*.json
 python3 -m psyfi_bench score bench_results/render/*.json --labels a,b
+python3 -m psyfi_bench score bench_results/render/*.json --labels a,b --format csv   # markdown (default), csv, json
 ```
 
 Results are sealed JSON under `bench_results/` (gitignored). `psyfi-bench validate <file>` checks the seal. `psyfi-bench export-schemas` refreshes the integration package.
@@ -67,7 +68,7 @@ Results are sealed JSON under `bench_results/` (gitignored). `psyfi-bench valida
 - `environment.hardware_class` is `discrete`, `integrated`, `cpu_only` or `unknown`. A result from an integrated Apple GPU is never Ultra evidence; the Ultra fps fixtures and issue #10 are untouched by this subsystem.
 - Compare only identical `manifest_hash`. A `--param` override changes the hash on purpose.
 - Pixel fidelity is compared within one device against its own Ultra frame. Never across devices.
-- Missing telemetry (power, thermal, GPU memory) is listed under `environment.unavailable` with a reason. Nothing is estimated.
+- Missing telemetry (power, thermal, GPU memory) is listed under `environment.unavailable` with a reason. Nothing is estimated. When `nvidia-smi` is present, `field_compute` stages also record sampled power and energy per cell-step under `stage.power`; the sampled energy is board power, whichever backend ran.
 - The soft raster is a deterministic CPU picture of the scene snapshot and is bit-identical to the TypeScript soft-present goldens. It is not a WebGPU frame.
 
 ## Prior art inside the repo

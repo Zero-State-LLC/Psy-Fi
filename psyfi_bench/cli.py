@@ -127,17 +127,25 @@ def cmd_validate(args: argparse.Namespace) -> int:
 
 
 def cmd_score(args: argparse.Namespace) -> int:
-    from psyfi_bench.report import scorecard_markdown
+    from psyfi_bench.report import scorecard_csv, scorecard_markdown
     from psyfi_bench.scoring import build_scorecard
     from psyfi_bench.store import ResultStore
 
+    fmt = args.format or ("json" if args.json else "markdown")
+    if args.json and fmt != "json":
+        raise SystemExit("--json conflicts with --format " + fmt)
     store = ResultStore()
     results = [store.load_path(Path(p)) for p in args.results]
     labels = args.labels.split(",") if args.labels else None
     card = build_scorecard(results, labels)
     if args.out:
         Path(args.out).write_text(json.dumps(card.model_dump(by_alias=True), indent=2) + "\n", encoding="utf-8")
-    print(json.dumps(card.model_dump(by_alias=True), indent=2) if args.json else scorecard_markdown(card))
+    if fmt == "json":
+        print(json.dumps(card.model_dump(by_alias=True), indent=2))
+    elif fmt == "csv":
+        print(scorecard_csv(card), end="")
+    else:
+        print(scorecard_markdown(card))
     return 0
 
 
@@ -237,6 +245,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("results", nargs="+")
     p.add_argument("--labels", help="comma separated labels")
     p.add_argument("--out")
+    p.add_argument("--format", choices=["markdown", "csv", "json"], help="stdout format (default markdown; --json is the same as --format json)")
     p.add_argument("--json", action="store_true")
     p.set_defaults(fn=cmd_score)
 

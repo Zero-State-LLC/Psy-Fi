@@ -236,7 +236,7 @@ Hardware-dependent:
 - Captures from discrete GPUs (NVIDIA, AMD, Intel Arc, Apple Pro/Max) through `/gpu/bench.html`; this machine is integrated-class.
 - Torch backend validation on CUDA and MPS; the port exists and is validated against NumPy, but torch is not installed here.
 - A WGSL Kuramoto compute port in the browser validated against a Python reference field (not implemented).
-- Power and thermal sampling through `nvidia-smi` during a stage (the `power` slot in `EnvironmentRecord` is reserved; not implemented).
+- Power and temperature: when `nvidia-smi` exists, `field_compute` stages carry `StageRecord.power` (`psyfi_bench/power.py`): one `nvidia-smi -lms 100` process per stage reading `power.draw.instant` where the driver has it (else `power.draw`, which is a 1 s average on Ampere and newer; arXiv:2312.02741), stamped with nvidia-smi's own timestamps; only readings inside the measured window count, energy is the trapezoid integral of those with a power reading (no extrapolation), and `energy_j_per_work_unit` per cell-step is reported only for a stage of at least 1 s whose readings span at least 90% of it, mean and max watts, and max GPU temperature. With no tool, no power field is written and `environment.unavailable.power` stays. Energy per frame for webgpu captures is not wired: a capture is taken in a browser outside this process, so there is no sample window to integrate. [ADR 0011](adr/0011-host-power-trace-for-browser-captures.md) proposes a host power trace aligned to each stage's window (not accepted yet).
 
 Provider-dependent:
 
