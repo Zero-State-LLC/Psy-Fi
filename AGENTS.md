@@ -9,7 +9,8 @@ Harness adapters (`CLAUDE.md`) only point here.
 Non-trivial work starts **intent → spec/plan → code**.
 Read the active intent in [`intent/`](intent/) before editing.
 Decision records live in [`docs/specs/`](docs/specs/).
-Runtime conformance is [`docs/specs/AUDIT.md`](docs/specs/AUDIT.md).
+Runtime conformance is [`docs/specs/AUDIT.md`](docs/specs/AUDIT.md). Read its "Later main" note first.
+A new agent starts at [`HANDOFF.md`](HANDOFF.md).
 Next stage is spec/plan. Do not skip to code.
 
 If the change is non-trivial and no intent exists, draft one from

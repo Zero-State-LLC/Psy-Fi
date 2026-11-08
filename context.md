@@ -4,6 +4,7 @@ For: Aaron
 Date: 2026-11-07
 Repo: [`Zero-State-LLC/Psy-Fi`](https://github.com/Zero-State-LLC/Psy-Fi)
 Intent: [`intent.md`](intent.md)
+Fable handoff: [`HANDOFF.md`](HANDOFF.md)
 Host doc: [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md)
 Issue: [#36](https://github.com/Zero-State-LLC/Psy-Fi/issues/36)
 
