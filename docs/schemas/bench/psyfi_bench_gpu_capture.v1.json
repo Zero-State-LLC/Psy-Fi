@@ -1,5 +1,201 @@
 {
   "$defs": {
+    "CaptureKernel": {
+      "additionalProperties": false,
+      "description": "One browser-side compute-kernel validation (``/gpu/bench.html``, stage kind ``webgpu_kernel``).\n\nThe kernel evolves a Python-generated fixture field on the GPU; the browser reports its max\nabs error against the fixture's numpy-evolved field. Python re-judges it against its own\ndeclared tolerance. The GPU result never feeds back into a simulation.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kernel": {
+          "description": "Kernel name, e.g. kuramoto_symmetric_step.",
+          "title": "Kernel",
+          "type": "string"
+        },
+        "fixture_id": {
+          "title": "Fixture Id",
+          "type": "string"
+        },
+        "fixture_hash": {
+          "description": "content_hash of the fixture the browser ran; must match the committed fixture.",
+          "title": "Fixture Hash",
+          "type": "string"
+        },
+        "width": {
+          "title": "Width",
+          "type": "integer"
+        },
+        "height": {
+          "title": "Height",
+          "type": "integer"
+        },
+        "steps": {
+          "title": "Steps",
+          "type": "integer"
+        },
+        "status": {
+          "enum": [
+            "ran",
+            "unsupported",
+            "error"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "unsupported_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unsupported Reason"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        },
+        "max_abs_error": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Max abs error over real and imaginary parts; null when the output had non-finite values.",
+          "title": "Max Abs Error"
+        },
+        "nonfinite_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nonfinite Count"
+        },
+        "tolerance": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Tolerance the browser judged against (Python uses its own).",
+          "title": "Tolerance"
+        },
+        "passed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The browser's verdict; informational.",
+          "title": "Passed"
+        },
+        "timing_source": {
+          "anyOf": [
+            {
+              "enum": [
+                "timestamp-query",
+                "wall"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Timing Source"
+        },
+        "dispatch_ms": {
+          "description": "Per-dispatch ms from timing_source: GPU pass time with timestamp-query, else wall time.",
+          "items": {
+            "type": "number"
+          },
+          "title": "Dispatch Ms",
+          "type": "array"
+        },
+        "wall_dispatch_ms": {
+          "description": "Per-dispatch wall ms, submit to onSubmittedWorkDone. Never GPU time.",
+          "items": {
+            "type": "number"
+          },
+          "title": "Wall Dispatch Ms",
+          "type": "array"
+        },
+        "warmup_runs": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Warmup Runs",
+          "type": "integer"
+        },
+        "adapter": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Adapter"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "id",
+        "kernel",
+        "fixture_id",
+        "fixture_hash",
+        "width",
+        "height",
+        "steps",
+        "status"
+      ],
+      "title": "CaptureKernel",
+      "type": "object"
+    },
     "CaptureStage": {
       "additionalProperties": false,
       "description": "One browser-side GPU stage: fixed tier, fixed snapshot, N frames.",
@@ -195,6 +391,14 @@
         "$ref": "#/$defs/CaptureStage"
       },
       "title": "Stages",
+      "type": "array"
+    },
+    "kernels": {
+      "description": "Optional compute-kernel validations (scored as stage kind webgpu_kernel).",
+      "items": {
+        "$ref": "#/$defs/CaptureKernel"
+      },
+      "title": "Kernels",
       "type": "array"
     },
     "aborted": {

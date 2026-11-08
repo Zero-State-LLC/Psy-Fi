@@ -330,6 +330,12 @@ def score_capture(capture: GpuCapture, manifest: WorkloadManifest, env: Environm
     }
     if capture.measurement_class != "measured":
         metrics["warning"] = f"this capture is {capture.measurement_class}; it is not hardware evidence"
+    if capture.kernels:
+        # Additive: compute-kernel validations (stage kind webgpu_kernel), appended after the frame stages.
+        from psyfi_bench.render.webgpu_kernel import kernel_summary, score_kernels
+
+        stages.extend(score_kernels(capture.kernels, measurement_class=capture.measurement_class, resamples=protocol.bootstrap_resamples, seed=protocol.bootstrap_seed))
+        metrics["kernels"] = kernel_summary(stages)
     return FamilyOutput(stages=stages, metrics=metrics, failures=failures, measurement_class=capture.measurement_class)
 
 

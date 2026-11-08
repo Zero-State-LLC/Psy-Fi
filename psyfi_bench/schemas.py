@@ -311,6 +311,38 @@ class CaptureStage(BaseModel):
     note: str | None = None
 
 
+class CaptureKernel(BaseModel):
+    """One browser-side compute-kernel validation (``/gpu/bench.html``, stage kind ``webgpu_kernel``).
+
+    The kernel evolves a Python-generated fixture field on the GPU; the browser reports its max
+    abs error against the fixture's numpy-evolved field. Python re-judges it against its own
+    declared tolerance. The GPU result never feeds back into a simulation.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    id: str
+    kernel: str = Field(description="Kernel name, e.g. kuramoto_symmetric_step.")
+    fixture_id: str
+    fixture_hash: str = Field(description="content_hash of the fixture the browser ran; must match the committed fixture.")
+    width: int
+    height: int
+    steps: int
+    status: Literal["ran", "unsupported", "error"]
+    unsupported_reason: str | None = None
+    error: str | None = None
+    max_abs_error: float | None = Field(default=None, description="Max abs error over real and imaginary parts; null when the output had non-finite values.")
+    nonfinite_count: int | None = Field(default=None, ge=0)
+    tolerance: float | None = Field(default=None, description="Tolerance the browser judged against (Python uses its own).")
+    passed: bool | None = Field(default=None, description="The browser's verdict; informational.")
+    timing_source: Literal["timestamp-query", "wall"] | None = None
+    dispatch_ms: list[float] = Field(default_factory=list, description="Per-dispatch ms from timing_source: GPU pass time with timestamp-query, else wall time.")
+    wall_dispatch_ms: list[float] = Field(default_factory=list, description="Per-dispatch wall ms, submit to onSubmittedWorkDone. Never GPU time.")
+    warmup_runs: int = Field(default=0, ge=0)
+    adapter: dict[str, Any] | None = None
+    note: str | None = None
+
+
 class GpuCapture(BaseModel):
     """Payload a browser runner posts or downloads. Scored in Python."""
 
@@ -326,6 +358,7 @@ class GpuCapture(BaseModel):
         description="user_agent, adapter {vendor, architecture, device, description}, dpr, viewport, features.",
     )
     stages: list[CaptureStage]
+    kernels: list[CaptureKernel] = Field(default_factory=list, description="Optional compute-kernel validations (scored as stage kind webgpu_kernel).")
     aborted: bool = False
     note: str | None = None
 
