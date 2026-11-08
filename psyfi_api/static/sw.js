@@ -2,7 +2,7 @@
 // Strategies follow MOBILE_PWA_GUIDE.md + docs/PWA_GPU_ROUTE.md.
 // Decision: /gpu/ is a separate route (not embedded); not shell-precached.
 
-const CACHE_NAME = 'psyfi-shell-v42';
+const CACHE_NAME = 'psyfi-shell-v43';
 const SHELL_URLS = [
   '/',
   '/static/style.css',

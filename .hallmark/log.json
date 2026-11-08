@@ -30,7 +30,7 @@
       ],
       "designed_as_app": true,
       "tone": "technical",
-      "notes": "Front page says what PsyFi is; field stays in view while the rail scrolls; Simulation beside Results; frontend skill spacing and type steps; SW cache still v42 (bump with its test at deploy)."
+      "notes": "Front page says what PsyFi is; field stays in view while the rail scrolls; Simulation beside Results; frontend skill spacing and type steps; SW v43 (cache name and its two pinned tests bumped together)."
     },
     {
       "date": "2026-11-07",
