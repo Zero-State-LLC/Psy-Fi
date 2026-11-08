@@ -22,7 +22,7 @@ import time
 from collections.abc import Callable
 from datetime import datetime
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Literal, Protocol
 
 from psyfi_bench.schemas import PowerRecord
 
@@ -45,7 +45,7 @@ MIN_WINDOW_S = 1.0
 
 @dataclass(frozen=True)
 class PowerSample:
-    t_s: float  # monotonic seconds
+    t_s: float  # seconds on the sampler's clock: perf_counter for a stage, Unix epoch for a host trace
     power_w: float | None
     temperature_c: float | None = None
     sm_clock_mhz: float | None = None
@@ -89,18 +89,53 @@ def probe_power_field() -> str | None:
     return None
 
 
-def parse_stream_line(line: str, clock_offset_s: float) -> PowerSample | None:
+def probe_gpu_name() -> str | None:
+    """nvidia-smi's product name for GPU 0, or None when it does not answer."""
+    try:
+        out = subprocess.run(
+            ["nvidia-smi", "-i", "0", "--query-gpu=name", "--format=csv,noheader"],
+            capture_output=True, text=True, timeout=5.0, check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    lines = out.stdout.strip().splitlines()
+    return lines[0].strip() or None if out.returncode == 0 and lines else None
+
+
+def nvidia_smi_stamp_to_epoch_s(stamp: str, *, received_epoch_s: float | None = None) -> float | None:
+    """nvidia-smi's ``timestamp`` field as Unix epoch seconds, or None when it does not parse.
+
+    nvidia-smi prints local wall time with milliseconds and no zone. It runs on this host with this
+    process's environment, so this process's timezone is the one it printed in; a naive
+    ``datetime.timestamp()`` applies exactly that zone and yields epoch seconds, the clock the
+    browser's ``performance.timeOrigin + performance.now()`` is on.
+
+    A local time in the repeated hour when daylight saving ends is ambiguous. With
+    ``received_epoch_s`` (when the line was read), the reading closest to that is taken; without it,
+    the earlier one, which is what ``datetime`` does by default.
+    """
+    try:
+        local = datetime.strptime(stamp.strip(), "%Y/%m/%d %H:%M:%S.%f")
+    except ValueError:
+        return None
+    earlier = local.timestamp()
+    if received_epoch_s is None:
+        return earlier
+    later = local.replace(fold=1).timestamp()
+    return min((earlier, later), key=lambda t: abs(received_epoch_s - t))
+
+
+def parse_stream_line(line: str, clock_offset_s: float, *, received_epoch_s: float | None = None) -> PowerSample | None:
     """One ``timestamp, power, temperature, sm clock`` line, stamped on the runner's clock.
 
     nvidia-smi's timestamp is local wall time with milliseconds; ``clock_offset_s`` is
-    ``perf_counter() - time.time()`` taken when sampling started.
+    ``perf_counter() - time.time()`` taken when sampling started, or 0 for a stamp in Unix epoch seconds.
     """
     parts = [part.strip() for part in line.split(",")]
     if len(parts) < 4:
         return None
-    try:
-        wall = datetime.strptime(parts[0], "%Y/%m/%d %H:%M:%S.%f").timestamp()
-    except ValueError:
+    wall = nvidia_smi_stamp_to_epoch_s(parts[0], received_epoch_s=received_epoch_s)
+    if wall is None:
         return None
     return PowerSample(
         t_s=wall + clock_offset_s, power_w=_num(parts[1]), temperature_c=_num(parts[2]), sm_clock_mhz=_num(parts[3]),
@@ -112,10 +147,11 @@ class NvidiaSmiStreamSampler:
 
     name = "nvidia-smi"
 
-    def __init__(self, power_field: str, *, interval_s: float = STREAM_INTERVAL_S) -> None:
+    def __init__(self, power_field: str, *, interval_s: float = STREAM_INTERVAL_S, clock: Literal["perf_counter", "epoch"] = "perf_counter") -> None:
         self.power_field = power_field
         self.query = _query_for(power_field)
         self.interval_s = interval_s
+        self.clock = clock  # "perf_counter" for a stage measured in this process; "epoch" for a host trace
         self._samples: list[PowerSample] = []
         self._proc: subprocess.Popen[str] | None = None
         self._thread: threading.Thread | None = None
@@ -123,20 +159,27 @@ class NvidiaSmiStreamSampler:
     def _read(self, proc: subprocess.Popen[str], offset: float) -> None:
         assert proc.stdout is not None
         for line in proc.stdout:
-            sample = parse_stream_line(line, offset)
+            received = time.time() if self.clock == "epoch" else None
+            sample = parse_stream_line(line, offset, received_epoch_s=received)
             if sample is not None:
                 self._samples.append(sample)
 
     def start(self) -> None:
         self._samples = []
-        offset = time.perf_counter() - time.time()
+        offset = (time.perf_counter() - time.time()) if self.clock == "perf_counter" else 0.0
         self._proc = subprocess.Popen(
             ["nvidia-smi", "-i", "0", f"--query-gpu={self.query}", "--format=csv,noheader,nounits",
              "-lms", str(max(1, round(self.interval_s * 1000)))],
             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True,
+            # A trace owns its nvidia-smi: Ctrl-C reaches only the command, which then stops this process.
+            start_new_session=self.clock == "epoch",
         )
         self._thread = threading.Thread(target=self._read, args=(self._proc, offset), name="psyfi-bench-power", daemon=True)
         self._thread.start()
+
+    def running(self) -> bool:
+        """True while the nvidia-smi process is alive."""
+        return self._proc is not None and self._proc.poll() is None
 
     def stop(self) -> list[PowerSample]:
         """End the nvidia-smi process and return its readings. Safe to call twice."""

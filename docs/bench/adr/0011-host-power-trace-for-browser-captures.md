@@ -1,6 +1,6 @@
 # ADR 0011: Energy per frame comes from a host power trace aligned to each browser stage
 
-Status: proposed, 2026-11-08. Not implemented. Needs a human to accept it before an agent builds it (issue #50).
+Status: accepted, 2026-11-08 (operator).
 
 ## Problem
 
@@ -37,6 +37,8 @@ Issue #50 asks for energy per frame on WebGPU captures scored on the same host. 
 - It exists only on hosts with `nvidia-smi` and a GPU that reports power. Apple and AMD captures stay unavailable, with a reason, and so do vGPU slices, which do not expose board power.
 - nvidia-smi's sensor sees only part of each update period (about 25% of runtime on A100 and H100, per arXiv:2312.02741), so per-frame energy needs a stage of at least 1 s, the same rule as field compute.
 - Both schema changes are additive: the window on `CaptureStage` and a trace document. A capture without windows scores exactly as today.
+- `performance.timeOrigin + performance.now()` does not follow wall-clock steps made after the page loads (an NTP correction, a sleep). Load the bench page just before the run. Any remaining offset between the two clocks is neither measured nor corrected.
+- This has been exercised only against synthetic captures and a fake `nvidia-smi`. The first run on a real NVIDIA host (register entry 6) is what shows it working.
 - The operator runs two things at once, the trace command and the bench page. `docs/bench/README.md` would gain a three-line recipe.
 
 ## Testing decisions
@@ -49,7 +51,9 @@ The tests use a synthetic capture with windows and a synthetic trace, and never 
 - a stage without a window, giving no power;
 - a capture with no `--power-trace`, which is unchanged.
 
-## Open questions
+## Decided questions
 
-- Whether the host match is strict (the same `hostname_hash`) or only requires the same GPU name.
-- Whether the gated API ingest (`PSYFI_BENCH_INGEST=1`) should accept a trace too, or only the CLI.
+- The host match is strict: the trace's `hostname_hash` must equal the scoring host's. A matching GPU name is not enough.
+- A trace is CLI only: the gated API ingest (`PSYFI_BENCH_INGEST=1`) does not accept one.
+
+Implemented in `psyfi_bench/power_trace.py`, with sample times taken from nvidia-smi's own stamp converted to epoch seconds rather than `time.time_ns` at read time, so pipe delay stays out of them.

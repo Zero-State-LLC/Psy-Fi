@@ -222,7 +222,8 @@ def load_capture(source: str | Path | dict[str, Any] | GpuCapture) -> GpuCapture
 def score_capture(capture: GpuCapture, manifest: WorkloadManifest, env: EnvironmentRecord, ctx: RunContext | None = None) -> FamilyOutput:
     p = dict(manifest.params)
     targets = {**DEFAULT_TIER_TARGET_MS, **(p.get("tier_targets_ms") or {})}
-    protocol = (ctx or RunContext()).protocol(manifest)
+    ctx = ctx or RunContext()
+    protocol = ctx.protocol(manifest)
     stages: list[StageRecord] = []
     failures: list[FailureRecord] = []
     thumbs: dict[str, dict[str, np.ndarray]] = {}
@@ -317,6 +318,12 @@ def score_capture(capture: GpuCapture, manifest: WorkloadManifest, env: Environm
     env.browser = {**(capture.browser or {}), "adapter_classified": adapter}
     if adapter["hardware_class"] in ("discrete", "integrated"):
         env.hardware_class = adapter["hardware_class"]  # type: ignore[assignment]
+    power_summary = None
+    if ctx.power_trace is not None:
+        # Before the kernel stages are appended: this pairs one StageRecord with each capture stage.
+        from psyfi_bench.power_trace import apply_power_trace
+
+        power_summary = apply_power_trace(ctx.power_trace, capture.stages, stages, env, adapter_vendor=adapter["vendor"])
     sustained = [s for s in ok if "sustained" in s.metrics]
     metrics = {
         "execution_class": "webgpu",
@@ -330,6 +337,8 @@ def score_capture(capture: GpuCapture, manifest: WorkloadManifest, env: Environm
     }
     if capture.measurement_class != "measured":
         metrics["warning"] = f"this capture is {capture.measurement_class}; it is not hardware evidence"
+    if power_summary is not None:
+        metrics["power_trace"] = power_summary
     if capture.kernels:
         # Additive: compute-kernel validations (stage kind webgpu_kernel), appended after the frame stages.
         from psyfi_bench.render.webgpu_kernel import kernel_summary, score_kernels

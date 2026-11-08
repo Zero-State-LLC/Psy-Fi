@@ -254,6 +254,14 @@ def classify_hardware(gpus: list[GpuRecord]) -> str:
     return "cpu_only" if not gpus else "unknown"
 
 
+def hostname_hash() -> str | None:
+    """SHA-256 prefix of this machine's hostname; never the hostname itself."""
+    try:
+        return hashlib.sha256(socket.gethostname().encode()).hexdigest()[:12]
+    except OSError:
+        return None
+
+
 def collect_environment(*, include_gpu: bool = True) -> EnvironmentRecord:
     unavailable: dict[str, str] = {}
     gpus = gpu_info(unavailable) if include_gpu else []
@@ -265,13 +273,9 @@ def collect_environment(*, include_gpu: bool = True) -> EnvironmentRecord:
     software["git_dirty"] = dirty
     unavailable.setdefault("power", "no power sampler on this host (nvidia-smi absent or not sampled)")
     unavailable.setdefault("thermal", "no thermal sensor API without elevated privileges")
-    try:
-        host_hash = hashlib.sha256(socket.gethostname().encode()).hexdigest()[:12]
-    except OSError:
-        host_hash = None
     return EnvironmentRecord(
         captured_at=utc_now_iso(),
-        hostname_hash=host_hash,
+        hostname_hash=hostname_hash(),
         platform={
             "system": platform.system(),
             "release": platform.release(),

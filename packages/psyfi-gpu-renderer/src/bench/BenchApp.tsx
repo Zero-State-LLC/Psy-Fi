@@ -17,6 +17,7 @@ import { BenchProbe, createProbeHandle } from './BenchProbe'
 import {
   FALLBACK_MANIFEST,
   buildCapturePayload,
+  measuredWindowEpochMs,
   quickSummary,
   scheduleStages,
   trimFrames,
@@ -213,6 +214,7 @@ export function BenchApp() {
             drawCalls: lastFrame?.drawCalls ?? null,
             triangles: lastFrame?.triangles ?? null,
             durationMs: performance.now() - t0,
+            windowEpochMs: measuredWindowEpochMs(frames, warmupUsed, performance.timeOrigin),
             jsHeapBytes: perf.memory?.usedJSHeapSize ?? null,
             thumbnailPngBase64: thumb,
             snapshotHash: snap.parameter_field?.hash ?? null,

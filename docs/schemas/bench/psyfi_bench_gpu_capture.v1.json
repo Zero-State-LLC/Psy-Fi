@@ -272,6 +272,29 @@
           "title": "Duration Ms",
           "type": "number"
         },
+        "window_epoch_ms": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "[start, end] of the measured frames, warm-up excluded, in Unix epoch ms (performance.timeOrigin + performance.now()). Lines the stage up with a host power trace (ADR 0011); absent on older captures.",
+          "title": "Window Epoch Ms"
+        },
         "js_heap_bytes": {
           "anyOf": [
             {

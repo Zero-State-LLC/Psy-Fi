@@ -10,6 +10,8 @@ import * as THREE from 'three/webgpu'
 
 export interface ProbeFrame {
   wallMs: number
+  /** performance.now() at this frame's callback; the frame's interval is [atMs - wallMs, atMs]. */
+  atMs: number
   gpuMs: number | null
   drawCalls: number
   triangles: number
@@ -116,7 +118,7 @@ export function BenchProbe({ handle, enabled, trackTimestamp = false }: { handle
       const calls = info.calls ?? 0
       const drawCalls = lastCalls.current === null ? calls : Math.max(0, calls - lastCalls.current)
       lastCalls.current = calls
-      handle.frames.push({ wallMs, gpuMs, drawCalls, triangles: info.triangles ?? 0 })
+      handle.frames.push({ wallMs, atMs: now, gpuMs, drawCalls, triangles: info.triangles ?? 0 })
     }
     last.current = now
     if (trackTimestamp && typeof renderer.resolveTimestampsAsync === 'function') {

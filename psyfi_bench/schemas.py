@@ -18,6 +18,7 @@ from psyfi_bench import (
     CAPABILITIES_SCHEMA,
     CAPTURE_SCHEMA,
     MANIFEST_SCHEMA,
+    POWER_TRACE_SCHEMA,
     RESULT_SCHEMA,
     SCORECARD_SCHEMA,
 )
@@ -329,6 +330,11 @@ class CaptureStage(BaseModel):
     draw_calls: int | None = None
     triangles: int | None = None
     duration_ms: float
+    window_epoch_ms: tuple[float, float] | None = Field(
+        default=None,
+        description="[start, end] of the measured frames, warm-up excluded, in Unix epoch ms (performance.timeOrigin + performance.now()). "
+        "Lines the stage up with a host power trace (ADR 0011); absent on older captures.",
+    )
     js_heap_bytes: int | None = None
     thumbnail_png_base64: str | None = Field(default=None, description="128x128 PNG of one presented frame for tier fidelity.")
     snapshot_hash: str | None = None
@@ -385,6 +391,38 @@ class GpuCapture(BaseModel):
     stages: list[CaptureStage]
     kernels: list[CaptureKernel] = Field(default_factory=list, description="Optional compute-kernel validations (scored as stage kind webgpu_kernel).")
     aborted: bool = False
+    note: str | None = None
+
+
+class PowerTraceSample(BaseModel):
+    """One reading of a host power trace."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    t_epoch_s: float = Field(description="Unix epoch seconds: nvidia-smi's local-time stamp converted with this host's timezone.")
+    power_w: float | None = None
+    temperature_c: float | None = None
+    sm_clock_mhz: float | None = None
+
+
+class PowerTrace(BaseModel):
+    """GPU board power over time from ``psyfi-bench power-trace``, paired with browser stages at ingest (ADR 0011)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    schema_id: str = Field(default=POWER_TRACE_SCHEMA, alias="schema")
+    created_at: str
+    source: str = Field(description="Sampler name, e.g. nvidia-smi.")
+    query: str = Field(description="Fields requested from the sampler.")
+    interval_s: float = Field(description="Requested polling interval; actual spacing is in the sample timestamps.")
+    gpu_index: int = Field(default=0, ge=0, description="The GPU the trace reads.")
+    gpu_name: str | None = None
+    gpu_vendor: str = Field(description="Vendor of the traced GPU; ingest requires it to match the capture adapter's vendor.")
+    hostname_hash: str | None = Field(default=None, description="SHA-256 prefix of the hostname, as in EnvironmentRecord; never the hostname.")
+    clock: Literal["unix_epoch_s"] = Field(default="unix_epoch_s", description="The clock sample and start/stop timestamps are on; browsers on this host use the same one.")
+    started_epoch_s: float = Field(description="time.time_ns() when sampling started, in seconds.")
+    stopped_epoch_s: float = Field(description="time.time_ns() when sampling stopped, in seconds.")
+    samples: list[PowerTraceSample] = Field(default_factory=list)
     note: str | None = None
 
 
