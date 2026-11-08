@@ -5,6 +5,7 @@ Date: 2026-11-07
 Updated: 2026-11-08, after the share card deploy (#43) and its container rollout
 Repo: [`Zero-State-LLC/Psy-Fi`](https://github.com/Zero-State-LLC/Psy-Fi)
 Intent: [`intent.md`](intent.md)
+Fable handoff: [`HANDOFF.md`](HANDOFF.md)
 Host doc: [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md)
 Issue: [#36](https://github.com/Zero-State-LLC/Psy-Fi/issues/36)
 
@@ -77,15 +78,13 @@ CI does not call Cloudflare and does not depend on DNS. Live `/health` and shell
 
 ## Git, as of this handoff
 
-Update, 2026-11-08: `origin/main` is `bb7ee9a` (#43 to #46 merged by admin merges at the operator's request). That tree names the script `psy-fi`. Version `7f79f732` was deployed from `7372d31` with `npx wrangler@4 deploy --keep-vars` (Wrangler 4.152.0); version `363b5d70` redeployed `c2c534a` with `--containers-rollout immediate --keep-vars`; version `3d97825f` deployed `bb7ee9a` the same way (Wrangler 4.158.0). `7f79f732` and `363b5d70` carry container base image `psy-fi-psyfiapi-base` `sha256:89ace427…`; `3d97825f` carries `sha256:68fc9db8…`, because the image copies `psyfi_api/` and the shell template changed. All of them are built from `main`, so the vision-bench modules in the running image are the ones on `main`. The live instance (`npx wrangler containers instances 224374f7189b4e3281bac784426c2f18`) was created 2026-11-08T07:32:16.916Z, 24 seconds after the `3d97825f` deploy, so it runs that image. Container application `psy-fi-psyfiapi` still reports last modified 2026-11-07T23:50:32Z: that field did not move on any of these deploys, so it is not a rollout signal.
+`origin/main` is `1c6d1a4`, the merge of pull request #57, as of 2026-11-08T07:46Z. That tree names script `psy-fi`. A deploy from GitHub `main` updates Worker `psy-fi` and does not update Worker `psyfi`.
 
-The paragraphs below describe the 2026-11-07 handoff.
+Pull request #44 (the shell redesign), #43 (the share card), and #45, #46 and #57 (this map) were admin-merged at the operator's request. Version `7f79f732` was deployed from `7372d31` with `npx wrangler@4 deploy --keep-vars` (Wrangler 4.152.0); version `363b5d70` redeployed `c2c534a` with `--containers-rollout immediate --keep-vars`; version `3d97825f` deployed `bb7ee9a` the same way (Wrangler 4.158.0). `7f79f732` and `363b5d70` carry container base image `psy-fi-psyfiapi-base` `sha256:89ace427…`; `3d97825f` carries `sha256:68fc9db8…`, because the image copies `psyfi_api/` and the shell template changed. All of them are built from `main`, so the vision-bench modules in the running image are the ones on `main`. The live instance (`npx wrangler containers instances 224374f7189b4e3281bac784426c2f18`) was created 2026-11-08T07:32:16.916Z, 24 seconds after the `3d97825f` deploy, so it runs that image. Container application `psy-fi-psyfiapi` still reports last modified 2026-11-07T23:50:32Z: that field did not move on any of these deploys, so it is not a rollout signal.
 
-`origin/main` was `80fcfa2380325e30c84f884f70f98a10210f9670`. That tree names the script `psyfi`. A deploy from GitHub `main` updates Worker `psyfi` and does not move `psy-fi.space`.
+Pull request #39 put the hostname on `main`. Pull request #40 put the vision bench on `main`. The bench adds no public route. There is no receipt fixture until a person runs capture.
 
-The operator's local `main` includes the vision-bench commits through `dece192823a4e110df0718dac880196f0033faad`. Those commits are not on `origin/main`. The handoff branch is cut from `origin/main` and does not include them.
-
-The live container was built from that local tree, so the bench modules are in the running image until the next image build. They add no public route. A redeploy from the handoff branch rebuilds the image without those modules. The public shell, GPU lab, and API stay the product that is already on `origin/main`.
+The Call section of [`docs/specs/cloudflare-nvidia.md`](docs/specs/cloudflare-nvidia.md) records the direct call to `https://integrate.api.nvidia.com`. An AI Gateway is an open question. Do not add one.
 
 Direct push to `main` is rejected: one code-owner review, and admins are enforced. Do not force-push. Do not admin-merge unless a human asks.
 
@@ -94,7 +93,7 @@ Direct push to `main` is rejected: one code-owner review, and admins are enforce
 - Issue #10, hardware Ultra frame times. It stays Backlog. This Mac is a MacBook Air M4 with 10 GPU cores. Do not record it as Ultra evidence. Do not invent frame times.
 - Hardware-quality scaling. It was discussed and not written.
 - Catalog reload. The route stays as the app already implements it. No ticket.
-- The Call section in [`docs/specs/cloudflare-nvidia.md`](docs/specs/cloudflare-nvidia.md). It still says production vision goes through an AI Gateway custom provider. The live host does not. That section was not rewritten.
+- The Call section in [`docs/specs/cloudflare-nvidia.md`](docs/specs/cloudflare-nvidia.md). It records the direct integrate call on Worker `psy-fi`. An AI Gateway stays an open question. Do not add one.
 - A vision-bench receipt fixture. CI recomputes only after a human runs capture. Do not commit a receipt.
 - Login, an API-key check, an origin allowlist, a rate limit, and `www.psy-fi.space`.
 - The image-reading request: `reasoning_effort` `none`, `max_tokens` 256, and the not-medical-advice sentence. A reading does not write presets, the catalog, the master seed, hints, recipe rank, or planner text.

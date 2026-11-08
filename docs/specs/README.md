@@ -4,7 +4,7 @@ Decision records for the web instrument. Written in the Matt Pocock spec shape: 
 
 These files record decisions the repo already made in `PLANS.md`, `docs/PRODUCTION_READINESS.md`, `docs/CONTINUATION_PLAN.md`, and the contract docs, plus the required production host: Cloudflare, calling the NVIDIA API with one vision-language model.
 
-`docs/specs/AUDIT.md` checks those decisions against the runtime on `main` (`7ca678e0`).
+`docs/specs/AUDIT.md` records a pass against `main` at `7ca678e0`. Read its "Later main" note before treating any diverge as open work.
 
 The older boards stay where they are. Tests still assert their headings and phrases. Do not treat a green `tests/test_production_readiness.py` as proof the runtime matches these specs.
 
@@ -24,6 +24,7 @@ One seam per spec. Existing seams only.
 | [Telemetry](telemetry.md) | Telemetry routes and the in-process buffer |
 | [Deploy and CI](deploy-and-ci.md) | Docker image, Compose, and `.github/workflows/ci.yml` (local seam) |
 | [Cloudflare and NVIDIA](cloudflare-nvidia.md) | Worker, static assets, Container, and the NVIDIA API call |
+| [Vision bench](vision-bench.md) | Local capture and CI scorer. No public route |
 
 ## How this sits in the workflow
 
@@ -48,3 +49,4 @@ The kanban is Zero-State-LLC project **#7**: https://github.com/orgs/Zero-State-
 | #23 | Done | [Cloudflare and NVIDIA](cloudflare-nvidia.md). [Pull request #24](https://github.com/Zero-State-LLC/Psy-Fi/pull/24) is merged. |
 | #36 | Done | Public host `https://psy-fi.space` on Worker `psy-fi`. [Issue #36](https://github.com/Zero-State-LLC/Psy-Fi/issues/36). |
 | #37 | Done | Public shell on the field plate. [Pull request #38](https://github.com/Zero-State-LLC/Psy-Fi/pull/38) is merged. |
+| #40 | Done | [Vision bench](vision-bench.md). [Pull request #40](https://github.com/Zero-State-LLC/Psy-Fi/pull/40) is merged. |
