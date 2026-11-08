@@ -1,0 +1,430 @@
+{
+  "$defs": {
+    "CaptureKernel": {
+      "additionalProperties": false,
+      "description": "One browser-side compute-kernel validation (``/gpu/bench.html``, stage kind ``webgpu_kernel``).\n\nThe kernel evolves a Python-generated fixture field on the GPU; the browser reports its max\nabs error against the fixture's numpy-evolved field. Python re-judges it against its own\ndeclared tolerance. The GPU result never feeds back into a simulation.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kernel": {
+          "description": "Kernel name, e.g. kuramoto_symmetric_step.",
+          "title": "Kernel",
+          "type": "string"
+        },
+        "fixture_id": {
+          "title": "Fixture Id",
+          "type": "string"
+        },
+        "fixture_hash": {
+          "description": "content_hash of the fixture the browser ran; must match the committed fixture.",
+          "title": "Fixture Hash",
+          "type": "string"
+        },
+        "width": {
+          "title": "Width",
+          "type": "integer"
+        },
+        "height": {
+          "title": "Height",
+          "type": "integer"
+        },
+        "steps": {
+          "title": "Steps",
+          "type": "integer"
+        },
+        "status": {
+          "enum": [
+            "ran",
+            "unsupported",
+            "error"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "unsupported_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unsupported Reason"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        },
+        "max_abs_error": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Max abs error over real and imaginary parts; null when the output had non-finite values.",
+          "title": "Max Abs Error"
+        },
+        "nonfinite_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nonfinite Count"
+        },
+        "tolerance": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Tolerance the browser judged against (Python uses its own).",
+          "title": "Tolerance"
+        },
+        "passed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The browser's verdict; informational.",
+          "title": "Passed"
+        },
+        "timing_source": {
+          "anyOf": [
+            {
+              "enum": [
+                "timestamp-query",
+                "wall"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Timing Source"
+        },
+        "dispatch_ms": {
+          "description": "Per-dispatch ms from timing_source: GPU pass time with timestamp-query, else wall time.",
+          "items": {
+            "type": "number"
+          },
+          "title": "Dispatch Ms",
+          "type": "array"
+        },
+        "wall_dispatch_ms": {
+          "description": "Per-dispatch wall ms, submit to onSubmittedWorkDone. Never GPU time.",
+          "items": {
+            "type": "number"
+          },
+          "title": "Wall Dispatch Ms",
+          "type": "array"
+        },
+        "warmup_runs": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Warmup Runs",
+          "type": "integer"
+        },
+        "adapter": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Adapter"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "id",
+        "kernel",
+        "fixture_id",
+        "fixture_hash",
+        "width",
+        "height",
+        "steps",
+        "status"
+      ],
+      "title": "CaptureKernel",
+      "type": "object"
+    },
+    "CaptureStage": {
+      "additionalProperties": false,
+      "description": "One browser-side GPU stage: fixed tier, fixed snapshot, N frames.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "tier": {
+          "title": "Tier",
+          "type": "string"
+        },
+        "snapshot_key": {
+          "title": "Snapshot Key",
+          "type": "string"
+        },
+        "requested_frames": {
+          "title": "Requested Frames",
+          "type": "integer"
+        },
+        "warmup_frames": {
+          "title": "Warmup Frames",
+          "type": "integer"
+        },
+        "frames_ms": {
+          "description": "Wall-clock rAF spacing per frame, warm-up excluded.",
+          "items": {
+            "type": "number"
+          },
+          "title": "Frames Ms",
+          "type": "array"
+        },
+        "gpu_ms": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "GPU pass time per frame when timestamp-query is available.",
+          "title": "Gpu Ms"
+        },
+        "draw_calls": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Draw Calls"
+        },
+        "triangles": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Triangles"
+        },
+        "duration_ms": {
+          "title": "Duration Ms",
+          "type": "number"
+        },
+        "js_heap_bytes": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Js Heap Bytes"
+        },
+        "thumbnail_png_base64": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "128x128 PNG of one presented frame for tier fidelity.",
+          "title": "Thumbnail Png Base64"
+        },
+        "snapshot_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Snapshot Hash"
+        },
+        "js_errors": {
+          "default": 0,
+          "description": "Uncaught errors observed during the measured window; non-zero invalidates the stage's frames.",
+          "minimum": 0,
+          "title": "Js Errors",
+          "type": "integer"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "id",
+        "tier",
+        "snapshot_key",
+        "requested_frames",
+        "warmup_frames",
+        "frames_ms",
+        "duration_ms"
+      ],
+      "title": "CaptureStage",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Payload a browser runner posts or downloads. Scored in Python.",
+  "properties": {
+    "schema": {
+      "default": "psyfi.bench.gpu_capture.v1",
+      "title": "Schema",
+      "type": "string"
+    },
+    "captured_at": {
+      "title": "Captured At",
+      "type": "string"
+    },
+    "manifest_id": {
+      "title": "Manifest Id",
+      "type": "string"
+    },
+    "manifest_hash": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Manifest Hash"
+    },
+    "measurement_class": {
+      "default": "measured",
+      "enum": [
+        "measured",
+        "synthetic",
+        "replay"
+      ],
+      "title": "Measurement Class",
+      "type": "string"
+    },
+    "browser": {
+      "additionalProperties": true,
+      "description": "user_agent, adapter {vendor, architecture, device, description}, dpr, viewport, features.",
+      "title": "Browser",
+      "type": "object"
+    },
+    "stages": {
+      "items": {
+        "$ref": "#/$defs/CaptureStage"
+      },
+      "title": "Stages",
+      "type": "array"
+    },
+    "kernels": {
+      "description": "Optional compute-kernel validations (scored as stage kind webgpu_kernel).",
+      "items": {
+        "$ref": "#/$defs/CaptureKernel"
+      },
+      "title": "Kernels",
+      "type": "array"
+    },
+    "aborted": {
+      "default": false,
+      "title": "Aborted",
+      "type": "boolean"
+    },
+    "note": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Note"
+    }
+  },
+  "required": [
+    "captured_at",
+    "manifest_id",
+    "stages"
+  ],
+  "title": "GpuCapture",
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

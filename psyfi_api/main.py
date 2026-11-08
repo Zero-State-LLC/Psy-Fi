@@ -67,11 +67,23 @@ app.include_router(telemetry.router, prefix="/api/v1")  # /api/v1/telemetry
 # Experiences router already uses /api/v1 prefix internally
 app.include_router(experiences.router)
 
+# Benchmark API: a separately versioned sub-application. Mounting keeps its routes out of the
+# frozen /api/v1 OpenAPI document; it has its own at /api/bench/openapi.json.
+from psyfi_bench.api import bench_app  # noqa: E402
+
+app.mount("/api/bench", bench_app, name="bench")
+
 
 @app.get("/")
 async def root(request: Request):
     """Root endpoint - serves the web UI."""
     return templates.TemplateResponse(request, "index.html")
+
+
+@app.get("/bench", include_in_schema=False)
+async def bench_results_page(request: Request):
+    """FieldLoop results page over the read-only bench API. The Worker serves the staged copy."""
+    return templates.TemplateResponse(request, "bench.html")
 
 
 @app.get("/privacy", include_in_schema=False)

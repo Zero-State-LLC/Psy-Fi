@@ -1,0 +1,8 @@
+{
+  "schema": "psyfi.bench.error.v1",
+  "error": {
+    "code": "ingest_disabled",
+    "message": "capture ingest is disabled on this host; download the capture and run `psyfi-bench ingest <file>`",
+    "status": 403
+  }
+}

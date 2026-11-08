@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,6 +43,19 @@ def test_readme_badge_and_package_repository_name_this_repo() -> None:
     assert "git+https://github.com/Zero-State-LLC/Psy-Fi.git" in package
     license_text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     assert 'license = {text = "Zero State Proprietary License"}' in license_text
+
+
+def test_one_lowercase_pull_request_template() -> None:
+    listed = subprocess.check_output(
+        ["git", "ls-files", "--", ".github"],
+        cwd=ROOT,
+        text=True,
+    ).splitlines()
+    matches = [path for path in listed if path.casefold() == ".github/pull_request_template.md"]
+    assert matches == [".github/pull_request_template.md"]
+    text = (ROOT / ".github" / "pull_request_template.md").read_text(encoding="utf-8")
+    assert text.startswith("## Summary\n")
+    assert "Partner Agents" in text
 
 
 def test_default_compose_does_not_mask_the_image() -> None:

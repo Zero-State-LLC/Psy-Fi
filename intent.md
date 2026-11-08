@@ -59,6 +59,8 @@ Non-goals:
 
 ## Open questions
 
+Researched 2026-11-08 with a recommendation each: [`docs/specs/OPEN_QUESTIONS.md`](docs/specs/OPEN_QUESTIONS.md).
+
 - Whether a later host should send production vision through an AI Gateway. The live host does not. The Call section of [`docs/specs/cloudflare-nvidia.md`](docs/specs/cloudflare-nvidia.md) records the direct call and leaves the gateway undecided.
 - Whether catalog reload stays, is renamed, or is removed. No ticket.
 - Hardware Ultra evidence (issue #10) and any later hardware-quality scaling. Not this host.
@@ -68,8 +70,8 @@ Non-goals:
 
 | Claim | Label |
 | --- | --- |
-| https://psy-fi.space/health, `/ready`, `/`, `/gpu/`, and `/sw.js` answered as the outcome says on 2026-11-07, and again on 2026-11-08 after versions `7f79f732`, `363b5d70` and `3d97825f` | `[verified: deploy checks against the live host]` |
-| Worker `psy-fi` version `3d97825f-cea6-41b5-b50c-4e83659aa723` (2026-11-08, after `363b5d70`, `7f79f732` and `d27e5f06`) is the current version, and the secret and the vision var are both set | `[verified: wrangler deployments list and the version's binding names]` |
+| https://psy-fi.space/health, `/ready`, `/`, `/gpu/`, and `/sw.js` answered as the outcome says on 2026-11-07, and again on 2026-11-08 after versions `7f79f732`, `363b5d70`, `3d97825f`, `97b60aaf` and `94e47554` | `[verified: deploy checks against the live host]` |
+| Worker `psy-fi` version `94e47554-10d5-4d8e-ab2b-5cf346305857` (2026-11-08, after `97b60aaf`, `3d97825f`, `363b5d70`, `7f79f732` and `d27e5f06`) is the current version, and the secret and the vision var are both set | `[verified: wrangler deployments list and the version's binding names]` |
 | Worker `psyfi` still serves its workers.dev health route | `[verified: GET /health 200 at 2026-11-07T23:51:48Z]` |
 | A deploy from this `wrangler.jsonc` updates `psy-fi` and does not update `psyfi` | `[verified: the two hostnames after this deploy]` |
 | `origin/main` at `bf5953b` names script `psy-fi` and includes the vision bench | `[verified: pull requests #39 and #40 are merged]` |

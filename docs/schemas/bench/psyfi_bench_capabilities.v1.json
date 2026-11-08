@@ -1,0 +1,247 @@
+{
+  "$defs": {
+    "EnvironmentRecord": {
+      "additionalProperties": true,
+      "description": "Hardware, software, and provenance of the process that measured.",
+      "properties": {
+        "captured_at": {
+          "title": "Captured At",
+          "type": "string"
+        },
+        "hostname_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "SHA-256 prefix of the hostname; never the hostname.",
+          "title": "Hostname Hash"
+        },
+        "platform": {
+          "additionalProperties": true,
+          "title": "Platform",
+          "type": "object"
+        },
+        "cpu": {
+          "additionalProperties": true,
+          "title": "Cpu",
+          "type": "object"
+        },
+        "memory": {
+          "additionalProperties": true,
+          "title": "Memory",
+          "type": "object"
+        },
+        "gpus": {
+          "items": {
+            "$ref": "#/$defs/GpuRecord"
+          },
+          "title": "Gpus",
+          "type": "array"
+        },
+        "software": {
+          "additionalProperties": true,
+          "title": "Software",
+          "type": "object"
+        },
+        "browser": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Browser"
+        },
+        "power": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Power"
+        },
+        "hardware_class": {
+          "default": "unknown",
+          "enum": [
+            "discrete",
+            "integrated",
+            "cpu_only",
+            "remote",
+            "unknown"
+          ],
+          "title": "Hardware Class",
+          "type": "string"
+        },
+        "unavailable": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Telemetry that could not be collected, with the reason. Never estimated silently.",
+          "title": "Unavailable",
+          "type": "object"
+        }
+      },
+      "required": [
+        "captured_at"
+      ],
+      "title": "EnvironmentRecord",
+      "type": "object"
+    },
+    "GpuRecord": {
+      "additionalProperties": true,
+      "properties": {
+        "vendor": {
+          "default": "unknown",
+          "title": "Vendor",
+          "type": "string"
+        },
+        "name": {
+          "default": "",
+          "title": "Name",
+          "type": "string"
+        },
+        "memory_bytes": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Bytes"
+        },
+        "driver": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Driver"
+        },
+        "cores": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cores"
+        },
+        "source": {
+          "description": "nvidia-smi | rocm-smi | system_profiler | torch | webgpu | manual",
+          "title": "Source",
+          "type": "string"
+        },
+        "hardware_class": {
+          "default": "unknown",
+          "enum": [
+            "discrete",
+            "integrated",
+            "cpu_only",
+            "remote",
+            "unknown"
+          ],
+          "title": "Hardware Class",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source"
+      ],
+      "title": "GpuRecord",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "default": "psyfi.bench.capabilities.v1",
+      "title": "Schema",
+      "type": "string"
+    },
+    "bench_version": {
+      "default": "0.1.0",
+      "title": "Bench Version",
+      "type": "string"
+    },
+    "families": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Families",
+      "type": "array"
+    },
+    "workloads": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Workloads",
+      "type": "array"
+    },
+    "providers": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Providers",
+      "type": "array"
+    },
+    "accelerators": {
+      "additionalProperties": true,
+      "title": "Accelerators",
+      "type": "object"
+    },
+    "environment": {
+      "$ref": "#/$defs/EnvironmentRecord"
+    },
+    "ingest_enabled": {
+      "title": "Ingest Enabled",
+      "type": "boolean"
+    },
+    "run_enabled": {
+      "title": "Run Enabled",
+      "type": "boolean"
+    },
+    "non_claim": {
+      "title": "Non Claim",
+      "type": "string"
+    }
+  },
+  "required": [
+    "families",
+    "workloads",
+    "providers",
+    "accelerators",
+    "environment",
+    "ingest_enabled",
+    "run_enabled",
+    "non_claim"
+  ],
+  "title": "Capabilities",
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

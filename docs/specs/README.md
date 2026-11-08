@@ -25,10 +25,11 @@ One seam per spec. Existing seams only.
 | [Deploy and CI](deploy-and-ci.md) | Docker image, Compose, and `.github/workflows/ci.yml` (local seam) |
 | [Cloudflare and NVIDIA](cloudflare-nvidia.md) | Worker, static assets, Container, and the NVIDIA API call |
 | [Vision bench](vision-bench.md) | Local capture and CI scorer. No public route |
+| [FieldLoop benchmark platform](benchmark-platform.md) | `psyfi_bench` CLI and mounted `/api/bench` over `psyfi_core`; additive `/gpu/bench.html` |
 
 ## How this sits in the workflow
 
-`intent/` is stage 0. These specs are the next stage. Tickets, when cut, are disposable slices of a spec. A spec is the decision record.
+`intent/` is stage 0. These specs are the next stage. Open questions, with evidence and a recommendation each, are in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md). Tickets, when cut, are disposable slices of a spec. A spec is the decision record.
 
 The issue tracker is GitHub. `docs/agents/` maps the Pocock roles. A spec whose behavior already matches the runtime is marked implemented and is not an agent ticket. A spec with a remaining gap is marked `ready-for-agent` and names the GitHub issue. That issue is the agent contract for the gap. It is not a work order to rebuild the instrument.
 
@@ -50,3 +51,12 @@ The kanban is Zero-State-LLC project **#7**: https://github.com/orgs/Zero-State-
 | #36 | Done | Public host `https://psy-fi.space` on Worker `psy-fi`. [Issue #36](https://github.com/Zero-State-LLC/Psy-Fi/issues/36). |
 | #37 | Done | Public shell on the field plate. [Pull request #38](https://github.com/Zero-State-LLC/Psy-Fi/pull/38) is merged. |
 | #40 | Done | [Vision bench](vision-bench.md). [Pull request #40](https://github.com/Zero-State-LLC/Psy-Fi/pull/40) is merged. |
+| #47 | In Progress | [FieldLoop benchmark platform](benchmark-platform.md) (umbrella). [Pull request #56](https://github.com/Zero-State-LLC/Psy-Fi/pull/56) is merged, and so are #59, #60 and #65. #51 and #52 are done; #48, #49, #50, #53 and #54 are its open slices. |
+| #48 | Backlog | FieldLoop WebGPU captures on a discrete GPU. Needs a person with the hardware. |
+| #49 | Backlog | Interpretation bench against a live vision model. Needs a person; the run spends the key. |
+| #50 | Backlog | FieldLoop power sampling. [Pull request #59](https://github.com/Zero-State-LLC/Psy-Fi/pull/59) is merged: field-compute stages sample `nvidia-smi`. Energy per frame for browser captures waits on [ADR 0011](../bench/adr/0011-host-power-trace-for-browser-captures.md) being accepted, and a live run needs an NVIDIA host. |
+| #51 | Done | FieldLoop WGSL Kuramoto kernel. [Pull request #60](https://github.com/Zero-State-LLC/Psy-Fi/pull/60) is merged and live. |
+| #52 | Done | FieldLoop results and scorecard views: a shell page at `/bench`, for the local operator first ([intent](../../intent/bench-results-page.md)). [Pull request #65](https://github.com/Zero-State-LLC/Psy-Fi/pull/65) is merged and live. |
+| #53 | Backlog | `psyfi-bench score --format` is merged with [pull request #59](https://github.com/Zero-State-LLC/Psy-Fi/pull/59). The CUDA validation needs hardware. |
+| #54 | Backlog | Benchmark run endpoint. Needs an accepted intent. |
+| #55 | Done | [GPU Lab](gpu-lab.md). A runtime tier switch broke the present path. [Pull request #58](https://github.com/Zero-State-LLC/Psy-Fi/pull/58) is merged and live. |

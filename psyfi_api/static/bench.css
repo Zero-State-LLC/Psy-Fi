@@ -1,0 +1,372 @@
+/* Bench results page (/bench). Extends style.css in the design.md system: its tokens, faces and
+ * controls only. Every colour is a style.css token; the one cyan signal marks measured evidence.
+ * Loaded after style.css?v=44, so the shell's service-worker cache name does not move.
+ * The shell's service worker serves /static/ files from its cache: bump ?v= on bench.css and
+ * bench.js in templates/bench.html whenever either file changes. */
+
+.bench-panel {
+    padding-block: var(--space-500);
+}
+
+.bench-panel:first-child {
+    border-top: 0;
+    padding-top: var(--space-400);
+}
+
+.bench-status,
+.bench-help {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
+    color: var(--color-ink-2);
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+
+.bench-help {
+    max-width: 70ch;
+    margin-bottom: var(--space-300);
+}
+
+.bench-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: var(--space-200);
+    margin-bottom: var(--space-300);
+}
+
+.bench-filter {
+    width: min(100%, 18rem);
+}
+
+.bench-file {
+    width: min(100%, 28rem);
+}
+
+/* The table scrolls inside itself on a phone; the page never scrolls sideways. */
+.bench-table-wrap {
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-lg);
+}
+
+.bench-table {
+    width: 100%;
+    min-width: 64rem; /* below this the frame scrolls; columns never collapse to a sliver */
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
+    font-variant-numeric: tabular-nums;
+}
+
+.bench-table th,
+.bench-table td {
+    padding: var(--space-100) var(--space-200);
+    border-bottom: 1px solid var(--color-rule);
+    text-align: left;
+    vertical-align: top;
+}
+
+.bench-table th {
+    font-weight: 500;
+    color: var(--color-ink-2);
+    white-space: nowrap;
+    background: var(--color-paper-2);
+}
+
+.bench-col-headline {
+    width: 26%;
+}
+
+.bench-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.bench-table tbody tr[data-selected="true"] {
+    background: var(--color-paper-2);
+}
+
+.bench-row-button {
+    display: grid;
+    gap: var(--space-25);
+    min-height: var(--control-h);
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-ink);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.bench-row-button:hover .bench-run-id {
+    color: var(--color-accent);
+}
+
+/* Ids and times stay whole; on a narrow screen the table scrolls inside its frame instead. */
+.bench-row-button span,
+.bench-table .bench-run-id {
+    white-space: nowrap;
+}
+
+.bench-stage-error {
+    display: block;
+    font-size: var(--text-xs);
+    line-height: var(--leading-xs);
+    color: var(--color-danger);
+    overflow-wrap: anywhere;
+}
+
+.bench-run-id {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: var(--leading-xs);
+    color: var(--color-ink-2);
+    overflow-wrap: anywhere;
+    transition: color var(--dur-short) var(--ease-out);
+}
+
+.bench-muted {
+    color: var(--color-ink-2);
+}
+
+/* Evidence and status labels: body face, a step smaller, sentence case, untracked. */
+.bench-tag {
+    display: inline-block;
+    padding: 0 var(--space-75);
+    border: 1px solid var(--color-rule-strong);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    line-height: var(--leading-xs);
+    color: var(--color-ink-2);
+    white-space: nowrap;
+}
+
+.bench-tag[data-tone="measured"] {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.bench-tag[data-tone="not-evidence"],
+.bench-tag[data-tone="partial"] {
+    border-color: var(--color-warning);
+    color: var(--color-warning);
+}
+
+.bench-tag[data-tone="failed"] {
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+}
+
+.bench-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-50);
+}
+
+.bench-empty-title {
+    margin: 0 0 var(--space-75);
+    color: var(--color-ink);
+    font-weight: 500;
+}
+
+.bench-empty p:last-child {
+    margin: 0;
+    max-width: 70ch;
+}
+
+.bench-error {
+    padding: var(--space-200) var(--space-300);
+    border: 1px solid var(--color-danger);
+    border-radius: var(--radius-lg);
+    background: var(--color-danger-wash);
+    color: var(--color-ink);
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
+    overflow-wrap: anywhere;
+}
+
+.bench-detail,
+.bench-card {
+    display: grid;
+    gap: var(--space-400);
+    min-width: 0;
+}
+
+.bench-detail h3,
+.bench-card h3 {
+    margin: 0 0 var(--space-100);
+    font-size: var(--text-lg);
+    line-height: var(--leading-lg);
+    overflow-wrap: break-word;
+    min-width: 0;
+}
+
+.bench-dl {
+    display: grid;
+    grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+    gap: var(--space-75) var(--space-300);
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
+}
+
+.bench-dl dt {
+    color: var(--color-ink-2);
+}
+
+.bench-dl dd {
+    margin: 0;
+    color: var(--color-ink);
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+
+.bench-list {
+    display: grid;
+    gap: var(--space-75);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
+}
+
+.bench-list li {
+    padding: var(--space-100) var(--space-200);
+    border-radius: var(--radius-md);
+    background: var(--color-paper-2);
+    color: var(--color-ink-2);
+    overflow-wrap: anywhere;
+}
+
+.bench-list code {
+    color: var(--color-ink);
+}
+
+.bench-validity {
+    padding: var(--space-200) var(--space-300);
+    border: 1px solid var(--color-rule-strong);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
+}
+
+.bench-validity[data-comparable="false"] {
+    border-color: var(--color-warning);
+}
+
+.bench-validity p {
+    margin: 0;
+}
+
+.bench-validity p + p,
+.bench-validity ul {
+    margin-top: var(--space-75);
+}
+
+.bench-best {
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+.bench-seal {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: var(--leading-xs);
+    color: var(--color-ink-2);
+    overflow-wrap: anywhere;
+}
+
+.bench-footer {
+    display: grid;
+    gap: var(--space-200);
+    margin-inline: auto;
+    padding: var(--space-400) var(--gutter);
+}
+
+.bench-nonclaim {
+    max-width: 70ch;
+    margin: 0;
+    font-size: var(--text-xs);
+    line-height: var(--leading-xs);
+    color: var(--color-muted);
+}
+
+/* On a phone each table row restacks into a labelled card (bench.js sets data-label per cell),
+ * so the run and its evidence label stay in view instead of behind a sideways scroll. */
+@media (max-width: 40rem) {
+    .bench-table-wrap {
+        overflow-x: visible;
+    }
+
+    .bench-table {
+        min-width: 0;
+    }
+
+    .bench-table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    .bench-table,
+    .bench-table tbody,
+    .bench-table tr,
+    .bench-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .bench-table tr {
+        padding-block: var(--space-100);
+        border-bottom: 1px solid var(--color-rule);
+    }
+
+    .bench-table tbody tr:last-child {
+        border-bottom: 0;
+    }
+
+    .bench-table td {
+        display: grid;
+        grid-template-columns: minmax(0, 6rem) minmax(0, 1fr);
+        gap: var(--space-200);
+        padding: var(--space-50) var(--space-200);
+        border-bottom: 0;
+    }
+
+    .bench-table td::before {
+        content: attr(data-label);
+        color: var(--color-ink-2);
+    }
+
+    .bench-table td > * {
+        justify-self: start;
+        min-width: 0;
+    }
+
+    .bench-row-button span,
+    .bench-table .bench-run-id {
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .bench-dl {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .bench-dl dd {
+        margin-bottom: var(--space-75);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bench-run-id {
+        transition: none;
+    }
+}

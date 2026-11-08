@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FieldLoop benchmark results: sealed runs with their measurement class, hardware class and missing telemetry beside every number.">
+    <meta name="theme-color" content="#3ee7f2">
+    <meta name="robots" content="noindex">
+    <title>PsyFi bench results</title>
+    <link rel="canonical" href="https://psy-fi.space/bench">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/assets/icons/pf-icon-core-sigil-24.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/fonts/fonts.css">
+    <link rel="stylesheet" href="/static/style.css?v=44">
+    <link rel="stylesheet" href="/static/bench.css?v=2">
+</head>
+<body class="bench-page">
+    <div class="app-shell">
+        <a class="skip-link" href="#benchResults">Skip to the results</a>
+        <header class="masthead">
+            <div class="masthead-inner">
+                <div class="brand-row">
+                    <img class="sigil-mark" src="/assets/icons/pf-icon-core-sigil-48.svg" width="28" height="28" alt="">
+                    <h1 class="title"><span class="title-main">PsyFi</span></h1>
+                    <span class="title-version">v1.4.0</span>
+                    <p class="subtitle">FieldLoop bench results</p>
+                </div>
+
+                <nav class="workspace-nav" aria-label="PsyFi pages">
+                    <a href="/" class="nav-link">Workspace</a>
+                    <a href="/gpu/" class="nav-link">GPU Lab</a>
+                    <a href="/bench" class="nav-link" aria-current="page">Bench results</a>
+                    <a href="/gpu/bench.html" class="nav-link">GPU bench runner</a>
+                    <a href="/api/bench/docs" class="nav-link">Bench API</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="main-content bench-main" id="benchMain">
+            <section class="panel bench-panel" id="benchResults" aria-labelledby="benchResultsTitle">
+                <div class="panel-header">
+                    <h2 id="benchResultsTitle">Results</h2>
+                    <p class="bench-status" id="benchResultsStatus" role="status" aria-live="polite">Reading the results on this host.</p>
+                </div>
+
+                <div class="bench-toolbar">
+                    <div class="input-group bench-filter">
+                        <label for="benchFamily"><span>Family</span></label>
+                        <select id="benchFamily">
+                            <option value="">All families</option>
+                            <option value="field_compute">Field compute</option>
+                            <option value="render">Render</option>
+                            <option value="interpretation">Interpretation</option>
+                            <option value="fieldloop">Closed loop</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn-secondary" id="benchRefresh">Refresh</button>
+                </div>
+
+                <div class="bench-table-wrap" id="benchResultsWrap" hidden>
+                    <table class="bench-table" id="benchResultsTable">
+                        <caption class="visually-hidden">Stored benchmark results, newest first</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Run</th>
+                                <th scope="col">Workload</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Evidence</th>
+                                <th scope="col">Hardware</th>
+                                <th scope="col" class="bench-col-headline">Headline</th>
+                            </tr>
+                        </thead>
+                        <tbody id="benchResultsBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="empty-state bench-empty" id="benchResultsEmpty" hidden>
+                    <p class="bench-empty-title">No results on this host.</p>
+                    <p>Runs are CLI only. On a machine with the repo, <code>python3 -m psyfi_bench run field-compute.scaling</code> writes a sealed result to <code>bench_results/</code>, and this page lists it when the API runs there.</p>
+                </div>
+
+                <div class="bench-error" id="benchResultsError" role="alert" hidden></div>
+            </section>
+
+            <section class="panel bench-panel" id="benchDetail" aria-labelledby="benchDetailTitle">
+                <div class="panel-header">
+                    <h2 id="benchDetailTitle">Run</h2>
+                    <p class="bench-status" id="benchDetailStatus" role="status" aria-live="polite"></p>
+                </div>
+                <div class="empty-state" id="benchDetailEmpty">Select a run to see its environment, the telemetry it could not collect, its stages and its seal.</div>
+                <div class="bench-detail" id="benchDetailBody" hidden></div>
+            </section>
+
+            <section class="panel bench-panel" id="benchScorecard" aria-labelledby="benchScorecardTitle">
+                <div class="panel-header">
+                    <h2 id="benchScorecardTitle">Scorecard</h2>
+                    <p class="bench-status" id="benchScorecardStatus" role="status" aria-live="polite"></p>
+                </div>
+                <div class="bench-toolbar">
+                    <div class="input-group bench-file">
+                        <label for="benchScorecardFile"><span>Scorecard file</span></label>
+                        <input type="file" id="benchScorecardFile" accept="application/json,.json">
+                    </div>
+                </div>
+                <p class="bench-help">Make one with <code>python3 -m psyfi_bench score &lt;result files&gt; --out card.json</code>. The page ranks only when the scorecard says its subjects are comparable.</p>
+                <div class="bench-error" id="benchScorecardError" role="alert" hidden></div>
+                <div class="bench-card" id="benchScorecardBody" hidden></div>
+            </section>
+        </main>
+
+        <footer class="footer bench-footer">
+            <div class="footer-links">
+                <a href="/privacy">Privacy</a>
+                <a href="/api/bench/docs">Bench API docs</a>
+                <a href="https://github.com/Zero-State-LLC/Psy-Fi">GitHub</a>
+            </div>
+            <p class="bench-nonclaim">Modeled phenomenology for research and visualization only. The benchmark measures computation, rendering and model interpretation of modeled representations, not consciousness or subjective experience. Not medical advice.</p>
+        </footer>
+    </div>
+
+    <script src="/static/bench.js?v=1"></script>
+</body>
+</html>

@@ -24,7 +24,9 @@ Specs are the decision records. They use the Matt Pocock shape: problem, solutio
 | Public API, simulation and jobs, Live Experience, image seed, GPU lab, shell and PWA, MIDI, telemetry, deploy and CI | Implemented. Issues #16–#23 and #37 are Done. |
 | Cloudflare and NVIDIA | Implemented. Public host is `https://psy-fi.space` on Worker `psy-fi`. Issue #36 is Done. |
 | Vision bench | Implemented. Pull request #40 is merged. No public route. No receipt file until a person runs capture. |
-| Shell front page and workbench redesign | Implemented. Intent [`intent/shell-front-page-workbench.md`](intent/shell-front-page-workbench.md) is accepted and done: pull request #44 is merged and live; Worker version `3d97825f` serves it. It is not an open slice. |
+| Shell front page and workbench redesign | Implemented. Intent [`intent/shell-front-page-workbench.md`](intent/shell-front-page-workbench.md) is accepted and done: pull request #44 is merged and live; Worker version `94e47554` serves it. It is not an open slice. |
+| FieldLoop benchmark platform | Implemented and live. Pull request #56 (Fable) is merged: `psyfi_bench`, its spec [`docs/specs/benchmark-platform.md`](docs/specs/benchmark-platform.md), the read-only `/api/bench` mount (runs and capture ingest off) and `/gpu/bench.html`. So are #59 (`nvidia-smi` power sampling, `score --format csv|markdown|json`), #60 (the WGSL Kuramoto kernel, issue #51) and #65 (the `/bench` results page, issue #52). Worker version `94e47554` serves all four on psy-fi.space; `/bench` shows the empty state there, since the public host has no results and runs and ingest are off. Issue #47 is the umbrella; its open slices wait on hardware, a person or a decision ([register](docs/specs/OPEN_QUESTIONS.md)). |
+| GPU Lab tier switch | Fixed and live. Pull request #58 is merged (issue #55) and Worker version `94e47554` serves it. SSR and motion blur take texture inputs; see the learning in `.trail/learnings/`. |
 
 The older Worker `psyfi` on workers.dev stays. Do not attach `psy-fi.space` to it, and do not delete it.
 
@@ -42,10 +44,12 @@ The older Worker `psyfi` on workers.dev stays. Do not attach `psy-fi.space` to i
 
 ## 4. Open, and not yours until a human accepts an intent
 
+Evidence and a recommendation for each open question, researched 2026-11-08: [`docs/specs/OPEN_QUESTIONS.md`](docs/specs/OPEN_QUESTIONS.md).
+
 - Issue #10, hardware Ultra evidence.
 - Catalog reload: keep, rename, or remove.
 - Whether a later host should use an AI Gateway.
-- A GPU frame-time bench. It does not share the vision bench score, corpus, or pass rule.
+- A GPU frame-time bench. Answered: FieldLoop's `render.webgpu.tiers` and `/gpu/bench.html` (pull request #56) are that bench, scored apart from the vision bench.
 - A committed vision-bench receipt. A person has to run the capture first.
 
 ## 5. If the work is a new slice

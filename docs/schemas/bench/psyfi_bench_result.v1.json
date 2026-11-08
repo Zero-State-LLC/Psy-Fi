@@ -1,0 +1,1036 @@
+{
+  "$defs": {
+    "DeterminismRecord": {
+      "additionalProperties": true,
+      "properties": {
+        "exact_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exact Sha256"
+        },
+        "quantized_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quantized Sha256"
+        },
+        "quantization": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quantization"
+        },
+        "bitwise_identical_across_repeats": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bitwise Identical Across Repeats"
+        },
+        "quantized_identical_across_repeats": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quantized Identical Across Repeats"
+        },
+        "reference_match": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Quantized digest equals the manifest's locked digest (None when no lock). Platform-class evidence: the same digest means the same floating-point platform; a mismatch alone is not an error.",
+          "title": "Reference Match"
+        },
+        "reference_within_tolerance": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Output summary statistics are within tolerances.reference_atol of the locked summary (None when no summary lock). The cross-platform reproducibility check.",
+          "title": "Reference Within Tolerance"
+        },
+        "reference_max_abs_error": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Max abs error of the summary vs the lock.",
+          "title": "Reference Max Abs Error"
+        },
+        "nan_count": {
+          "default": 0,
+          "title": "Nan Count",
+          "type": "integer"
+        },
+        "inf_count": {
+          "default": 0,
+          "title": "Inf Count",
+          "type": "integer"
+        }
+      },
+      "title": "DeterminismRecord",
+      "type": "object"
+    },
+    "EnvironmentRecord": {
+      "additionalProperties": true,
+      "description": "Hardware, software, and provenance of the process that measured.",
+      "properties": {
+        "captured_at": {
+          "title": "Captured At",
+          "type": "string"
+        },
+        "hostname_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "SHA-256 prefix of the hostname; never the hostname.",
+          "title": "Hostname Hash"
+        },
+        "platform": {
+          "additionalProperties": true,
+          "title": "Platform",
+          "type": "object"
+        },
+        "cpu": {
+          "additionalProperties": true,
+          "title": "Cpu",
+          "type": "object"
+        },
+        "memory": {
+          "additionalProperties": true,
+          "title": "Memory",
+          "type": "object"
+        },
+        "gpus": {
+          "items": {
+            "$ref": "#/$defs/GpuRecord"
+          },
+          "title": "Gpus",
+          "type": "array"
+        },
+        "software": {
+          "additionalProperties": true,
+          "title": "Software",
+          "type": "object"
+        },
+        "browser": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Browser"
+        },
+        "power": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Power"
+        },
+        "hardware_class": {
+          "default": "unknown",
+          "enum": [
+            "discrete",
+            "integrated",
+            "cpu_only",
+            "remote",
+            "unknown"
+          ],
+          "title": "Hardware Class",
+          "type": "string"
+        },
+        "unavailable": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Telemetry that could not be collected, with the reason. Never estimated silently.",
+          "title": "Unavailable",
+          "type": "object"
+        }
+      },
+      "required": [
+        "captured_at"
+      ],
+      "title": "EnvironmentRecord",
+      "type": "object"
+    },
+    "FailureRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "stage": {
+          "title": "Stage",
+          "type": "string"
+        },
+        "category": {
+          "enum": [
+            "timeout",
+            "cancelled",
+            "provider",
+            "parse",
+            "validation",
+            "resource",
+            "unsupported",
+            "internal"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        }
+      },
+      "required": [
+        "stage",
+        "category",
+        "detail"
+      ],
+      "title": "FailureRecord",
+      "type": "object"
+    },
+    "GpuRecord": {
+      "additionalProperties": true,
+      "properties": {
+        "vendor": {
+          "default": "unknown",
+          "title": "Vendor",
+          "type": "string"
+        },
+        "name": {
+          "default": "",
+          "title": "Name",
+          "type": "string"
+        },
+        "memory_bytes": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Bytes"
+        },
+        "driver": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Driver"
+        },
+        "cores": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cores"
+        },
+        "source": {
+          "description": "nvidia-smi | rocm-smi | system_profiler | torch | webgpu | manual",
+          "title": "Source",
+          "type": "string"
+        },
+        "hardware_class": {
+          "default": "unknown",
+          "enum": [
+            "discrete",
+            "integrated",
+            "cpu_only",
+            "remote",
+            "unknown"
+          ],
+          "title": "Hardware Class",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source"
+      ],
+      "title": "GpuRecord",
+      "type": "object"
+    },
+    "MemoryRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "rss_before_bytes": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rss Before Bytes"
+        },
+        "rss_peak_delta_bytes": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rss Peak Delta Bytes"
+        },
+        "tracemalloc_peak_bytes": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tracemalloc Peak Bytes"
+        },
+        "tracemalloc_current_bytes": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tracemalloc Current Bytes"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "title": "MemoryRecord",
+      "type": "object"
+    },
+    "PowerRecord": {
+      "additionalProperties": false,
+      "description": "Sampled GPU power for one stage. Only what the sampler returned; absent tool means no record.",
+      "properties": {
+        "source": {
+          "description": "Sampler name, e.g. nvidia-smi.",
+          "title": "Source",
+          "type": "string"
+        },
+        "query": {
+          "description": "Fields requested from the sampler.",
+          "title": "Query",
+          "type": "string"
+        },
+        "interval_s": {
+          "description": "Requested polling interval; actual spacing is in the sample timestamps.",
+          "title": "Interval S",
+          "type": "number"
+        },
+        "sample_count": {
+          "description": "Samples taken inside the measured window; readings after the stage are dropped.",
+          "title": "Sample Count",
+          "type": "integer"
+        },
+        "window_s": {
+          "description": "Wall seconds the sampler was running around the measured repeats.",
+          "title": "Window S",
+          "type": "number"
+        },
+        "sampled_span_s": {
+          "description": "Seconds between the first and last in-window sample with a power reading (energy is integrated over this).",
+          "title": "Sampled Span S",
+          "type": "number"
+        },
+        "power_w_mean": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Power W Mean"
+        },
+        "power_w_max": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Power W Max"
+        },
+        "temperature_c_max": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Temperature C Max"
+        },
+        "sm_clock_mhz_mean": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sm Clock Mhz Mean"
+        },
+        "sm_clock_mhz_max": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sm Clock Mhz Max"
+        },
+        "energy_j": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Joules from the samples; None with unavailable_reason when under 2 samples.",
+          "title": "Energy J"
+        },
+        "work_unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "cell_step or frame.",
+          "title": "Work Unit"
+        },
+        "work_units": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Work units completed while sampling.",
+          "title": "Work Units"
+        },
+        "energy_j_per_work_unit": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Energy J Per Work Unit"
+        },
+        "derivation": {
+          "title": "Derivation",
+          "type": "string"
+        },
+        "unavailable_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unavailable Reason"
+        }
+      },
+      "required": [
+        "source",
+        "query",
+        "interval_s",
+        "sample_count",
+        "window_s",
+        "sampled_span_s",
+        "derivation"
+      ],
+      "title": "PowerRecord",
+      "type": "object"
+    },
+    "Provenance": {
+      "additionalProperties": true,
+      "properties": {
+        "git_commit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Git Commit"
+        },
+        "git_dirty": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Git Dirty"
+        },
+        "command": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Command"
+        },
+        "bench_version": {
+          "default": "0.1.0",
+          "title": "Bench Version",
+          "type": "string"
+        },
+        "psyfi_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Psyfi Version"
+        },
+        "seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Seed"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        }
+      },
+      "title": "Provenance",
+      "type": "object"
+    },
+    "StageRecord": {
+      "additionalProperties": false,
+      "description": "One measured stage: a workload point, a render pass, a model query batch\u2026",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "status": {
+          "default": "ok",
+          "enum": [
+            "ok",
+            "failed",
+            "skipped",
+            "timeout",
+            "cancelled"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "measurement_class": {
+          "default": "measured",
+          "enum": [
+            "measured",
+            "synthetic",
+            "replay"
+          ],
+          "title": "Measurement Class",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "title": "Params",
+          "type": "object"
+        },
+        "wall_ms": {
+          "description": "Per-repeat wall time after warm-up.",
+          "items": {
+            "type": "number"
+          },
+          "title": "Wall Ms",
+          "type": "array"
+        },
+        "cpu_ms": {
+          "items": {
+            "type": "number"
+          },
+          "title": "Cpu Ms",
+          "type": "array"
+        },
+        "cold_wall_ms": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cold Wall Ms"
+        },
+        "warmup_wall_ms": {
+          "items": {
+            "type": "number"
+          },
+          "title": "Warmup Wall Ms",
+          "type": "array"
+        },
+        "memory": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MemoryRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "metrics": {
+          "additionalProperties": true,
+          "title": "Metrics",
+          "type": "object"
+        },
+        "statistics": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Statistics"
+          },
+          "title": "Statistics",
+          "type": "object"
+        },
+        "determinism": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DeterminismRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "power": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PowerRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Sampled GPU power; omitted when no sampler ran."
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        }
+      },
+      "required": [
+        "id",
+        "kind"
+      ],
+      "title": "StageRecord",
+      "type": "object"
+    },
+    "Statistics": {
+      "additionalProperties": false,
+      "description": "Summary of a repeated measurement.",
+      "properties": {
+        "n": {
+          "title": "N",
+          "type": "integer"
+        },
+        "unit": {
+          "default": "",
+          "title": "Unit",
+          "type": "string"
+        },
+        "mean": {
+          "title": "Mean",
+          "type": "number"
+        },
+        "median": {
+          "title": "Median",
+          "type": "number"
+        },
+        "min": {
+          "title": "Min",
+          "type": "number"
+        },
+        "max": {
+          "title": "Max",
+          "type": "number"
+        },
+        "std": {
+          "title": "Std",
+          "type": "number"
+        },
+        "cv": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "std / mean when mean > 0",
+          "title": "Cv"
+        },
+        "mad": {
+          "title": "Mad",
+          "type": "number"
+        },
+        "p50": {
+          "title": "P50",
+          "type": "number"
+        },
+        "p90": {
+          "title": "P90",
+          "type": "number"
+        },
+        "p95": {
+          "title": "P95",
+          "type": "number"
+        },
+        "p99": {
+          "title": "P99",
+          "type": "number"
+        },
+        "ci95_mean": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ci95 Mean"
+        },
+        "ci95_median": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ci95 Median"
+        },
+        "bootstrap": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bootstrap"
+        }
+      },
+      "required": [
+        "n",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "std",
+        "mad",
+        "p50",
+        "p90",
+        "p95",
+        "p99"
+      ],
+      "title": "Statistics",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Self-describing benchmark result. ``result_hash`` covers everything but itself.",
+  "properties": {
+    "schema": {
+      "default": "psyfi.bench.result.v1",
+      "title": "Schema",
+      "type": "string"
+    },
+    "bench_version": {
+      "default": "0.1.0",
+      "title": "Bench Version",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "manifest": {
+      "additionalProperties": true,
+      "title": "Manifest",
+      "type": "object"
+    },
+    "manifest_hash": {
+      "title": "Manifest Hash",
+      "type": "string"
+    },
+    "measurement_class": {
+      "enum": [
+        "measured",
+        "synthetic",
+        "replay"
+      ],
+      "title": "Measurement Class",
+      "type": "string"
+    },
+    "status": {
+      "default": "complete",
+      "enum": [
+        "complete",
+        "partial",
+        "failed"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "environment": {
+      "$ref": "#/$defs/EnvironmentRecord"
+    },
+    "stages": {
+      "items": {
+        "$ref": "#/$defs/StageRecord"
+      },
+      "title": "Stages",
+      "type": "array"
+    },
+    "metrics": {
+      "additionalProperties": true,
+      "description": "Headline metrics for this family.",
+      "title": "Metrics",
+      "type": "object"
+    },
+    "determinism": {
+      "additionalProperties": true,
+      "title": "Determinism",
+      "type": "object"
+    },
+    "failures": {
+      "items": {
+        "$ref": "#/$defs/FailureRecord"
+      },
+      "title": "Failures",
+      "type": "array"
+    },
+    "provenance": {
+      "$ref": "#/$defs/Provenance"
+    },
+    "non_claim": {
+      "title": "Non Claim",
+      "type": "string"
+    },
+    "result_hash": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Result Hash"
+    }
+  },
+  "required": [
+    "run_id",
+    "created_at",
+    "manifest",
+    "manifest_hash",
+    "measurement_class",
+    "environment",
+    "non_claim"
+  ],
+  "title": "BenchResult",
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

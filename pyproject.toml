@@ -35,6 +35,9 @@ dependencies = [
     "python-rtmidi>=1.5.0",
 ]
 
+[project.scripts]
+psyfi-bench = "psyfi_bench.cli:main"
+
 [project.optional-dependencies]
 dev = [
     "pytest>=7.4.0",
@@ -49,10 +52,11 @@ version = {file = "psyfi_core/VERSION"}
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["psyfi_core*", "psyfi_api*"]
+include = ["psyfi_core*", "psyfi_api*", "psyfi_bench*"]
 
 [tool.setuptools.package-data]
 psyfi_core = ["VERSION"]
+psyfi_bench = ["workloads/*.json", "fixtures/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

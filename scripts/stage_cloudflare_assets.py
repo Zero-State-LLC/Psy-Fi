@@ -8,8 +8,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC = ROOT / "public"
 GPU_DIST = ROOT / "packages" / "psyfi-gpu-renderer" / "dist"
-# Templates without template variables, staged as-is. 404.html is the Worker's not_found_handling page.
-PAGES = ("index.html", "privacy.html", "404.html")
+# Templates without template variables, staged as-is. The Worker serves bench.html at /bench;
+# 404.html is its not_found_handling page.
+PAGES = ("index.html", "privacy.html", "bench.html", "404.html")
 # Files the site must answer at its root; their sources live in psyfi_api/static/.
 ROOT_FILES = ("sw.js", "robots.txt", "sitemap.xml", "favicon.ico")
 
