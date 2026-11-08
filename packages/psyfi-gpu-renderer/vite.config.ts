@@ -16,6 +16,8 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
+    // Additive second page: the FieldLoop GPU bench runner (served at /gpu/bench.html).
+    rollupOptions: { input: { main: 'index.html', bench: 'bench.html' } },
     emptyOutDir: true,
     sourcemap: true,
   },
