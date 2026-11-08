@@ -59,6 +59,7 @@ def test_parse_accepts_only_the_four_modes_and_a_unit_interval() -> None:
         '{"mode": "Open", "intensity": 0.5}',
         '{"mode": "void", "intensity": "0.5"}',
         '{"mode": "void", "intensity": 70}',
+        '{"mode": "void", "intensity": NaN}',
         '{"mode": "void"}',
         '{"intensity": 0.5}',
         "[]",

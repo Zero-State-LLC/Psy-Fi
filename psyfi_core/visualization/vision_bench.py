@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 
 import numpy as np
 
@@ -87,7 +88,7 @@ def parse_model_content(text: str) -> dict[str, object]:
     if isinstance(intensity, bool) or not isinstance(intensity, (int, float)):
         return _parse_failure()
     value = float(intensity)
-    if value < 0.0 or value > 1.0:
+    if not math.isfinite(value) or value < 0.0 or value > 1.0:
         return _parse_failure()
     return {"parse_ok": True, "mode": mode, "intensity": value, "error": None}
 
