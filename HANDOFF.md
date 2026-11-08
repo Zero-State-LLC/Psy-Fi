@@ -24,7 +24,9 @@ Specs are the decision records. They use the Matt Pocock shape: problem, solutio
 | Public API, simulation and jobs, Live Experience, image seed, GPU lab, shell and PWA, MIDI, telemetry, deploy and CI | Implemented. Issues #16–#23 and #37 are Done. |
 | Cloudflare and NVIDIA | Implemented. Public host is `https://psy-fi.space` on Worker `psy-fi`. Issue #36 is Done. |
 | Vision bench | Implemented. Pull request #40 is merged. No public route. No receipt file until a person runs capture. |
-| Shell front page and workbench redesign | Implemented. Intent [`intent/shell-front-page-workbench.md`](intent/shell-front-page-workbench.md) is accepted and done: pull request #44 is merged and live; Worker version `3d97825f` serves it. It is not an open slice. |
+| Shell front page and workbench redesign | Implemented. Intent [`intent/shell-front-page-workbench.md`](intent/shell-front-page-workbench.md) is accepted and done: pull request #44 is merged and live; Worker version `97b60aaf` serves it. It is not an open slice. |
+| FieldLoop benchmark platform | In review, not on `main`. Pull request #56 (Fable) carries `psyfi_bench`, its spec and the bench page. Pull requests #59 (power sampling, score formats) and #60 (WGSL kernel) are stacked on it. Issue #47 is the umbrella. |
+| GPU Lab tier switch | Fixed and live. Pull request #58 is merged (issue #55) and Worker version `97b60aaf` serves it. SSR and motion blur take texture inputs; see the learning in `.trail/learnings/`. |
 
 The older Worker `psyfi` on workers.dev stays. Do not attach `psy-fi.space` to it, and do not delete it.
 
