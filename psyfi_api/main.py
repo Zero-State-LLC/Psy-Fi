@@ -4,10 +4,12 @@ import os
 from pathlib import Path
 
 from fastapi import FastAPI, Request
+from fastapi.exception_handlers import http_exception_handler
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from psyfi_api.routers import experiences, jobs, midi, presets, simulate, telemetry
 from psyfi_api.telemetry import TELEMETRY_ENABLED
@@ -70,6 +72,32 @@ app.include_router(experiences.router)
 async def root(request: Request):
     """Root endpoint - serves the web UI."""
     return templates.TemplateResponse(request, "index.html")
+
+
+@app.get("/privacy", include_in_schema=False)
+async def privacy(request: Request):
+    """Privacy policy page. The Worker serves the staged copy on the public host."""
+    return templates.TemplateResponse(request, "privacy.html")
+
+
+@app.get("/robots.txt", include_in_schema=False)
+@app.get("/sitemap.xml", include_in_schema=False)
+@app.get("/favicon.ico", include_in_schema=False)
+async def site_root_file(request: Request) -> FileResponse:
+    """Crawler and browser files that must sit at the site root; sources live in static/."""
+    return FileResponse(BASE_DIR / "static" / request.url.path.lstrip("/"))
+
+
+# Paths whose errors stay JSON. Everything else is a site page and gets the branded 404.
+_JSON_ERROR_PREFIXES = ("/api", "/simulate", "/health", "/ready", "/docs", "/redoc", "/openapi.json")
+
+
+@app.exception_handler(StarletteHTTPException)
+async def not_found_page(request: Request, exc: StarletteHTTPException):
+    """Unknown site paths get the HTML 404 page with a real 404 status; API paths keep JSON."""
+    if exc.status_code != 404 or request.url.path.startswith(_JSON_ERROR_PREFIXES):
+        return await http_exception_handler(request, exc)
+    return templates.TemplateResponse(request, "404.html", status_code=404)
 
 
 @app.get("/sw.js")

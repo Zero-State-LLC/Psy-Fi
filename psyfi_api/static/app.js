@@ -320,6 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (loadingOverlay) {
             loadingOverlay.setAttribute('aria-hidden', show ? 'false' : 'true');
         }
+        document.getElementById('results')?.setAttribute('aria-busy', show ? 'true' : 'false');
         runButton.disabled = show;
         if (cancelButton) {
             setHidden(cancelButton, !show);
@@ -1288,6 +1289,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const openGpuLabBtn = document.getElementById('openGpuLabBtn');
     const gpuLabNavLink = document.getElementById('gpuLabNavLink');
     const statusEl = document.getElementById('experienceStatus');
+    const experienceLoadStatus = document.getElementById('experienceLoadStatus');
+    const experienceStage = document.querySelector('#experiencePanel .experience-stage');
+
+    /** Recipe and timeline loads: visible status, a polite announcement, and aria-busy on the field. */
+    function setExperienceLoadState(text, busy) {
+        if (statusEl) statusEl.textContent = text;
+        if (experienceLoadStatus) experienceLoadStatus.textContent = text;
+        if (experienceStage) experienceStage.setAttribute('aria-busy', busy ? 'true' : 'false');
+    }
     /** Pass-1 image seed payload (also mirrored to sessionStorage for /gpu/). */
     let imageSeedState = null;
 
@@ -1892,6 +1902,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (imageReading) imageReading.textContent = 'Choose an image first';
             return;
         }
+        const readBtn = document.getElementById('imageReadingBtn');
+        if (readBtn) readBtn.disabled = true;
         if (imageReading) imageReading.textContent = 'Reading…';
         try {
             const form = new FormData();
@@ -1911,6 +1923,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (err) {
             if (imageReading) imageReading.textContent = err.message || String(err);
+        } finally {
+            if (readBtn) readBtn.disabled = false;
         }
     }
 
@@ -2473,11 +2487,14 @@ document.addEventListener('DOMContentLoaded', () => {
         el.textContent = text || '';
     }
 
-    document.getElementById('runPlannerBtn')?.addEventListener('click', async () => {
+    document.getElementById('runPlannerBtn')?.addEventListener('click', async (event) => {
         if (!player.timeline && !player.frame) {
             statusEl.textContent = 'Load an experience before running the planner';
             return;
         }
+        const plannerBtn = event.currentTarget;
+        plannerBtn.disabled = true;
+        setPlannerStatus('Running planner…', true);
         try {
             const res = await fetch('/api/v1/visualize/planner', {
                 method: 'POST',
@@ -2504,7 +2521,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.error(err);
             statusEl.textContent = 'Planner failed';
+            setPlannerStatus(`Planner failed: ${err.message || err}`, true);
             alert(err.message || String(err));
+        } finally {
+            plannerBtn.disabled = false;
         }
     });
 
@@ -3001,6 +3021,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadSubstances() {
         const res = await fetch('/api/v1/substances');
+        if (!res.ok) throw new Error(`Substance list failed (${res.status})`);
         const data = await res.json();
         substanceSelect.innerHTML = '';
         (data.substances || []).forEach((s) => {
@@ -3022,6 +3043,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadExperiences() {
         const substance = substanceSelect.value || 'lsd';
         const res = await fetch(`/api/v1/experiences?substance=${encodeURIComponent(substance)}&valence=positive`);
+        if (!res.ok) throw new Error(`Recipe list failed (${res.status})`);
         const data = await res.json();
         experienceSelect.innerHTML = '';
         const items = data.items || [];
@@ -3056,11 +3078,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    substanceSelect.addEventListener('change', () => loadExperiences());
+    substanceSelect.addEventListener('change', () => {
+        loadExperiences().catch((e) => setExperienceLoadState(`Recipes unavailable: ${e.message || e}`, false));
+    });
 
     loadBtn.addEventListener('click', async () => {
         loadBtn.disabled = true;
-        statusEl.textContent = 'Loading timeline…';
+        setExperienceLoadState('Loading timeline…', true);
         applyNeutral(false);
         syncModulators();
         try {
@@ -3093,15 +3117,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             player.resize();
             player.play();
-            statusEl.textContent = player.phaseAdvance
+            setExperienceLoadState(player.phaseAdvance
                 ? 'Experience loaded · phase advance on'
-                : 'Experience loaded';
+                : 'Experience loaded', false);
             if (imageSeedState) {
                 setImageSeedUiState('success', `Live field seeded from image · seed ${imageSeedState.master_seed}`);
             }
         } catch (err) {
             console.error(err);
-            statusEl.textContent = 'Load failed';
+            setExperienceLoadState(`Load failed: ${err.message || err}`, false);
             alert(err.message || String(err));
         } finally {
             loadBtn.disabled = false;
@@ -3130,8 +3154,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // The API can cold-start: show a pending state while the recipe lists load, and say plainly if they fail.
+    loadBtn.disabled = true;
+    setExperienceLoadState('Loading recipes…', true);
     loadSubstances()
         .then(loadExperiences)
-        .then(() => loadBtn.click())
-        .catch((e) => console.error('[PsyFi] experience init failed', e));
+        .then(() => {
+            loadBtn.disabled = false;
+            loadBtn.click();
+        })
+        .catch((e) => {
+            console.error('[PsyFi] experience init failed', e);
+            loadBtn.disabled = false;
+            setExperienceLoadState(`Recipes unavailable: ${e.message || e}. Reload the page to try again.`, false);
+        });
 })();

@@ -46,7 +46,7 @@ Full board: [`docs/PRODUCTION_READINESS.md`](docs/PRODUCTION_READINESS.md).
 | GPU platform G0–G3                 | **ready**        | `/gpu/` present · compute · TAA · premium post                              |
 | GPU G4 cutover ship gates          | **ready**        | assets · parity · goldens · [`G4_CUTOVER.md`](docs/rendering/G4_CUTOVER.md) |
 | Desktop Ultra (30/40/50 + peers)   | **ready**        | NVIDIA · AMD RX · Intel Arc · Apple Pro/Max                                 |
-| PWA (`/` shell + `/gpu/` route)    | **ready**        | separate `/gpu/` · SW v43 · field plate · [`PWA_GPU_ROUTE.md`](docs/PWA_GPU_ROUTE.md) |
+| PWA (`/` shell + `/gpu/` route)    | **ready**        | separate `/gpu/` · SW v44 · field plate · [`PWA_GPU_ROUTE.md`](docs/PWA_GPU_ROUTE.md) |
 | Device matrix + Phase 4            | **filled**       | 2026-07-25 human + simulated Ultra QA                                       |
 | Simulated Ultra QA                 | **passed**       | [`SIMULATED_ULTRA_QA.md`](docs/SIMULATED_ULTRA_QA.md)                       |
 | Soft-present pixel goldens         | **ready**        | [`PIXEL_GOLDENS.md`](docs/rendering/PIXEL_GOLDENS.md)                       |

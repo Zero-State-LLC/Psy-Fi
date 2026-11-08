@@ -1,0 +1,12 @@
+# PsyFi public site. The API, its docs and the health probes are not pages.
+User-agent: *
+Allow: /
+Disallow: /api
+Disallow: /simulate
+Disallow: /docs
+Disallow: /redoc
+Disallow: /openapi.json
+Disallow: /health
+Disallow: /ready
+
+Sitemap: https://psy-fi.space/sitemap.xml

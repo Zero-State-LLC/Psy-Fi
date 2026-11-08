@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="How PsyFi handles data: what your browser sends to the API, what stays on your device, and how Cloudflare hosts and measures the site.">
+    <meta name="theme-color" content="#3ee7f2">
+
+    <title>Privacy policy, PsyFi</title>
+    <link rel="canonical" href="https://psy-fi.space/privacy">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="PsyFi">
+    <meta property="og:url" content="https://psy-fi.space/privacy">
+    <meta property="og:title" content="Privacy policy, PsyFi">
+    <meta property="og:description" content="How PsyFi handles data: what your browser sends to the API, what stays on your device, and how Cloudflare hosts and measures the site.">
+    <meta property="og:image" content="https://psy-fi.space/static/images/psyfi-og.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Cyan and magenta field with a bright center">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Privacy policy, PsyFi">
+    <meta name="twitter:description" content="How PsyFi handles data: what your browser sends to the API, what stays on your device, and how Cloudflare hosts and measures the site.">
+    <meta name="twitter:image" content="https://psy-fi.space/static/images/psyfi-og.jpg">
+    <meta name="twitter:image:alt" content="Cyan and magenta field with a bright center">
+
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/assets/icons/pf-icon-core-sigil-24.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+    <link rel="stylesheet" href="/static/fonts/fonts.css">
+    <link rel="stylesheet" href="/static/style.css?v=44">
+</head>
+<body>
+    <div class="launch-splash">
+        <a class="skip-link" href="#privacyMain">Skip to content</a>
+        <header class="front-bar">
+            <div class="front-bar-inner container">
+                <span class="wordmark">
+                    <img class="launch-sigil" src="/assets/icons/pf-icon-core-sigil-48.svg" width="28" height="28" alt="">
+                    <span>PsyFi</span>
+                </span>
+                <div class="launch-actions">
+                    <a class="btn-primary" href="/">Open PsyFi</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="front" id="privacyMain" tabindex="-1">
+            <section class="front-questions" aria-labelledby="privacyTitle">
+                <div class="container questions-layout">
+                    <div class="front-hero-side">
+                        <h1 id="privacyTitle">Privacy policy</h1>
+                        <p class="lead">PsyFi is a research and visualization instrument at psy-fi.space. This page says what the site does with data, as its code works today.</p>
+                        <p>Effective date: 2026-11-08</p>
+                    </div>
+                    <dl class="questions">
+                        <div>
+                            <dt>Who runs PsyFi?</dt>
+                            <dd>Zero State LLC operates psy-fi.space. The <a href="https://zer0state.com/privacy.html">Zero State LLC privacy policy</a> is the parent policy for this site.</dd>
+                        </div>
+                        <div>
+                            <dt>Do I need an account?</dt>
+                            <dd>No. There is no sign-up and no login, and PsyFi's own code sets no cookies. Cloudflare may set cookies it uses to deliver and protect the site; see <a href="https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/">Cloudflare cookies</a>.</dd>
+                        </div>
+                        <div>
+                            <dt>What does my browser send to the server?</dt>
+                            <dd>The settings you run: grid size, steps, seed and preset for a simulation; substance, recipe, mode, intensity, seed and modulator levels for the Live Experience; and any planner notes or time and place anchors you type in. Export journey also sends stills of the rendered field. If you turn on the camera, microphone, motion or MIDI inputs, they are read in your browser and only a level between 0 and 1 is sent, never the picture or the sound.</dd>
+                        </div>
+                        <div>
+                            <dt>What happens to an image I upload?</dt>
+                            <dd>Image seed and Read image send the file to the PsyFi server, which works on it in memory and does not save it. Read image also sends a copy, resized to at most 384 pixels on its longest side, to NVIDIA's hosted model API (integrate.api.nvidia.com) to get a caption. The caption is inferred and is not medical advice.</dd>
+                        </div>
+                        <div>
+                            <dt>What does the server keep?</dt>
+                            <dd>Simulation jobs are held in the server's memory, at most 64 at a time, and are gone when the server restarts or sleeps after 10 minutes without traffic. There is no database of visitors. The server prints a standard access line for each request it handles (the connecting address it sees, the request and the response status) to its console. Diagnostic telemetry is off on this site, so the opt-in box records no events.</dd>
+                        </div>
+                        <div>
+                            <dt>What stays in my browser?</dt>
+                            <dd>Run history, saved comparisons and journeys live in this browser's IndexedDB (<code>psyfi-sessions</code>). The last session is in local storage (<code>psyfi.session.v1.last</code>). Session storage holds your field resolution, the launch scan note, a dismissed-recovery flag and the image seed handed to the GPU Lab. A service worker caches the site's files so it opens offline. Clear History removes saved runs; clearing site data in your browser removes all of it.</dd>
+                        </div>
+                        <div>
+                            <dt>Who hosts and measures the site?</dt>
+                            <dd>Cloudflare hosts psy-fi.space and runs the PsyFi server, so every request passes through Cloudflare's network (<a href="https://www.cloudflare.com/privacypolicy/">Cloudflare privacy policy</a>). Cloudflare Web Analytics is on: Cloudflare adds a script from static.cloudflareinsights.com to each page that reports page views and load times to Cloudflare. Cloudflare says it uses no cookies and stores nothing in your browser. PsyFi adds no other analytics or advertising, and its fonts are served from this site.</dd>
+                        </div>
+                        <div>
+                            <dt>Is this medical advice?</dt>
+                            <dd>No. PsyFi models phenomenology for research and visualization only. Nothing on the site, an image caption included, is medical, diagnostic or therapeutic advice.</dd>
+                        </div>
+                        <div>
+                            <dt>Questions or requests?</dt>
+                            <dd>Email <a href="mailto:zer0state@zer0state.com">zer0state@zer0state.com</a>.</dd>
+                        </div>
+                    </dl>
+                </div>
+            </section>
+        </main>
+
+        <footer class="front-footer">
+            <div class="container footer-line">
+                <p class="lab-credit">Applied Alchemy Labs · modeled outputs, not medical findings</p>
+                <nav class="footer-links" aria-label="PsyFi links">
+                    <a href="/privacy" aria-current="page">Privacy</a>
+                    <a href="/docs" target="_blank" rel="noopener">API Docs</a>
+                    <a href="https://github.com/Zero-State-LLC/Psy-Fi" target="_blank" rel="noopener">GitHub</a>
+                    <span class="abx-credit"><span class="pf-icon pf-icon-ethics" aria-hidden="true"></span>ABX-Core v1.3</span>
+                </nav>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
