@@ -53,6 +53,8 @@ export interface StageSamples {
   drawCalls: number | null
   triangles: number | null
   durationMs: number
+  /** Epoch-ms span of the measured frames (see measuredWindowEpochMs); null when none were measured. */
+  windowEpochMs?: [number, number] | null
   jsHeapBytes: number | null
   thumbnailPngBase64: string | null
   snapshotHash: string | null
@@ -71,6 +73,8 @@ export interface CaptureStagePayload {
   draw_calls: number | null
   triangles: number | null
   duration_ms: number
+  /** Measured frames on the epoch clock, warm-up excluded; omitted when none were measured. */
+  window_epoch_ms?: [number, number]
   js_heap_bytes: number | null
   thumbnail_png_base64: string | null
   snapshot_hash: string | null
@@ -124,6 +128,26 @@ export function trimFrames(allMs: number[], warmupFrames: number): number[] {
   return allMs.slice(Math.max(0, warmupFrames)).filter((v) => Number.isFinite(v) && v > 0)
 }
 
+/**
+ * The measured frames' span on the epoch clock: `[start, end]` in ms, warm-up excluded.
+ * Start is the opening of the first measured frame's interval (its `atMs - wallMs`) and end is the
+ * last measured frame's callback, so the window length is the sum of the measured `wallMs`: N frames
+ * over N intervals. `timeOriginMs` is `performance.timeOrigin`, which turns `atMs` into wall-clock
+ * ms that a host power trace on the same machine can line up against (ADR 0011).
+ */
+export function measuredWindowEpochMs(
+  frames: { wallMs: number; atMs: number }[],
+  warmupFrames: number,
+  timeOriginMs: number,
+): [number, number] | null {
+  const measured = frames.slice(Math.max(0, warmupFrames))
+  if (!measured.length) return null
+  const first = measured[0]
+  const start = timeOriginMs + first.atMs - first.wallMs
+  const end = timeOriginMs + measured[measured.length - 1].atMs
+  return Number.isFinite(start) && Number.isFinite(end) && end > start ? [start, end] : null
+}
+
 export function buildCapturePayload(opts: {
   manifest: BenchManifestDoc
   stages: { stage: ScheduledStage; samples: StageSamples }[]
@@ -151,6 +175,7 @@ export function buildCapturePayload(opts: {
       draw_calls: samples.drawCalls,
       triangles: samples.triangles,
       duration_ms: samples.durationMs,
+      ...(samples.windowEpochMs ? { window_epoch_ms: samples.windowEpochMs } : {}),
       js_heap_bytes: samples.jsHeapBytes,
       thumbnail_png_base64: samples.thumbnailPngBase64,
       snapshot_hash: samples.snapshotHash,

@@ -59,6 +59,14 @@ def cmd_run(args: argparse.Namespace) -> int:
         provider_options["record"] = True
     if args.pricing:
         provider_options["pricing"] = json.loads(Path(args.pricing).read_text()) if Path(args.pricing).exists() else json.loads(args.pricing)
+    power_trace = None
+    if getattr(args, "power_trace", None):
+        from psyfi_bench.power_trace import load_power_trace
+
+        try:
+            power_trace = load_power_trace(args.power_trace)
+        except (OSError, ValueError) as exc:  # a missing file, bad JSON, or a document that is not a trace
+            raise SystemExit(f"cannot read power trace {args.power_trace}: {str(exc)[:300]}") from exc
     store = None if args.no_store else ResultStore(Path(args.out) if args.out else None)
     ctx = RunContext(
         repeats=args.repeats,
@@ -70,6 +78,7 @@ def cmd_run(args: argparse.Namespace) -> int:
         provider=args.provider,
         provider_options=provider_options,
         backend=args.backend,
+        power_trace=power_trace,
         store=store,
         inputs=inputs,
         command=" ".join(sys.argv),
@@ -113,8 +122,42 @@ def cmd_ingest(args: argparse.Namespace) -> int:
     from psyfi_bench.families.render import load_capture
 
     capture = load_capture(args.capture)
-    ns = argparse.Namespace(manifest=args.manifest or capture.manifest_id, param=None, capture=args.capture, record=None, pricing=None, no_store=args.no_store, out=args.out, repeats=None, warmup=None, timeout=None, min_duration=None, seed=None, limit=None, provider=None, backend=None, json=args.json, quiet=args.quiet)
+    ns = argparse.Namespace(manifest=args.manifest or capture.manifest_id, param=None, capture=args.capture, record=None, pricing=None, no_store=args.no_store, out=args.out, repeats=None, warmup=None, timeout=None, min_duration=None, seed=None, limit=None, provider=None, backend=None, json=args.json, quiet=args.quiet, power_trace=args.power_trace)
     return cmd_run(ns)
+
+
+def cmd_power_trace(args: argparse.Namespace) -> int:
+    import os
+    import signal
+    import threading
+
+    from psyfi_bench.power_trace import PowerTraceUnavailable, record_power_trace, write_power_trace
+
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    # Found now, not after the bench: a trace that cannot be written at the end is a lost session.
+    if out.is_dir() or not os.access(out.parent, os.W_OK) or (out.exists() and not os.access(out, os.W_OK)):
+        raise SystemExit(f"cannot write the power trace to {out}")
+
+    stop = threading.Event()
+    previous: dict[int, Any] = {}
+    if threading.current_thread() is threading.main_thread():
+        for sig in (signal.SIGINT, signal.SIGTERM):
+            previous[sig] = signal.signal(sig, lambda _signum, _frame: stop.set())
+    try:
+        trace = record_power_trace(stop=stop, duration_s=args.duration, on_start=lambda msg: print(f"power-trace: {msg}", file=sys.stderr, flush=True))
+    except PowerTraceUnavailable as exc:
+        print(f"power-trace: {exc}", file=sys.stderr)
+        return 1
+    finally:
+        for sig, handler in previous.items():
+            signal.signal(sig, handler)
+    write_power_trace(trace, out)
+    powered = sum(1 for s in trace.samples if s.power_w is not None)
+    if trace.note:
+        print(f"power-trace: {trace.note}", file=sys.stderr)
+    print(f"power-trace: wrote {len(trace.samples)} samples ({powered} with power) to {out}", file=sys.stderr)
+    return 0 if powered else 1
 
 
 def cmd_validate(args: argparse.Namespace) -> int:
@@ -231,11 +274,17 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("ingest", help="score a browser GPU capture")
     p.add_argument("capture")
     p.add_argument("--manifest")
+    p.add_argument("--power-trace", help="host trace from `psyfi-bench power-trace`, taken on this host while the capture ran; adds energy per frame (ADR 0011)")
     p.add_argument("--out")
     p.add_argument("--no-store", action="store_true")
     p.add_argument("--json", action="store_true")
     p.add_argument("--quiet", action="store_true")
     p.set_defaults(fn=cmd_ingest)
+
+    p = sub.add_parser("power-trace", help="record this host's GPU power until stopped (Ctrl-C), to pair with a browser capture")
+    p.add_argument("--out", required=True, help="trace file to write when stopped")
+    p.add_argument("--duration", type=float, help="stop after this many seconds instead of waiting for Ctrl-C")
+    p.set_defaults(fn=cmd_power_trace)
 
     p = sub.add_parser("validate", help="verify a result's seal")
     p.add_argument("result")

@@ -17,6 +17,7 @@ RESULT_SCHEMA = "psyfi.bench.result.v1"
 CAPTURE_SCHEMA = "psyfi.bench.gpu_capture.v1"
 SCORECARD_SCHEMA = "psyfi.bench.scorecard.v1"
 CAPABILITIES_SCHEMA = "psyfi.bench.capabilities.v1"
+POWER_TRACE_SCHEMA = "psyfi.bench.power_trace.v1"
 
 FAMILIES = ("field_compute", "render", "interpretation", "fieldloop")
 
@@ -35,6 +36,7 @@ __all__ = [
     "FAMILIES",
     "MANIFEST_SCHEMA",
     "NON_CLAIM",
+    "POWER_TRACE_SCHEMA",
     "RESULT_SCHEMA",
     "SCHEMA_PREFIX",
     "SCORECARD_SCHEMA",

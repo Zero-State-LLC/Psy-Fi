@@ -51,6 +51,8 @@ class RunContext:
     inputs: dict[str, Any] = field(default_factory=dict)
     # Returns a PowerSampler or None. None (default) means "use nvidia-smi when present"; tests inject a fake.
     power_sampler_factory: Callable[[], Any] | None = None
+    # A psyfi_bench.schemas.PowerTrace to pair with a browser capture's stages (CLI ingest only; ADR 0011).
+    power_trace: Any = None
 
     RESERVED_INPUTS = ("capture", "_receipt")
 
