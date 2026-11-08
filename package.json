@@ -10,9 +10,8 @@
     "packages/psyfi-gpu-renderer"
   ],
   "scripts": {
-    "test": "hallmark lint README.md",
-    "markdown:lint": "hallmark lint README.md",
-    "markdown:fix": "hallmark fix README.md",
+    "test": "remark README.md --frail --quiet --no-stdout",
+    "markdown:lint": "remark README.md --frail --quiet --no-stdout",
     "gpu:dev": "npm run dev -w @psyfi/gpu-renderer",
     "gpu:build": "npm run build -w @psyfi/gpu-renderer",
     "gpu:test": "npm run test -w @psyfi/gpu-renderer",
@@ -21,26 +20,47 @@
     "gpu:fps:merge": "python3 scripts/merge_ultra_fps_measured.py"
   },
   "devDependencies": {
-    "hallmark": "^5.0.2"
+    "remark-cli": "^12.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-lint": "^10.0.1",
+    "remark-lint-blockquote-indentation": "^4.0.1",
+    "remark-lint-checkbox-character-style": "^5.0.1",
+    "remark-lint-checkbox-content-indent": "^5.0.1",
+    "remark-lint-code-block-style": "^4.0.1",
+    "remark-lint-definition-case": "^4.0.1",
+    "remark-lint-emphasis-marker": "^4.0.1",
+    "remark-lint-fenced-code-marker": "^4.0.1",
+    "remark-lint-final-newline": "^3.0.1",
+    "remark-lint-hard-break-spaces": "^4.1.1",
+    "remark-lint-list-item-bullet-indent": "^5.0.1",
+    "remark-lint-list-item-indent": "^4.0.1",
+    "remark-lint-no-auto-link-without-protocol": "^3.1.2",
+    "remark-lint-no-blockquote-without-marker": "^6.0.1",
+    "remark-lint-no-duplicate-definitions": "^4.0.1",
+    "remark-lint-no-heading-content-indent": "^5.0.1",
+    "remark-lint-no-inline-padding": "^4.1.2",
+    "remark-lint-no-literal-urls": "^4.0.1",
+    "remark-lint-no-undefined-references": "^5.0.2",
+    "remark-lint-no-unused-definitions": "^4.0.2",
+    "remark-lint-rule-style": "^4.0.1",
+    "remark-lint-strong-marker": "^4.0.1",
+    "remark-lint-table-cell-padding": "^5.1.1",
+    "remark-lint-table-pipes": "^5.0.1",
+    "remark-lint-unordered-list-marker-style": "^4.0.1",
+    "remark-validate-links": "^13.1.0"
   },
   "overrides": {
     "@npmcli/map-workspaces": {
       "glob": "^14.0.4",
       "minimatch": "^11.0.5"
+    },
+    "@npmcli/package-json": {
+      "glob": "^14.0.4",
+      "minimatch": "^11.0.5"
+    },
+    "unified-engine": {
+      "glob": "^14.0.4",
+      "minimatch": "^11.0.5"
     }
-  },
-  "hallmark": {
-    "ignore": [
-      "docs/**",
-      "PLANS.md",
-      "MOBILE_PWA_GUIDE.md",
-      "DEPLOYMENT.md",
-      "QUICK_DEPLOY.md",
-      "CHANGELOG.md",
-      "packages/**",
-      "apps/**"
-    ],
-    "validateLinks": true,
-    "paddedTable": true
   }
 }

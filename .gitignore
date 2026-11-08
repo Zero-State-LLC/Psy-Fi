@@ -1,4 +1,4 @@
-# Node (hallmark + workspaces)
+# Node (remark + workspaces)
 node_modules/
 packages/psyfi-gpu-renderer/dist/
 *.tsbuildinfo

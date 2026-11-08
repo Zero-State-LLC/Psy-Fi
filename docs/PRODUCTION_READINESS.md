@@ -29,7 +29,7 @@ Scope: web app / PWA / API — native iOS deferred (`IOS_MIGRATION.md`).
 | Safety | Intensity/Neutral/WebGL/job/GPU present hardening | **done** | strictest caps · timeline Neutral · WebGL SafetyPass · job caps · no raw present |
 | Deploy | Docker-only path | **done** | `DEPLOYMENT.md` · multi-stage GPU `dist/` |
 | Deploy | Compose healthcheck (no curl) | **done** | urllib |
-| CI | pytest + hallmark + gpu test/typecheck/build | **done** | `.github/workflows/ci.yml` |
+| CI | pytest + remark-lint + gpu test/typecheck/build | **done** | `.github/workflows/ci.yml` |
 | QA | Device capability matrix | **filled** | human + simulated Ultra rows — 2026-07-25 |
 | QA | Phase 4 usability log | **filled** | 2026-07-25 evidence rows |
 | QA | Simulated P0 Ultra desktop QA | **passed** | `SIMULATED_ULTRA_QA.md` (synthetic fps matrix; hardware measured optional) |

@@ -15,7 +15,7 @@ def test_ci_runs_pytest_readme_lint_and_gpu_build() -> None:
     assert "contents: read" in text
     assert 'pip install -e ".[dev]"' in text
     assert "python -m pytest -q" in text
-    assert "npx hallmark lint README.md" in text
+    assert "npx remark README.md --frail --quiet --no-stdout" in text
     assert "npm run gpu:test" in text
     assert "npm run gpu:typecheck" in text
     assert "npm run gpu:build" in text

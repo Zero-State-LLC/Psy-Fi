@@ -13,7 +13,7 @@
 [![API](https://img.shields.io/badge/api-/api/v1-3EE7F2)](docs/contracts/frozen/API_V1_FREEZE.md)
 [![License: Zero State Proprietary](https://img.shields.io/badge/license-Zero%20State%20Proprietary-informational)](LICENSE)
 [![PWA](https://img.shields.io/badge/PWA-installable-3EE7F2)](MOBILE_PWA_GUIDE.md)
-[![Markdown Style Guide](https://img.shields.io/badge/hallmark-informational?logo=markdown)](https://github.com/vweevers/hallmark)
+[![Markdown lint](https://img.shields.io/badge/remark--lint-informational?logo=markdown)](https://github.com/remarkjs/remark-lint)
 
 [Install](#install) · [Usage](#usage) · [Live Experience](#live-experience) · [Production readiness](#production-readiness) · [API](#api) · [Documentation](#documentation) · [Contributing](#contributing)
 
@@ -39,7 +39,7 @@ Full board: [`docs/PRODUCTION_READINESS.md`](docs/PRODUCTION_READINESS.md).
 | Track                              | Status           | Notes                                                                                               |
 | ---------------------------------- | ---------------- | --------------------------------------------------------------------------------------------------- |
 | `/api/v1` contracts                | **hard\_frozen** | `psyfi-api-v1-hard-2026-07-25`                                                                      |
-| CI (pytest + hallmark + GPU build) | **green path**   | `.github/workflows/ci.yml`                                                                          |
+| CI (pytest + remark + GPU build)   | **green path**   | `.github/workflows/ci.yml`                                                                          |
 | Docker deploy                      | **ready**        | Local seam: Compose + urllib healthcheck + GPU `dist/` bake                                         |
 | Cloudflare production host         | **live**         | `psy-fi` · <https://psy-fi.space> · [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md) · not deployed by CI |
 | Live Experience + safety           | **ready**        | Neutral View · ParameterField authority                                                             |
@@ -83,7 +83,7 @@ python3 scripts/sync_frozen_contracts.py
 
 # Tests
 python3 -m pytest tests/ -q
-npm test   # hallmark README lint
+npm test   # remark-lint on README.md
 npm run gpu:test
 
 # Optional GPU platform (R3F + WebGPU)
@@ -204,11 +204,11 @@ Motifs/parameters are **INFERRED**; source existence is **OBSERVED**.
 - Do not add medical/healing claims to UI copy
 - Native iOS stays out of the web track
 - Device matrix / Phase 4 are living QA — not freeze blockers
-- Keep root markdown hallmark-clean: `npx hallmark fix README.md`
+- Keep root markdown lint-clean: `npm test` (remark-lint, `.remarkrc.mjs`)
 
 ```bash
 python3 -m pytest tests/ -q
-npx hallmark lint README.md
+npm test
 python3 scripts/export_openapi.py
 python3 scripts/build_experience_catalog.py
 python3 scripts/sync_frozen_contracts.py
