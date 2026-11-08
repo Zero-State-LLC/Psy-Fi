@@ -4,6 +4,7 @@
  */
 
 import type { QualityTier } from '../contracts/QualityTier'
+import type { KernelCaptureRecord } from './kuramotoKernel'
 
 export const CAPTURE_SCHEMA = 'psyfi.bench.gpu_capture.v1' as const
 
@@ -85,6 +86,8 @@ export interface CapturePayload {
   measurement_class: 'measured'
   browser: Record<string, unknown>
   stages: CaptureStagePayload[]
+  /** Compute-kernel validation stages (stage kind `webgpu_kernel` in Python). Omitted when none ran. */
+  kernels?: KernelCaptureRecord[]
   aborted: boolean
   note: string | null
 }
@@ -128,6 +131,7 @@ export function buildCapturePayload(opts: {
   aborted: boolean
   capturedAt?: string
   note?: string | null
+  kernels?: KernelCaptureRecord[]
 }): CapturePayload {
   return {
     schema: CAPTURE_SCHEMA,
@@ -153,6 +157,7 @@ export function buildCapturePayload(opts: {
       js_errors: samples.jsErrors,
       note: [samples.effectiveTier !== stage.tier ? `requested tier ${stage.tier} clamped to ${samples.effectiveTier}` : '', samples.note || ''].filter(Boolean).join('; ') || null,
     })),
+    ...(opts.kernels && opts.kernels.length ? { kernels: opts.kernels } : {}),
     aborted: opts.aborted,
     note: opts.note ?? null,
   }
