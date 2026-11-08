@@ -72,6 +72,7 @@ export function BenchApp() {
   const probe = useMemo(() => createProbeHandle(), [])
   const abortRef = useRef(false)
   const errorCount = useRef(0)
+  const wantTimestamps = useMemo(() => /[?&]timestamps=(1|true|on)/i.test(window.location.search), [])
 
   useEffect(() => {
     // Renderer exceptions during a stage invalidate its frames; count them into the capture.
@@ -110,7 +111,7 @@ export function BenchApp() {
       viewport: { width: window.innerWidth, height: window.innerHeight },
       hardware_concurrency: nav.hardwareConcurrency ?? null,
       device_memory_gb: nav.deviceMemory ?? null,
-      features: { timestamp_query: probe.gpuTimestampsAvailable },
+      features: { timestamp_query: probe.gpuTimestampsAvailable, timestamps_requested: wantTimestamps },
       prefer_battery: caps.preferBattery,
       is_mobile: caps.isMobile,
       note: 'Frame times are requestAnimationFrame wall spacing; the compositor caps them at the display refresh rate. Chrome quantizes GPU timestamps unless WebGPU developer features are enabled.',
@@ -236,8 +237,8 @@ export function BenchApp() {
       </header>
       <div style={{ position: 'relative', minHeight: 320 }}>
         {caps.webgpu ? (
-          <BenchCanvas key={stageIndex} snapshot={snapshot} tier={tier}>
-            <BenchProbe handle={probe} enabled={measuring} />
+          <BenchCanvas key={stageIndex} snapshot={snapshot} tier={tier} trackTimestamp={wantTimestamps}>
+            <BenchProbe handle={probe} enabled={measuring} trackTimestamp={wantTimestamps} />
           </BenchCanvas>
         ) : (
           <p style={{ padding: 16 }}>WebGPU is not available in this browser. The bench needs Chrome/Edge with WebGPU enabled. No frames were recorded.</p>
@@ -245,7 +246,7 @@ export function BenchApp() {
       </div>
       <footer style={{ padding: '8px 14px', borderTop: '1px solid #1f2a36', fontSize: 13, maxHeight: '40vh', overflow: 'auto' }}>
         <div style={{ opacity: 0.8, marginBottom: 6 }}>
-          adapter: {caps.adapter.description || caps.adapter.vendor || 'unknown'} · band {caps.adapter.perfBand} · GPU timestamps: {probe.gpuTimestampsAvailable === null ? 'probing' : probe.gpuTimestampsAvailable ? 'yes' : 'no'} · stage {stageIndex + 1}/{stages.length}
+          adapter: {caps.adapter.description || caps.adapter.vendor || 'unknown'} · band {caps.adapter.perfBand} · GPU timestamps: {wantTimestamps ? (probe.gpuTimestampsAvailable === null ? 'probing' : probe.gpuTimestampsAvailable ? 'yes' : 'no') : 'off (add ?timestamps=1)'} · stage {stageIndex + 1}/{stages.length}
         </div>
         <table style={{ borderCollapse: 'collapse', width: '100%' }}>
           <thead>

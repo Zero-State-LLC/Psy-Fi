@@ -35,7 +35,7 @@ export function createProbeHandle(): ProbeHandle {
   return handle
 }
 
-export function BenchProbe({ handle, enabled }: { handle: ProbeHandle; enabled: boolean }) {
+export function BenchProbe({ handle, enabled, trackTimestamp = false }: { handle: ProbeHandle; enabled: boolean; trackTimestamp?: boolean }) {
   const { gl } = useThree()
   const last = useRef<number | null>(null)
   const lastCalls = useRef<number | null>(null)
@@ -70,10 +70,7 @@ export function BenchProbe({ handle, enabled }: { handle: ProbeHandle; enabled: 
   useEffect(() => {
     const renderer = gl as unknown as InstanceType<typeof THREE.WebGPURenderer> & { trackTimestamp?: boolean }
     canvasRef.current = (renderer.domElement as HTMLCanvasElement) || null
-    try {
-      // Opt into GPU timing. Chrome quantizes timestamps unless the developer flag is on.
-      renderer.trackTimestamp = true
-    } catch {
+    if (!trackTimestamp) {
       handle.gpuTimestampsAvailable = false
     }
     handle.requestThumbnail = (size: number) =>
@@ -86,7 +83,7 @@ export function BenchProbe({ handle, enabled }: { handle: ProbeHandle; enabled: 
       pendingThumb.current = null
       handle.requestThumbnail = async () => null
     }
-  }, [gl, handle])
+  }, [gl, handle, trackTimestamp])
 
   useFrame(() => {
     const now = performance.now()
@@ -122,7 +119,7 @@ export function BenchProbe({ handle, enabled }: { handle: ProbeHandle; enabled: 
       handle.frames.push({ wallMs, gpuMs, drawCalls, triangles: info.triangles ?? 0 })
     }
     last.current = now
-    if (typeof renderer.resolveTimestampsAsync === 'function') {
+    if (trackTimestamp && typeof renderer.resolveTimestampsAsync === 'function') {
       // Resolve queued GPU timestamps; without this the query pool fills up.
       const TQ = (THREE as unknown as { TimestampQuery?: { RENDER?: unknown } }).TimestampQuery
       void renderer.resolveTimestampsAsync(TQ?.RENDER).catch(() => {
