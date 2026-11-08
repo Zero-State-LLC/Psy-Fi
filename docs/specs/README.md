@@ -56,7 +56,7 @@ The kanban is Zero-State-LLC project **#7**: https://github.com/orgs/Zero-State-
 | #49 | Backlog | Interpretation bench against a live vision model. Needs a person; the run spends the key. |
 | #50 | In review | FieldLoop power sampling. [Pull request #59](https://github.com/Zero-State-LLC/Psy-Fi/pull/59) is open. Energy per frame for browser captures is still open. |
 | #51 | In review | FieldLoop WGSL Kuramoto kernel. [Pull request #60](https://github.com/Zero-State-LLC/Psy-Fi/pull/60) is open. |
-| #52 | Todo | FieldLoop results and scorecard views. Frontend, for Daniel. |
+| #52 | In review | FieldLoop results and scorecard views: a shell page at `/bench`, for the local operator first ([intent](../../intent/bench-results-page.md)). [Pull request #65](https://github.com/Zero-State-LLC/Psy-Fi/pull/65) is open. |
 | #53 | In review | `psyfi-bench score --format` is in [pull request #59](https://github.com/Zero-State-LLC/Psy-Fi/pull/59). The CUDA validation needs hardware. |
 | #54 | Backlog | Benchmark run endpoint. Needs an accepted intent. |
 | #55 | Done | [GPU Lab](gpu-lab.md). A runtime tier switch broke the present path. [Pull request #58](https://github.com/Zero-State-LLC/Psy-Fi/pull/58) is merged and live. |
