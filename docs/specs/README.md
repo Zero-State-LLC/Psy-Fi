@@ -46,3 +46,5 @@ The kanban is Zero-State-LLC project **#7**: https://github.com/orgs/Zero-State-
 | #21 | Done | [MIDI](midi.md). [Pull request #26](https://github.com/Zero-State-LLC/Psy-Fi/pull/26) is merged. |
 | #22 | Done | [GPU Lab](gpu-lab.md). [Pull request #25](https://github.com/Zero-State-LLC/Psy-Fi/pull/25) is merged. |
 | #23 | Done | [Cloudflare and NVIDIA](cloudflare-nvidia.md). [Pull request #24](https://github.com/Zero-State-LLC/Psy-Fi/pull/24) is merged. |
+| #36 | Done | Public host `https://psy-fi.space` on Worker `psy-fi`. [Issue #36](https://github.com/Zero-State-LLC/Psy-Fi/issues/36). |
+| #37 | Done | Public shell on the field plate. [Pull request #38](https://github.com/Zero-State-LLC/Psy-Fi/pull/38) is merged. |

@@ -18,8 +18,10 @@ not a second spec.
 |---|---|
 | [`_TEMPLATE.md`](_TEMPLATE.md) | Blank intent. Copy this. |
 | `<change-stream>.md` | One committed intent per change stream (after a human accepts) |
+| [`../intent.md`](../intent.md) | Accepted public-host intent. The handoff asked for this filename at the repo root. |
+| [`../context.md`](../context.md) | Live-host map for the next operator. Not a second spec. |
 
-There is no product intent in this folder until a human accepts one.
+Further streams still get their own file in this folder. The accepted public-host intent is the root [`intent.md`](../intent.md) because that handoff named the file. Do not treat this folder as empty of product intent while that file is accepted.
 
 ## How to start a change
 

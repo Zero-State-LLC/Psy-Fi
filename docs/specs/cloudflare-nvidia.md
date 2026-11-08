@@ -125,3 +125,5 @@ The image-seed decision already refuses a generative model inside the seed. That
 The grounding plan allows an optional later language-model path behind an explicit flag, and it keeps the planner deterministic. The flag this spec adds is the image reading. The planner stays the template.
 
 The audit on `7ca678e0` finds no Worker config, no AI Gateway, no NVIDIA call, and no vision call. Compose is the only ship path in the tree.
+
+The public name as of 2026-11-07 is `https://psy-fi.space` on Worker `psy-fi` ([issue #36](https://github.com/Zero-State-LLC/Psy-Fi/issues/36)). `workers.dev` is off on that script. The older `psyfi` script stays a separate deploy target. This note names the host. It does not add an AI Gateway, and it does not replace the Call section above.

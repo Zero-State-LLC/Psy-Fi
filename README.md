@@ -41,7 +41,7 @@ Full board: [`docs/PRODUCTION_READINESS.md`](docs/PRODUCTION_READINESS.md).
 | `/api/v1` contracts                | **hard\_frozen** | `psyfi-api-v1-hard-2026-07-25`                                              |
 | CI (pytest + hallmark + GPU build) | **green path**   | `.github/workflows/ci.yml`                                                  |
 | Docker deploy                      | **ready**        | Local seam: Compose + urllib healthcheck + GPU `dist/` bake                 |
-| Cloudflare production host         | **specified**    | Worker + Container · [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md) · not deployed by CI |
+| Cloudflare production host         | **live**         | `psy-fi` · <https://psy-fi.space> · [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md) · not deployed by CI |
 | Live Experience + safety           | **ready**        | Neutral View · ParameterField authority                                     |
 | GPU platform G0–G3                 | **ready**        | `/gpu/` present · compute · TAA · premium post                              |
 | GPU G4 cutover ship gates          | **ready**        | assets · parity · goldens · [`G4_CUTOVER.md`](docs/rendering/G4_CUTOVER.md) |
@@ -172,7 +172,9 @@ Canonical browser API is **`/api/v1`** (**hard-frozen**). Legacy `/api/*` and `/
 | [`docs/PWA_GPU_ROUTE.md`](docs/PWA_GPU_ROUTE.md)                                   | `/gpu/` separate-route decision |
 | [`docs/SIMULATED_ULTRA_QA.md`](docs/SIMULATED_ULTRA_QA.md)                         | Simulated P0 Ultra desktop QA   |
 | [`docs/NVIDIA_GPU.md`](docs/NVIDIA_GPU.md)                                         | NVIDIA drivers + Compose        |
-| [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md)                                         | Production Worker + vision call |
+| [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md)                                         | Production host <https://psy-fi.space> |
+| [`context.md`](context.md)                                                         | Live-host map for the next operator |
+| [`intent.md`](intent.md)                                                           | Accepted public-host intent |
 | [`PLANS.md`](PLANS.md)                                                             | Product phases + gates          |
 | [`docs/VISUAL_EXPERIENCES.md`](docs/VISUAL_EXPERIENCES.md)                         | Live Experience guide           |
 | [`docs/rendering/README.md`](docs/rendering/README.md)                             | WebGPU platform docs            |
