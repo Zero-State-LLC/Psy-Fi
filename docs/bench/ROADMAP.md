@@ -25,7 +25,6 @@ Date: 2026-11-07. Board: Zero-State-LLC project #7 (Psy-Fi). Project #16 is Noem
 
 ### Autonomous backend (agent-ready)
 
-- Power sampling thread via `nvidia-smi --query-gpu=power.draw` during a stage when the tool exists; report energy per cell-step and per frame as `measured`, otherwise keep `unavailable.power`.
 - A `render.soft.scaling` manifest over sizes 64..1024 with raster ms per megapixel fits.
 - Scorecard export to Markdown and CSV from the CLI (`--format`).
 - Receipt-driven regression: a committed replay receipt from a baseline is not evidence, but a CI test could replay a recorded live receipt if a human commits one.
@@ -33,6 +32,7 @@ Date: 2026-11-07. Board: Zero-State-LLC project #7 (Psy-Fi). Project #16 is Noem
 ### Hardware-dependent (needs a machine)
 
 - Discrete NVIDIA, AMD, Intel Arc and Apple Pro/Max captures from `/gpu/bench.html`.
+- A first `power-trace` plus `ingest --power-trace` run on an NVIDIA host. The code is in ([ADR 0011](adr/0011-host-power-trace-for-browser-captures.md)) and tested only against a fake `nvidia-smi`.
 - torch CUDA validation of `field-compute.accelerator` (MPS validated on this Mac when torch is installed).
 - A WGSL Kuramoto compute kernel in the browser validated against a Python reference fixture (designed in RESEARCH.md; not implemented).
 

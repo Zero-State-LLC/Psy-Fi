@@ -1,6 +1,6 @@
 # ADR 0011: Energy per frame comes from a host power trace aligned to each browser stage
 
-Status: proposed, 2026-11-08. Not implemented. Needs a human to accept it before an agent builds it (issue #50).
+Status: accepted, 2026-11-08 (operator).
 
 ## Problem
 
@@ -49,7 +49,9 @@ The tests use a synthetic capture with windows and a synthetic trace, and never 
 - a stage without a window, giving no power;
 - a capture with no `--power-trace`, which is unchanged.
 
-## Open questions
+## Decided questions
 
-- Whether the host match is strict (the same `hostname_hash`) or only requires the same GPU name.
-- Whether the gated API ingest (`PSYFI_BENCH_INGEST=1`) should accept a trace too, or only the CLI.
+- The host match is strict: the trace's `hostname_hash` must equal the scoring host's. A matching GPU name is not enough.
+- A trace is CLI only: the gated API ingest (`PSYFI_BENCH_INGEST=1`) does not accept one.
+
+Implemented in `psyfi_bench/power_trace.py`, with sample times taken from nvidia-smi's own stamp converted to epoch seconds rather than `time.time_ns` at read time, so pipe delay stays out of them.
