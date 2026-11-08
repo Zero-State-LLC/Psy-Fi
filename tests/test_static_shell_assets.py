@@ -121,6 +121,29 @@ def test_pwa_gpu_route_decision_documented() -> None:
     assert "GPU Lab route" in app_js
 
 
+def test_homepage_social_preview_uses_the_launch_image() -> None:
+    html = TEMPLATE.read_text(encoding="utf-8")
+    image = "https://psy-fi.space/static/images/psyfi-hero.jpg"
+    assert 'property="og:type" content="website"' in html
+    assert 'property="og:url" content="https://psy-fi.space/"' in html
+    assert 'property="og:title" content="PsyFi – Consciousness Field Simulator"' in html
+    assert 'property="og:description" content="Modular consciousness field simulation engine with ABX-Core v1.3"' in html
+    assert f'property="og:image" content="{image}"' in html
+    assert 'property="og:image:width" content="1400"' in html
+    assert 'property="og:image:height" content="933"' in html
+    assert 'name="twitter:card" content="summary_large_image"' in html
+    assert f'name="twitter:image" content="{image}"' in html
+    assert 'rel="canonical" href="https://psy-fi.space/"' in html
+    hero = STATIC / "images" / "psyfi-hero.jpg"
+    assert hero.exists()
+    # JPEG start, and the declared card size matches the file.
+    assert hero.read_bytes()[:3] == b"\xff\xd8\xff"
+    from PIL import Image
+
+    with Image.open(hero) as im:
+        assert im.size == (1400, 933)
+
+
 def test_pwa_png_icons_exist() -> None:
     assert (STATIC / "icon-192.png").exists()
     assert (STATIC / "icon-512.png").exists()
