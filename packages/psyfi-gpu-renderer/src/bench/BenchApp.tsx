@@ -25,6 +25,8 @@ import {
   type ScheduledStage,
   type StageSamples,
 } from './schedule'
+import { parseKernelMode, type KernelCaptureRecord } from './kuramotoKernel'
+import { runKuramotoKernelStage } from './kuramotoWebGpu'
 
 type Phase = 'idle' | 'loading' | 'running' | 'done' | 'error'
 
@@ -58,6 +60,12 @@ function downloadJson(filename: string, data: unknown): void {
   URL.revokeObjectURL(url)
 }
 
+function quickMedian(xs: number[]): number {
+  if (!xs.length) return NaN
+  const s = [...xs].sort((a, b) => a - b)
+  return s[Math.floor(s.length / 2)]
+}
+
 export function BenchApp() {
   const [phase, setPhase] = useState<Phase>('idle')
   const [status, setStatus] = useState('Idle. WebGPU bench runner for render.webgpu.tiers.')
@@ -69,6 +77,8 @@ export function BenchApp() {
   const [rows, setRows] = useState<{ stage: ScheduledStage; samples: StageSamples }[]>([])
   const [payload, setPayload] = useState<CapturePayload | null>(null)
   const [postStatus, setPostStatus] = useState<string | null>(null)
+  const [kernelRows, setKernelRows] = useState<KernelCaptureRecord[]>([])
+  const kernelMode = useMemo(() => parseKernelMode(window.location.search), [])
   const probe = useMemo(() => createProbeHandle(), [])
   const abortRef = useRef(false)
   const errorCount = useRef(0)
@@ -119,16 +129,24 @@ export function BenchApp() {
   }, [caps, probe])
 
   const run = useCallback(async () => {
-    if (!manifest || !caps.webgpu) return
+    if (!manifest || (!caps.webgpu && kernelMode !== 'only')) return
     abortRef.current = false
     setRows([])
+    setKernelRows([])
     setPayload(null)
     setPostStatus(null)
     setPhase('loading')
     const collected: { stage: ScheduledStage; samples: StageSamples }[] = []
+    const kernels: KernelCaptureRecord[] = []
     try {
+      if (kernelMode !== 'off') {
+        // Own WebGPU device, run before any frame stage so it cannot perturb them. Unsupported -> explicit reason.
+        setStatus('Kernel: WGSL Kuramoto step on the 32x32 seed-1337 fixture…')
+        kernels.push(await runKuramotoKernelStage())
+        setKernelRows([...kernels])
+      }
       for (let i = 0; i < stages.length; i++) {
-        if (abortRef.current) break
+        if (abortRef.current || kernelMode === 'only') break
         const stage = stages[i]
         const c = manifest.params.cases.find((x) => x.key === stage.caseKey)
         if (!c) throw new Error(`case ${stage.caseKey} missing from manifest`)
@@ -195,7 +213,7 @@ export function BenchApp() {
         setRows([...collected])
         setPhase('loading')
       }
-      const cap = buildCapturePayload({ manifest, stages: collected, browser: browserInfo(), aborted: abortRef.current })
+      const cap = buildCapturePayload({ manifest, stages: collected, browser: browserInfo(), aborted: abortRef.current, kernels })
       setPayload(cap)
       setPhase('done')
       setStatus(abortRef.current ? 'Aborted. Partial capture ready.' : 'Capture ready. Download it and run `psyfi-bench ingest <file>`, or post it if ingest is enabled.')
@@ -203,7 +221,7 @@ export function BenchApp() {
       setPhase('error')
       setStatus(err instanceof Error ? err.message : 'bench failed')
     }
-  }, [manifest, caps, stages, probe, browserInfo])
+  }, [manifest, caps, stages, probe, browserInfo, kernelMode])
 
   const post = useCallback(async () => {
     if (!payload) return
@@ -224,8 +242,8 @@ export function BenchApp() {
       <header style={{ padding: '10px 14px', display: 'flex', gap: 12, alignItems: 'center', borderBottom: '1px solid #1f2a36', flexWrap: 'wrap' }}>
         <strong>PsyFi FieldLoop · GPU bench</strong>
         <span style={{ opacity: 0.8 }}>{status}</span>
-        <button type="button" onClick={() => void run()} disabled={!manifest || !caps.webgpu || phase === 'running' || phase === 'loading'}>
-          Run {stages.length ? `(${stages.length} stages)` : ''}
+        <button type="button" onClick={() => void run()} disabled={!manifest || (!caps.webgpu && kernelMode !== 'only') || phase === 'running' || phase === 'loading'}>
+          Run {kernelMode === 'only' ? '(kernel only)' : `${stages.length ? `(${stages.length} stages)` : ''}${kernelMode === 'on' ? ' + kernel' : ''}`}
         </button>
         <button type="button" onClick={() => { abortRef.current = true }} disabled={phase !== 'running' && phase !== 'loading'}>
           Abort
@@ -270,6 +288,11 @@ export function BenchApp() {
             })}
           </tbody>
         </table>
+        {kernelRows.map((k) => (
+          <div key={k.id} style={{ marginTop: 6 }}>
+            {k.id}: {k.status === 'ran' ? `max abs error ${k.max_abs_error ?? 'non-finite'} (tolerance ${k.tolerance}) · ${k.passed ? 'pass' : 'FAIL'} · ${k.timing_source} p50 ${quickMedian(k.dispatch_ms).toFixed(4)} ms/dispatch` : k.status === 'unsupported' ? `unsupported: ${k.unsupported_reason}` : `error: ${k.error}`}
+          </div>
+        ))}
         <p style={{ opacity: 0.6, marginTop: 8 }}>
           The quick numbers are a sanity check. Scoring (percentiles, 1% low, pacing, drift, tier fidelity, budgets) happens in Python. Modeled phenomenology for research/visualization only. Not medical advice.
         </p>
