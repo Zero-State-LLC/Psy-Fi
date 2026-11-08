@@ -57,6 +57,7 @@ Browser GPU bench: start the API, open `http://localhost:8000/gpu/bench.html` in
 ```bash
 python3 -m psyfi_bench ingest ~/Downloads/psyfi-fieldloop-gpu-capture-*.json
 python3 -m psyfi_bench score bench_results/render/*.json --labels a,b
+python3 -m psyfi_bench score bench_results/render/*.json --labels a,b --format csv   # markdown (default), csv, json
 ```
 
 Results are sealed JSON under `bench_results/` (gitignored). `psyfi-bench validate <file>` checks the seal. `psyfi-bench export-schemas` refreshes the integration package.
