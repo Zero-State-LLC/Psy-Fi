@@ -44,10 +44,12 @@ The older Worker `psyfi` on workers.dev stays. Do not attach `psy-fi.space` to i
 
 ## 4. Open, and not yours until a human accepts an intent
 
+Evidence and a recommendation for each open question, researched 2026-11-08: [`docs/specs/OPEN_QUESTIONS.md`](docs/specs/OPEN_QUESTIONS.md).
+
 - Issue #10, hardware Ultra evidence.
 - Catalog reload: keep, rename, or remove.
 - Whether a later host should use an AI Gateway.
-- A GPU frame-time bench. It does not share the vision bench score, corpus, or pass rule.
+- A GPU frame-time bench. Answered: FieldLoop's `render.webgpu.tiers` and `/gpu/bench.html` (pull request #56) are that bench, scored apart from the vision bench.
 - A committed vision-bench receipt. A person has to run the capture first.
 
 ## 5. If the work is a new slice

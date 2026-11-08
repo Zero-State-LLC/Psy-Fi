@@ -29,7 +29,7 @@ One seam per spec. Existing seams only.
 
 ## How this sits in the workflow
 
-`intent/` is stage 0. These specs are the next stage. Tickets, when cut, are disposable slices of a spec. A spec is the decision record.
+`intent/` is stage 0. These specs are the next stage. Open questions, with evidence and a recommendation each, are in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md). Tickets, when cut, are disposable slices of a spec. A spec is the decision record.
 
 The issue tracker is GitHub. `docs/agents/` maps the Pocock roles. A spec whose behavior already matches the runtime is marked implemented and is not an agent ticket. A spec with a remaining gap is marked `ready-for-agent` and names the GitHub issue. That issue is the agent contract for the gap. It is not a work order to rebuild the instrument.
 

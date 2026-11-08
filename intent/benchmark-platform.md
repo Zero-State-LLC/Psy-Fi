@@ -52,8 +52,8 @@ Non-goals:
 ## Open questions
 
 - Whether a run endpoint should exist behind an accepted intent (today: CLI only).
-- Whether a WGSL Kuramoto compute kernel in the browser is worth validating against the Python reference (designed, not implemented).
-- Whether Daniel wants results in the shell, the GPU lab, or a new page (integration package ready; UI is his).
+- Whether a WGSL Kuramoto compute kernel in the browser is worth validating against the Python reference (designed, not implemented). Answered 2026-11-08: yes; pull request #60 implements it and validated it on an Apple GPU (max abs error 7.2e-7, tolerance 1e-3).
+- Whether Daniel wants results in the shell, the GPU lab, or a new page (integration package ready; UI is his). Answered 2026-11-08: a shell page at `/bench`, for the local operator first ([`intent/bench-results-page.md`](bench-results-page.md), pull request #65).
 
 ## Verified / assumed
 
