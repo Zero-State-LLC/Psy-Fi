@@ -18,6 +18,18 @@ _SCAN_ROOTS = (
 )
 
 
+def test_public_worker_is_psy_fi_space_only() -> None:
+    text = (ROOT / "wrangler.jsonc").read_text(encoding="utf-8")
+    assert '"name": "psy-fi"' in text
+    assert '"workers_dev": false' in text
+    assert '"preview_urls": false' in text
+    assert text.count('"pattern"') == 1
+    assert '"pattern": "psy-fi.space"' in text
+    assert '"custom_domain": true' in text
+    assert "www.psy-fi.space" not in text
+    assert "workers.dev" not in text
+
+
 def test_wrangler_names_the_container_and_does_not_pin_a_model() -> None:
     text = (ROOT / "wrangler.jsonc").read_text(encoding="utf-8")
     assert _NEEDLE not in text

@@ -1,6 +1,6 @@
 # PsyFi Deployment Guide
 
-Production is one Cloudflare Worker: static shell and GPU lab, Python API in the existing image behind that Worker. The steps are in [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md). CI does not deploy.
+Production is one Cloudflare Worker: static shell and GPU lab, Python API in the existing image behind that Worker. The public name is `https://psy-fi.space` on Worker `psy-fi`. The steps, and the older `psyfi` script, are in [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md). CI does not deploy.
 
 Docker Compose is the local seam. Azure, Render, and the Pages workflow are not ship paths.
 
