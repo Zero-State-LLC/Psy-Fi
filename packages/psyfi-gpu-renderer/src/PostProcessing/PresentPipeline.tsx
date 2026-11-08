@@ -1,36 +1,13 @@
 import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three/webgpu'
-import {
-  pass,
-  uniform,
-  vec3,
-  float,
-  mix,
-  max,
-  div,
-  mul,
-  select,
-  greaterThan,
-  renderOutput,
-  mrt,
-  output,
-  normalView,
-  metalness,
-  velocity,
-} from 'three/tsl'
-import { bloom } from 'three/addons/tsl/display/BloomNode.js'
-import { afterImage } from 'three/addons/tsl/display/AfterImageNode.js'
-import { ao } from 'three/addons/tsl/display/GTAONode.js'
-import { ssr } from 'three/addons/tsl/display/SSRNode.js'
-import { dof } from 'three/addons/tsl/display/DepthOfFieldNode.js'
-import { rgbShift } from 'three/addons/tsl/display/RGBShiftNode.js'
-import { motionBlur } from 'three/addons/tsl/display/MotionBlur.js'
+import { uniform } from 'three/tsl'
 import type { SceneSnapshotV1 } from '../contracts/SceneSnapshot'
 import type { QualityTier } from '../contracts/QualityTier'
 import { tierConfig } from '../contracts/QualityTier'
 import { resolveTemporalPolicy } from './TemporalAccumulate'
-import { disposePresentResources, type DisposableGpuResource } from './presentDispose'
+import { disposePresentResources } from './presentDispose'
+import { buildPresentGraph } from './presentGraph'
 
 /**
  * Present path: scene → GTAO → SSR → bloom → DoF → motion blur → chroma → temporal → grade → safety.
@@ -56,98 +33,17 @@ export function PresentPipeline({
 
   useEffect(() => {
     const renderer = gl as unknown as InstanceType<typeof THREE.WebGPURenderer>
-    const scenePass = pass(scene, camera)
-    const disposables: DisposableGpuResource[] = [scenePass]
-    const needsMrt = cfg.post.ssao || cfg.post.ssr || cfg.post.motionBlur
+    const graph = buildPresentGraph({
+      scene,
+      camera,
+      tier,
+      uniforms: { uExposure, uGrade, uSafety },
+    })
+    bloomStrengthRef.current = graph.bloomStrength
+    temporalDampRef.current = graph.temporalDamp
+    const disposables = graph.disposables
 
-    if (needsMrt) {
-      scenePass.setMRT(
-        mrt({
-          output,
-          normal: normalView,
-          metalness,
-          ...(cfg.post.motionBlur ? { velocity } : {}),
-        }),
-      )
-    }
-
-    const color = scenePass.getTextureNode('output')
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let node: any = color
-    const depth = scenePass.getTextureNode('depth')
-    const normal = needsMrt ? scenePass.getTextureNode('normal') : null
-
-    if (cfg.post.ssao && normal) {
-      const aoPass = ao(depth, normal, camera)
-      aoPass.resolutionScale = tier === 'balanced' ? 0.5 : 1
-      disposables.push(aoPass)
-      node = aoPass.getTextureNode().mul(color)
-    }
-
-    if (cfg.post.ssr && normal) {
-      const metal = scenePass.getTextureNode('metalness')
-      const ssrPass = ssr(node, depth, normal, metal, camera)
-      disposables.push(ssrPass)
-      node = node.add(ssrPass.getTextureNode().mul(float(0.28)))
-    }
-
-    if (cfg.post.bloom) {
-      const bloomPass = bloom(node, 0.35, 0.4, 0.85)
-      bloomStrengthRef.current = bloomPass.strength
-      disposables.push(bloomPass)
-      node = node.add(bloomPass)
-    } else {
-      bloomStrengthRef.current = null
-    }
-
-    if (cfg.post.depthOfField) {
-      const viewZ = scenePass.getViewZNode('depth')
-      // Subtle DoF — Neutral path still reads clearly via safety/exposure later
-      const dofPass = dof(node, viewZ, float(2.2), float(0.018), float(0.006))
-      disposables.push(dofPass)
-      node = dofPass
-    }
-
-    if (cfg.post.motionBlur) {
-      const vel = scenePass.getTextureNode('velocity')
-      const mb = motionBlur(node, vel, 8)
-      disposables.push(mb)
-      node = mb
-    }
-
-    if (cfg.post.chromaticAberration) {
-      const chroma = rgbShift(node, 0.0018, 0.0)
-      disposables.push(chroma)
-      node = chroma
-    }
-
-    if (cfg.post.taa) {
-      const temporal = afterImage(node, 0.82)
-      temporalDampRef.current = temporal.damp
-      disposables.push(temporal)
-      node = temporal.getTextureNode()
-    } else {
-      temporalDampRef.current = null
-    }
-
-    if (cfg.post.colorGrading || cfg.post.hdr) {
-      node = node.mul(uGrade).mul(uExposure)
-    }
-
-    // Mandatory safety: peak luminance clamp (safety_clamp.wgsl) then attenuator.
-    // Peak clamp must run even when uSafety === 1 (common happy path).
-    const peak = max(node.r, max(node.g, node.b))
-    const peakScale = select(greaterThan(peak, float(0.96)), div(float(0.96), peak), float(1))
-    node = mul(node, peakScale)
-    node = node.mul(uSafety)
-    node = mix(vec3(0.05, 0.05, 0.055), node, float(0.98))
-
-    if (cfg.post.hdr) {
-      node = renderOutput(node)
-    }
-
-    const post = new THREE.PostProcessing(renderer, node)
+    const post = new THREE.PostProcessing(renderer, graph.output)
     post.outputColorTransform = !cfg.post.hdr
     postRef.current = post
     disposables.push(post)
