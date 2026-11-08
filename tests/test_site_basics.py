@@ -141,7 +141,9 @@ def test_privacy_page_is_served_and_linked_from_every_footer() -> None:
     assert 'href="https://zer0state.com/privacy.html"' in html
     assert "zer0state@zer0state.com" in html
     assert "Cloudflare Web Analytics" in html
-    assert "static.cloudflareinsights.com" in html
+    # The whole disclosure sentence, not a bare hostname: a hostname-only substring check reads as
+    # URL sanitising to CodeQL (py/incomplete-url-substring-sanitization).
+    assert "Cloudflare adds a script from static.cloudflareinsights.com to each page" in html
     # Automatic (proxied) Web Analytics reports to the site's own /cdn-cgi/rum.
     assert "/cdn-cgi/rum" in html
     # The page names NVIDIA as a recipient, so it links NVIDIA's policy.
