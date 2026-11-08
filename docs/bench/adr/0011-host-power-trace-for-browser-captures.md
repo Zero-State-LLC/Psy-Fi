@@ -37,6 +37,8 @@ Issue #50 asks for energy per frame on WebGPU captures scored on the same host. 
 - It exists only on hosts with `nvidia-smi` and a GPU that reports power. Apple and AMD captures stay unavailable, with a reason, and so do vGPU slices, which do not expose board power.
 - nvidia-smi's sensor sees only part of each update period (about 25% of runtime on A100 and H100, per arXiv:2312.02741), so per-frame energy needs a stage of at least 1 s, the same rule as field compute.
 - Both schema changes are additive: the window on `CaptureStage` and a trace document. A capture without windows scores exactly as today.
+- `performance.timeOrigin + performance.now()` does not follow wall-clock steps made after the page loads (an NTP correction, a sleep). Load the bench page just before the run. Any remaining offset between the two clocks is neither measured nor corrected.
+- This has been exercised only against synthetic captures and a fake `nvidia-smi`. The first run on a real NVIDIA host (register entry 6) is what shows it working.
 - The operator runs two things at once, the trace command and the bench page. `docs/bench/README.md` would gain a three-line recipe.
 
 ## Testing decisions

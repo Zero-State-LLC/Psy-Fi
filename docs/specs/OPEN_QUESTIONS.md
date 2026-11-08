@@ -14,7 +14,7 @@ This register collects every open question from `intent.md`, `intent/*.md`, `HAN
 | 4 | [Vision-bench receipt and #49](#4-vision-bench-receipt-and-49) | Open. Needs a person with the key: about 4 posts, then 28 (smoke) or 242 (full) | Operator |
 | 5 | [FieldLoop run endpoint (#54)](#5-fieldloop-run-endpoint-54) | Open. Recommend no | Operator |
 | 6 | [Discrete GPU, CUDA and power evidence (#48, #53, #50)](#6-discrete-gpu-cuda-and-power-evidence-48-53-50) | Open. Needs a cloud account | Operator |
-| 7 | [Per-frame energy (ADR 0011)](#7-per-frame-energy-adr-0011) | Open. Interval settled; acceptance pending | Operator |
+| 7 | [Per-frame energy (ADR 0011)](#7-per-frame-energy-adr-0011) | Answered. Accepted and built; a real NVIDIA run is entry 6 | — |
 | 8 | [Publishing results on psy-fi.space](#8-publishing-results-on-psy-fispace) | Open. Recommend not yet | Operator |
 | 9 | [Read-only scorecard endpoint](#9-read-only-scorecard-endpoint) | Open. Tied to 8 | Operator, Fable |
 | 10 | [README linter advisories](#10-readme-linter-advisories) | Open. Recommend switching to `remark-cli`, checked as equivalent on the README | Operator |
@@ -162,6 +162,8 @@ Asked in: ADR 0011 (proposed, merged with #59) and issue #50.
 - **Host match:** strict, the same `hostname_hash`. Wall-clock alignment only holds on the same machine.
 - **Trace:** CLI only, since ingest is off on the public host anyway.
 - **Then:** accept the ADR, and the build is a clear agent slice.
+
+**Answered** by the operator on 2026-11-08 ("permission granted where required, continue"): accepted as recommended, with a strict `hostname_hash` match and a CLI-only trace. `psyfi-bench power-trace` and `psyfi-bench ingest --power-trace` implement it. It has run only against synthetic captures and a fake `nvidia-smi`; a real run needs the NVIDIA host in entry 6.
 
 ## 8. Publishing results on psy-fi.space
 
