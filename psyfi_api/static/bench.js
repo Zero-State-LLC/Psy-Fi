@@ -127,11 +127,12 @@
     return lines.length ? lines.join('; ') : 'see the run';
   }
 
-  async function api(path) {
+  async function api(path, signal) {
     let response;
     try {
-      response = await fetch(path, { headers: { Accept: 'application/json' } });
+      response = await fetch(path, { headers: { Accept: 'application/json' }, signal });
     } catch (err) {
+      if (signal?.aborted) throw err;
       throw new Error(`Could not reach the bench API (${err.message}).`);
     }
     let body = null;
@@ -152,7 +153,15 @@
 
   // ----- Results list -----
 
-  const state = { selected: null, entries: [] };
+  // Only the newest list request and the newest run request may render: each new one aborts the last.
+  const state = { selected: null, entries: [], listRequest: null, runRequest: null };
+
+  function supersede(key) {
+    state[key]?.abort();
+    const controller = new AbortController();
+    state[key] = controller;
+    return controller;
+  }
 
   function showResultsError(message) {
     $('benchResultsWrap').hidden = true;
@@ -206,14 +215,17 @@
     if (family) query.set('family', family);
     $('benchResultsStatus').textContent = 'Reading the results on this host.';
     $('benchRefresh').setAttribute('aria-busy', 'true');
+    const request = supersede('listRequest');
     try {
-      const doc = await api(`${API}/results?${query}`);
+      const doc = await api(`${API}/results?${query}`, request.signal);
+      if (state.listRequest !== request) return;
       state.entries = Array.isArray(doc?.results) ? doc.results : [];
       renderResults(state.entries);
     } catch (err) {
+      if (state.listRequest !== request) return;
       showResultsError(err.message);
     } finally {
-      $('benchRefresh').removeAttribute('aria-busy');
+      if (state.listRequest === request) $('benchRefresh').removeAttribute('aria-busy');
     }
   }
 
@@ -334,13 +346,17 @@
     renderResults(state.entries);
     const status = $('benchDetailStatus');
     status.textContent = `Reading run ${runId}.`;
+    const request = supersede('runRequest');
     try {
-      const result = await api(`${API}/results/${encodeURIComponent(runId)}`);
+      const result = await api(`${API}/results/${encodeURIComponent(runId)}`, request.signal);
+      // A slower answer for a run the operator has since moved off must not overwrite the current one.
+      if (state.runRequest !== request || state.selected !== runId) return;
       renderRun(result);
       status.textContent = `Showing run ${runId}.`;
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       $('benchDetail').scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
     } catch (err) {
+      if (state.runRequest !== request || state.selected !== runId) return;
       $('benchDetailBody').hidden = true;
       $('benchDetailEmpty').hidden = false;
       status.textContent = err.message;
