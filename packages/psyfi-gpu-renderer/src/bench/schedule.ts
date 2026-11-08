@@ -24,6 +24,8 @@ export interface BenchManifestDoc {
     tiers: string[]
     frames_per_stage: number
     warmup_frames: number
+    /** Warm-up also lasts at least this long so late pipeline compilation stays out of the sample. */
+    warmup_min_ms?: number
     sustained?: { case: string; tier: string; frames: number } | null
     thumbnail_size?: number
     include_simulation?: boolean
@@ -36,10 +38,15 @@ export interface ScheduledStage {
   tier: QualityTier
   requestedFrames: number
   warmupFrames: number
+  warmupMinMs: number
   sustained: boolean
 }
 
 export interface StageSamples {
+  /** Warm-up frames actually discarded (>= stage.warmupFrames when warmupMinMs extended it). */
+  warmupUsed: number
+  /** Uncaught errors and unhandled rejections observed while this stage was measured. */
+  jsErrors: number
   framesMs: number[]
   gpuMs: number[] | null
   drawCalls: number | null
@@ -66,6 +73,7 @@ export interface CaptureStagePayload {
   js_heap_bytes: number | null
   thumbnail_png_base64: string | null
   snapshot_hash: string | null
+  js_errors: number
   note: string | null
 }
 
@@ -93,16 +101,17 @@ export function scheduleStages(manifest: BenchManifestDoc): ScheduledStage[] {
   const out: ScheduledStage[] = []
   const frames = Math.max(1, Math.floor(manifest.params.frames_per_stage))
   const warmup = Math.max(0, Math.floor(manifest.params.warmup_frames))
+  const warmupMinMs = Math.max(0, Math.floor(manifest.params.warmup_min_ms ?? 0))
   for (const c of manifest.params.cases) {
     for (const tierRaw of manifest.params.tiers) {
       const tier = asTier(tierRaw)
-      out.push({ id: `${c.key}.${tier}`, caseKey: c.key, tier, requestedFrames: frames, warmupFrames: warmup, sustained: false })
+      out.push({ id: `${c.key}.${tier}`, caseKey: c.key, tier, requestedFrames: frames, warmupFrames: warmup, warmupMinMs, sustained: false })
     }
   }
   const s = manifest.params.sustained
   if (s) {
     const tier = asTier(s.tier)
-    out.push({ id: `sustained.${s.case}.${tier}`, caseKey: s.case, tier, requestedFrames: Math.max(1, Math.floor(s.frames)), warmupFrames: warmup, sustained: true })
+    out.push({ id: `sustained.${s.case}.${tier}`, caseKey: s.case, tier, requestedFrames: Math.max(1, Math.floor(s.frames)), warmupFrames: warmup, warmupMinMs, sustained: true })
   }
   return out
 }
@@ -132,7 +141,7 @@ export function buildCapturePayload(opts: {
       tier: samples.effectiveTier,
       snapshot_key: stage.caseKey,
       requested_frames: stage.requestedFrames,
-      warmup_frames: stage.warmupFrames,
+      warmup_frames: samples.warmupUsed,
       frames_ms: samples.framesMs,
       gpu_ms: samples.gpuMs,
       draw_calls: samples.drawCalls,
@@ -141,6 +150,7 @@ export function buildCapturePayload(opts: {
       js_heap_bytes: samples.jsHeapBytes,
       thumbnail_png_base64: samples.thumbnailPngBase64,
       snapshot_hash: samples.snapshotHash,
+      js_errors: samples.jsErrors,
       note: [samples.effectiveTier !== stage.tier ? `requested tier ${stage.tier} clamped to ${samples.effectiveTier}` : '', samples.note || ''].filter(Boolean).join('; ') || null,
     })),
     aborted: opts.aborted,
@@ -170,7 +180,8 @@ export const FALLBACK_MANIFEST: BenchManifestDoc = {
     ],
     tiers: ['ultra', 'high', 'balanced', 'battery'],
     frames_per_stage: 240,
-    warmup_frames: 60,
+    warmup_frames: 120,
+    warmup_min_ms: 3000,
     sustained: { case: 'lsd_open_42', tier: 'ultra', frames: 1800 },
     thumbnail_size: 128,
     include_simulation: false,

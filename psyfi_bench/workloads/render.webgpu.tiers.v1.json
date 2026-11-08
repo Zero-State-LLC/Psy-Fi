@@ -4,26 +4,80 @@
   "version": 1,
   "family": "render",
   "title": "WebGPU present path: frame times and tier fidelity on one device",
-  "description": "Browser runner (/gpu/bench.html) renders the three G4 seeds at every quality tier for a fixed frame count after a warm-up, then one sustained Ultra stage. The capture carries per-frame wall times, GPU timestamps where exposed, adapter info and 128 px thumbnails. Python scores p50/p95/p99, 1% low, pacing, drift, budget checks and same-device fidelity against Ultra. Measured only: a capture from this runner is hardware evidence for the device it names and nothing else.",
+  "description": "Browser runner (/gpu/bench.html) renders the three G4 seeds at every quality tier for a fixed frame count after a warm-up of at least 120 frames and 3 s (late pipeline compilation stays out of the sample), then one sustained Ultra stage. The capture carries per-frame wall times, GPU timestamps where exposed, adapter info and 128 px thumbnails. Python scores p50/p95/p99, 1% low, pacing, drift, budget checks and same-device fidelity against Ultra. Measured only: a capture from this runner is hardware evidence for the device it names and nothing else.",
   "execution": "browser",
   "params": {
     "execution_class": "webgpu",
     "cases": [
-      {"key": "lsd_open_42", "substance": "lsd", "mode": "open", "seed": 42, "intensity": 0.75},
-      {"key": "psilocybin_attractor_7", "substance": "psilocybin", "mode": "attractor", "seed": 7, "intensity": 0.6},
-      {"key": "dmt_void_99", "substance": "dmt", "mode": "void", "seed": 99, "intensity": 0.85}
+      {
+        "key": "lsd_open_42",
+        "substance": "lsd",
+        "mode": "open",
+        "seed": 42,
+        "intensity": 0.75
+      },
+      {
+        "key": "psilocybin_attractor_7",
+        "substance": "psilocybin",
+        "mode": "attractor",
+        "seed": 7,
+        "intensity": 0.6
+      },
+      {
+        "key": "dmt_void_99",
+        "substance": "dmt",
+        "mode": "void",
+        "seed": 99,
+        "intensity": 0.85
+      }
     ],
-    "tiers": ["ultra", "high", "balanced", "battery"],
+    "tiers": [
+      "ultra",
+      "high",
+      "balanced",
+      "battery"
+    ],
     "frames_per_stage": 240,
-    "warmup_frames": 60,
-    "sustained": {"case": "lsd_open_42", "tier": "ultra", "frames": 1800},
+    "warmup_frames": 120,
+    "sustained": {
+      "case": "lsd_open_42",
+      "tier": "ultra",
+      "frames": 1800
+    },
     "thumbnail_size": 128,
     "include_simulation": false,
-    "tier_targets_ms": {"ultra": 8.3, "high": 16.7, "balanced": 16.7, "battery": 33.0}
+    "tier_targets_ms": {
+      "ultra": 8.3,
+      "high": 16.7,
+      "balanced": 16.7,
+      "battery": 33
+    },
+    "warmup_min_ms": 3000
   },
-  "protocol": {"warmup_runs": 0, "repeats": 1, "cold_start": false, "timeout_s": 900, "memory_probe": false, "bootstrap_resamples": 1000, "bootstrap_seed": 0},
+  "protocol": {
+    "warmup_runs": 0,
+    "repeats": 1,
+    "cold_start": false,
+    "timeout_s": 900,
+    "memory_probe": false,
+    "bootstrap_resamples": 1000,
+    "bootstrap_seed": 0
+  },
   "references": {},
-  "tolerances": {"timing_cv_max": 0.5, "quantization": 1.0, "accelerator_atol": 0.0, "accelerator_rtol": 0.0},
-  "requires": ["browser", "webgpu"],
-  "tags": ["gpu", "browser", "webgpu", "frame-time"]
+  "tolerances": {
+    "timing_cv_max": 0.5,
+    "quantization": 1,
+    "accelerator_atol": 0,
+    "accelerator_rtol": 0
+  },
+  "requires": [
+    "browser",
+    "webgpu"
+  ],
+  "tags": [
+    "gpu",
+    "browser",
+    "webgpu",
+    "frame-time"
+  ]
 }

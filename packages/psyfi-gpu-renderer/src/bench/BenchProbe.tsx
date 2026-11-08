@@ -38,7 +38,34 @@ export function createProbeHandle(): ProbeHandle {
 export function BenchProbe({ handle, enabled }: { handle: ProbeHandle; enabled: boolean }) {
   const { gl } = useThree()
   const last = useRef<number | null>(null)
+  const lastCalls = useRef<number | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const pendingThumb = useRef<{ size: number; resolve: (v: string | null) => void } | null>(null)
+
+  const captureNow = (size: number): string | null => {
+    try {
+      const src = canvasRef.current
+      if (!src) return null
+      const out = document.createElement('canvas')
+      out.width = size
+      out.height = size
+      const ctx = out.getContext('2d')
+      if (!ctx) return null
+      ctx.drawImage(src, 0, 0, size, size)
+      const px = ctx.getImageData(0, 0, size, size).data
+      let any = 0
+      for (let i = 0; i < px.length; i += 4) {
+        if (px[i] || px[i + 1] || px[i + 2]) {
+          any = 1
+          break
+        }
+      }
+      // A fully black readback means the WebGPU canvas could not be read; report null, never a fake frame.
+      return any ? out.toDataURL('image/png').split(',')[1] || null : null
+    } catch {
+      return null
+    }
+  }
 
   useEffect(() => {
     const renderer = gl as unknown as InstanceType<typeof THREE.WebGPURenderer> & { trackTimestamp?: boolean }
@@ -51,47 +78,30 @@ export function BenchProbe({ handle, enabled }: { handle: ProbeHandle; enabled: 
     }
     handle.requestThumbnail = (size: number) =>
       new Promise<string | null>((resolve) => {
-        // Microtask: runs after this task's synchronous render, before the compositor takes the frame.
-        queueMicrotask(() => {
-          try {
-            const src = canvasRef.current
-            if (!src) return resolve(null)
-            const out = document.createElement('canvas')
-            out.width = size
-            out.height = size
-            const ctx = out.getContext('2d')
-            if (!ctx) return resolve(null)
-            ctx.drawImage(src, 0, 0, size, size)
-            const url = out.toDataURL('image/png')
-            const data = url.split(',')[1] || null
-            // A fully black readback means the WebGPU canvas could not be read; report null, never a fake frame.
-            const px = ctx.getImageData(0, 0, size, size).data
-            let any = 0
-            for (let i = 0; i < px.length; i += 4) {
-              if (px[i] || px[i + 1] || px[i + 2]) {
-                any = 1
-                break
-              }
-            }
-            resolve(any ? data : null)
-          } catch {
-            resolve(null)
-          }
-        })
+        // Fulfilled from the next frame callback: a microtask queued there runs after R3F's
+        // synchronous render in the same task, before the compositor takes the frame.
+        pendingThumb.current = { size, resolve }
       })
     return () => {
+      pendingThumb.current = null
       handle.requestThumbnail = async () => null
     }
   }, [gl, handle])
 
   useFrame(() => {
     const now = performance.now()
+    const pending = pendingThumb.current
+    if (pending) {
+      pendingThumb.current = null
+      queueMicrotask(() => pending.resolve(captureNow(pending.size)))
+    }
     const renderer = gl as unknown as {
       info?: { render?: { calls?: number; triangles?: number; timestamp?: number } }
       resolveTimestampsAsync?: (type?: unknown) => Promise<unknown>
     }
     if (!enabled) {
       last.current = now
+      lastCalls.current = renderer.info?.render?.calls ?? null
       return
     }
     if (last.current !== null) {
@@ -105,7 +115,11 @@ export function BenchProbe({ handle, enabled }: { handle: ProbeHandle; enabled: 
       } else if (handle.gpuTimestampsAvailable === null && handle.frames.length > 30) {
         handle.gpuTimestampsAvailable = false
       }
-      handle.frames.push({ wallMs, gpuMs, drawCalls: info.calls ?? 0, triangles: info.triangles ?? 0 })
+      // renderer.info counters accumulate across frames in the WebGPU backend; report the per-frame delta.
+      const calls = info.calls ?? 0
+      const drawCalls = lastCalls.current === null ? calls : Math.max(0, calls - lastCalls.current)
+      lastCalls.current = calls
+      handle.frames.push({ wallMs, gpuMs, drawCalls, triangles: info.triangles ?? 0 })
     }
     last.current = now
     if (typeof renderer.resolveTimestampsAsync === 'function') {

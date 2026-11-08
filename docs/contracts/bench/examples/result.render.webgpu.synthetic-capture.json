@@ -1,15 +1,15 @@
 {
   "schema": "psyfi.bench.result.v1",
   "bench_version": "0.1.0",
-  "run_id": "render_1794109061_4e25422a",
-  "created_at": "2026-11-08T03:37:41.405559Z",
+  "run_id": "render_1794110078_1eea3188",
+  "created_at": "2026-11-08T03:54:38.003166Z",
   "manifest": {
     "schema": "psyfi.bench.manifest.v1",
     "id": "render.webgpu.tiers",
     "version": 1,
     "family": "render",
     "title": "WebGPU present path: frame times and tier fidelity on one device",
-    "description": "Browser runner (/gpu/bench.html) renders the three G4 seeds at every quality tier for a fixed frame count after a warm-up, then one sustained Ultra stage. The capture carries per-frame wall times, GPU timestamps where exposed, adapter info and 128 px thumbnails. Python scores p50/p95/p99, 1% low, pacing, drift, budget checks and same-device fidelity against Ultra. Measured only: a capture from this runner is hardware evidence for the device it names and nothing else.",
+    "description": "Browser runner (/gpu/bench.html) renders the three G4 seeds at every quality tier for a fixed frame count after a warm-up of at least 120 frames and 3 s (late pipeline compilation stays out of the sample), then one sustained Ultra stage. The capture carries per-frame wall times, GPU timestamps where exposed, adapter info and 128 px thumbnails. Python scores p50/p95/p99, 1% low, pacing, drift, budget checks and same-device fidelity against Ultra. Measured only: a capture from this runner is hardware evidence for the device it names and nothing else.",
     "execution": "browser",
     "params": {
       "execution_class": "webgpu",
@@ -43,7 +43,7 @@
         "battery"
       ],
       "frames_per_stage": 240,
-      "warmup_frames": 60,
+      "warmup_frames": 120,
       "sustained": {
         "case": "lsd_open_42",
         "tier": "ultra",
@@ -55,8 +55,9 @@
         "ultra": 8.3,
         "high": 16.7,
         "balanced": 16.7,
-        "battery": 33.0
-      }
+        "battery": 33
+      },
+      "warmup_min_ms": 3000
     },
     "protocol": {
       "warmup_runs": 0,
@@ -85,13 +86,13 @@
       "webgpu",
       "frame-time"
     ],
-    "manifest_hash": "ce97da01065a10f6"
+    "manifest_hash": "be171b9e1e7a71bc"
   },
-  "manifest_hash": "ce97da01065a10f6",
+  "manifest_hash": "be171b9e1e7a71bc",
   "measurement_class": "synthetic",
   "status": "complete",
   "environment": {
-    "captured_at": "2026-11-08T03:37:41.345744Z",
+    "captured_at": "2026-11-08T03:54:37.928213Z",
     "hostname_hash": "225369c658b1",
     "platform": {
       "system": "Darwin",
@@ -134,9 +135,12 @@
       },
       "env_threads": {},
       "accelerators": {
-        "torch": null
+        "torch": "2.15.0",
+        "cuda": false,
+        "mps": true,
+        "devices": []
       },
-      "git_commit": "7372d31eed042021aa866613deb1c62d72548a96",
+      "git_commit": "eebf92a031b367a9805cfff8e53f0d08436b5193",
       "git_dirty": true
     },
     "browser": {
@@ -432,6 +436,8 @@
         "frame_ms_p50": 7.494910453957864,
         "frame_ms_p95": 8.137331331392756,
         "frame_ms_p99": 8.376101933826854,
+        "frame_ms_max": 22.5,
+        "frame_ms_mean": 7.554568917336689,
         "pacing": {
           "jitter_ms": 1.503104433633734,
           "stutter_frames": 1,
@@ -842,6 +848,8 @@
         "frame_ms_p50": 9.01263654065729,
         "frame_ms_p95": 9.604147163165345,
         "frame_ms_p99": 9.856269510689222,
+        "frame_ms_max": 27.0,
+        "frame_ms_mean": 9.072495542313394,
         "pacing": {
           "jitter_ms": 1.7307396846445464,
           "stutter_frames": 1,
@@ -1223,6 +1231,8 @@
         "frame_ms_p50": 19.951126251857758,
         "frame_ms_p95": 20.55108521529274,
         "frame_ms_p99": 20.975114693395668,
+        "frame_ms_max": 60.0,
+        "frame_ms_mean": 20.131807269227917,
         "pacing": {
           "jitter_ms": 3.731405535702834,
           "stutter_frames": 1,
@@ -3164,6 +3174,8 @@
         "frame_ms_p50": 8.3995,
         "frame_ms_p95": 9.20905,
         "frame_ms_p99": 9.28101,
+        "frame_ms_max": 9.299,
+        "frame_ms_mean": 8.3995,
         "pacing": {
           "jitter_ms": 7.352778507979956e-16,
           "stutter_frames": 0,
@@ -3276,7 +3288,7 @@
   "determinism": {},
   "failures": [],
   "provenance": {
-    "git_commit": "7372d31eed042021aa866613deb1c62d72548a96",
+    "git_commit": "eebf92a031b367a9805cfff8e53f0d08436b5193",
     "git_dirty": true,
     "command": "scripts/export_bench_contracts.py",
     "bench_version": "0.1.0",
@@ -3285,5 +3297,5 @@
     "notes": []
   },
   "non_claim": "Modeled phenomenology for research and visualization only. The benchmark measures computation, rendering, and model interpretation of modeled representations. It does not measure consciousness or subjective experience. Not medical advice.",
-  "result_hash": "03fe8a16fa38cdcff452a446e6c7a219b526d08c864a30d11c81ff578f9f5c3d"
+  "result_hash": "bdab5314ae619bc4c6264a129dfa7f18c894c6a249ecad4b852074ec04101693"
 }

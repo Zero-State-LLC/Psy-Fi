@@ -5,7 +5,7 @@ describe('bench schedule', () => {
   it('expands cases x tiers then the sustained stage', () => {
     const stages = scheduleStages(FALLBACK_MANIFEST)
     expect(stages).toHaveLength(3 * 4 + 1)
-    expect(stages[0]).toMatchObject({ id: 'lsd_open_42.ultra', tier: 'ultra', requestedFrames: 240, warmupFrames: 60, sustained: false })
+    expect(stages[0]).toMatchObject({ id: 'lsd_open_42.ultra', tier: 'ultra', requestedFrames: 240, warmupFrames: 120, sustained: false })
     expect(stages[stages.length - 1]).toMatchObject({ id: 'sustained.lsd_open_42.ultra', requestedFrames: 1800, sustained: true })
   })
 
@@ -21,7 +21,7 @@ describe('bench schedule', () => {
       manifest: { ...FALLBACK_MANIFEST, manifest_hash: 'abc' },
       stages: stages.map((stage) => ({
         stage,
-        samples: { framesMs: [8, 9, 8.5], gpuMs: null, drawCalls: 12, triangles: 1000, durationMs: 25.5, jsHeapBytes: null, thumbnailPngBase64: null, snapshotHash: 'h', effectiveTier: 'balanced' },
+        samples: { warmupUsed: 130, jsErrors: 2, framesMs: [8, 9, 8.5], gpuMs: null, drawCalls: 12, triangles: 1000, durationMs: 25.5, jsHeapBytes: null, thumbnailPngBase64: null, snapshotHash: 'h', effectiveTier: 'balanced' },
       })),
       browser: { user_agent: 'test' },
       aborted: false,
@@ -33,6 +33,9 @@ describe('bench schedule', () => {
     expect(payload.stages[0].tier).toBe('balanced')
     expect(payload.stages[0].note).toContain('clamped')
     expect(payload.stages[0].frames_ms).toEqual([8, 9, 8.5])
+    expect(payload.stages[0].warmup_frames).toBe(130)
+    expect(payload.stages[0].js_errors).toBe(2)
+    expect(stages[0].warmupMinMs).toBe(3000)
   })
 
   it('quick summary is a sanity check only', () => {

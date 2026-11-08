@@ -295,6 +295,7 @@ class CaptureStage(BaseModel):
     js_heap_bytes: int | None = None
     thumbnail_png_base64: str | None = Field(default=None, description="128x128 PNG of one presented frame for tier fidelity.")
     snapshot_hash: str | None = None
+    js_errors: int = Field(default=0, ge=0, description="Uncaught errors observed during the measured window; non-zero invalidates the stage's frames.")
     note: str | None = None
 
 

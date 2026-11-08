@@ -113,6 +113,13 @@
           "default": null,
           "title": "Snapshot Hash"
         },
+        "js_errors": {
+          "default": 0,
+          "description": "Uncaught errors observed during the measured window; non-zero invalidates the stage's frames.",
+          "minimum": 0,
+          "title": "Js Errors",
+          "type": "integer"
+        },
         "note": {
           "anyOf": [
             {

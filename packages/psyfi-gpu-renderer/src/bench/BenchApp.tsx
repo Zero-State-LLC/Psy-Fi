@@ -1,10 +1,10 @@
 /**
- * FieldLoop GPU bench runner. Reuses PsyFiGPUCanvas + SceneRoot unchanged; drives them through
+ * FieldLoop GPU bench runner. Reuses SceneRoot unchanged inside a bench-only canvas; drives it through
  * a scripted schedule and emits a psyfi.bench.gpu_capture.v1 payload. Python scores it.
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { PsyFiGPUCanvas } from '../Renderer/PsyFiGPUCanvas'
+import { BenchCanvas } from './BenchCanvas'
 import {
   probeDeviceCaps,
   refineDeviceCaps,
@@ -71,6 +71,20 @@ export function BenchApp() {
   const [postStatus, setPostStatus] = useState<string | null>(null)
   const probe = useMemo(() => createProbeHandle(), [])
   const abortRef = useRef(false)
+  const errorCount = useRef(0)
+
+  useEffect(() => {
+    // Renderer exceptions during a stage invalidate its frames; count them into the capture.
+    const onError = () => {
+      errorCount.current += 1
+    }
+    window.addEventListener('error', onError)
+    window.addEventListener('unhandledrejection', onError)
+    return () => {
+      window.removeEventListener('error', onError)
+      window.removeEventListener('unhandledrejection', onError)
+    }
+  }, [])
   const measuring = phase === 'running'
 
   useEffect(() => {
@@ -125,9 +139,23 @@ export function BenchApp() {
         setStageIndex(i)
         probe.reset()
         setPhase('running')
-        const need = stage.warmupFrames + stage.requestedFrames
         const t0 = performance.now()
-        setStatus(`Stage ${i + 1}/${stages.length}: ${stage.id} (tier ${effective}) · ${need} frames…`)
+        setStatus(`Stage ${i + 1}/${stages.length}: ${stage.id} (tier ${effective}) · warm-up ≥ ${stage.warmupFrames} frames / ${stage.warmupMinMs} ms, then ${stage.requestedFrames} frames…`)
+        // Warm-up: both a frame floor and a time floor, so late pipeline compilation stays out of the sample.
+        let warmupUsed = 0
+        await new Promise<void>((resolve) => {
+          const tick = () => {
+            if (abortRef.current) return resolve()
+            if (probe.frames.length >= stage.warmupFrames && performance.now() - t0 >= stage.warmupMinMs) {
+              warmupUsed = probe.frames.length
+              return resolve()
+            }
+            requestAnimationFrame(tick)
+          }
+          requestAnimationFrame(tick)
+        })
+        const need = warmupUsed + stage.requestedFrames
+        const errorsBefore = errorCount.current
         await new Promise<void>((resolve) => {
           const tick = () => {
             if (abortRef.current || probe.frames.length >= need) return resolve()
@@ -137,14 +165,16 @@ export function BenchApp() {
         })
         const thumb = await probe.requestThumbnail(manifest.params.thumbnail_size ?? 128)
         const frames = probe.frames.slice(0, need)
-        const wall = trimFrames(frames.map((f) => f.wallMs), stage.warmupFrames)
-        const gpuAll = frames.slice(stage.warmupFrames).map((f) => f.gpuMs)
+        const wall = trimFrames(frames.map((f) => f.wallMs), warmupUsed)
+        const gpuAll = frames.slice(warmupUsed).map((f) => f.gpuMs)
         const gpu = gpuAll.every((g) => g === null) ? null : gpuAll.map((g) => (g === null ? NaN : g)).filter((g) => Number.isFinite(g))
         const lastFrame = frames[frames.length - 1]
         const perf = performance as Performance & { memory?: { usedJSHeapSize?: number } }
         collected.push({
           stage,
           samples: {
+            warmupUsed,
+            jsErrors: errorCount.current - errorsBefore,
             framesMs: wall,
             gpuMs: gpu && gpu.length ? gpu : null,
             drawCalls: lastFrame?.drawCalls ?? null,
@@ -206,9 +236,9 @@ export function BenchApp() {
       </header>
       <div style={{ position: 'relative', minHeight: 320 }}>
         {caps.webgpu ? (
-          <PsyFiGPUCanvas snapshot={snapshot} tier={tier}>
+          <BenchCanvas snapshot={snapshot} tier={tier}>
             <BenchProbe handle={probe} enabled={measuring} />
-          </PsyFiGPUCanvas>
+          </BenchCanvas>
         ) : (
           <p style={{ padding: 16 }}>WebGPU is not available in this browser. The bench needs Chrome/Edge with WebGPU enabled. No frames were recorded.</p>
         )}
@@ -220,7 +250,7 @@ export function BenchApp() {
         <table style={{ borderCollapse: 'collapse', width: '100%' }}>
           <thead>
             <tr style={{ textAlign: 'left', opacity: 0.7 }}>
-              <th>stage</th><th>tier</th><th>frames</th><th>fps (quick)</th><th>p95 ms</th><th>gpu ms</th><th>thumb</th>
+              <th>stage</th><th>tier</th><th>frames</th><th>fps (quick)</th><th>p95 ms</th><th>gpu ms</th><th>thumb</th><th>js errors</th>
             </tr>
           </thead>
           <tbody>
@@ -229,7 +259,7 @@ export function BenchApp() {
               return (
                 <tr key={stage.id}>
                   <td>{stage.id}</td><td>{samples.effectiveTier}</td><td>{q.n}</td><td>{q.fps.toFixed(1)}</td><td>{q.p95Ms.toFixed(2)}</td>
-                  <td>{samples.gpuMs ? 'yes' : 'n/a'}</td><td>{samples.thumbnailPngBase64 ? 'yes' : 'no'}</td>
+                  <td>{samples.gpuMs ? 'yes' : 'n/a'}</td><td>{samples.thumbnailPngBase64 ? 'yes' : 'no'}</td><td>{samples.jsErrors}</td>
                 </tr>
               )
             })}

@@ -106,7 +106,7 @@
         "browser",
         "webgpu"
       ],
-      "manifest_hash": "ce97da01065a10f6",
+      "manifest_hash": "be171b9e1e7a71bc",
       "title": "WebGPU present path: frame times and tier fidelity on one device"
     }
   ],
@@ -167,10 +167,10 @@
   ],
   "accelerators": {
     "numpy": true,
-    "torch": false
+    "torch": true
   },
   "environment": {
-    "captured_at": "2026-11-08T03:37:39.300981Z",
+    "captured_at": "2026-11-08T03:54:35.628297Z",
     "hostname_hash": "225369c658b1",
     "platform": {
       "system": "Darwin",
@@ -213,9 +213,12 @@
       },
       "env_threads": {},
       "accelerators": {
-        "torch": null
+        "torch": "2.15.0",
+        "cuda": false,
+        "mps": true,
+        "devices": []
       },
-      "git_commit": "7372d31eed042021aa866613deb1c62d72548a96",
+      "git_commit": "eebf92a031b367a9805cfff8e53f0d08436b5193",
       "git_dirty": true
     },
     "browser": null,

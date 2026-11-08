@@ -255,6 +255,8 @@ def score_capture(capture: GpuCapture, manifest: WorkloadManifest, env: Environm
                 "frame_ms_p50": float(np.percentile(frames, 50)),
                 "frame_ms_p95": p95,
                 "frame_ms_p99": float(np.percentile(frames, 99)),
+                "frame_ms_max": float(np.max(frames)),
+                "frame_ms_mean": float(np.mean(frames)),
                 "pacing": frame_pacing(frames),
                 "tier_target_ms": target,
                 "p95_over_target": p95 / target,
@@ -265,6 +267,11 @@ def score_capture(capture: GpuCapture, manifest: WorkloadManifest, env: Environm
                 "js_heap_bytes": cs.js_heap_bytes,
             }
         )
+        if cs.js_errors:
+            stage.metrics["js_errors"] = cs.js_errors
+            stage.metrics["warning"] = f"{cs.js_errors} uncaught errors during the measured window; frames are not trustworthy"
+            stage.status = "failed"
+            stage.error = f"ValueError: {cs.js_errors} uncaught renderer errors during measurement"
         if len(frames) >= 8 and (cs.requested_frames >= 600 or "sustained" in cs.id):
             stage.metrics["sustained"] = sustained_drift(frames)
         if cs.gpu_ms:
