@@ -5,7 +5,7 @@
 const CACHE_NAME = 'psyfi-shell-v43';
 const SHELL_URLS = [
   '/',
-  '/static/style.css',
+  '/static/style.css?v=43',
   '/static/fonts/fonts.css',
   '/static/fonts/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2',
   '/static/fonts/-F63fjptAgt5VM-kVkqdyU8n1iEq129k.woff2',
@@ -50,7 +50,8 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log('[SW] Caching app shell', CACHE_NAME);
-      return cache.addAll(SHELL_URLS);
+      // cache: 'reload' skips the HTTP cache, so a new shell version never stores a stale copy.
+      return cache.addAll(SHELL_URLS.map((url) => new Request(url, { cache: 'reload' })));
     })
   );
   self.skipWaiting();
