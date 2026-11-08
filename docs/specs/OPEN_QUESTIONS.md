@@ -119,7 +119,7 @@ Asked in: `intent/benchmark-platform.md`, issue #54, ADR 0009.
 
 ## 6. Discrete GPU, CUDA and power evidence (#48, #53, #50)
 
-Asked in: issues #48, #53 and #50, and the part of #50 that #59 left open.
+Asked in: issues #48 and #53, and the first real run of the power code from #50 (closed; built and tested on synthetic data only).
 
 **Found.**
 - **#53 and #50:** any rented NVIDIA Linux GPU, for example RunPod, vast.ai, Colab or an AWS g4dn Linux box, runs `--backend torch-cuda` in minutes. Check that `nvidia-smi --query-gpu=power.draw.instant` returns a number before paying; vGPU slices return "Not Supported".
@@ -170,7 +170,7 @@ Asked in: ADR 0011 (proposed, merged with #59) and issue #50.
 Asked in: `intent/bench-results-page.md` (#65).
 
 **Found.**
-- The live container has no results store contents, and run and ingest are off, so `/bench` on psy-fi.space shows the empty state (checked after version `94e47554`, 2026-11-08).
+- The live container has no results store contents, and run and ingest are off, so `/bench` on psy-fi.space shows the empty state (checked after versions `94e47554` and `25fdefd7`, 2026-11-08).
 - The only results that exist are integrated-class Apple runs, which are never Ultra evidence.
 - Ultra and high WebGPU stages on the M5 were not measured because of #55, which is now fixed and live.
 
