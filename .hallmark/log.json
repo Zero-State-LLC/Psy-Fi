@@ -3,6 +3,37 @@
   "runs": [
     {
       "date": "2026-11-07",
+      "target": "front page (launch splash) + workspace (psyfi_api/templates/index.html, psyfi_api/static/style.css)",
+      "verb": "redesign",
+      "mode": "redesign",
+      "depth": "full",
+      "scope": "site",
+      "genre": "atmospheric",
+      "macrostructure": "Photographic\u2192Workbench",
+      "theme": "design.md",
+      "hero": "Poster: field plate band above a full-width paper strip",
+      "nav": "N9 (fixed front bar; masthead sticky after Enter)",
+      "footer": "Ft2",
+      "signature": "six real Live Experience captures in a rail",
+      "sections": [
+        "hero",
+        "rail",
+        "statement",
+        "steps",
+        "rows",
+        "band",
+        "footer"
+      ],
+      "imagery": "field plate + screenshots 6 (captured from the shell at seed 42)",
+      "waived": [
+        "77"
+      ],
+      "designed_as_app": true,
+      "tone": "technical",
+      "notes": "Front page says what PsyFi is; field stays in view while the rail scrolls; Simulation beside Results; frontend skill spacing and type steps; SW v43 (cache name and its two pinned tests bumped together)."
+    },
+    {
+      "date": "2026-11-07",
       "target": "public shell entry + workbench stage",
       "verb": "redesign",
       "genre": "atmospheric",

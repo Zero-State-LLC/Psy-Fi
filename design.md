@@ -9,8 +9,10 @@ atmospheric
 
 ## Macrostructure family
 - Marketing pages: Photographic (field-led, one dominant visual)
-  - Entry fold: launch splash uses `/static/images/psyfi-hero.jpg` full-bleed. Type and Enter sit on the plate. The device scan starts closed. Then Workbench.
+  - Entry fold: launch splash uses `/static/images/psyfi-hero.jpg` full-bleed above a full-width paper strip that carries the headline, the lede, the live scan status and the device scan drawer (closed). Enter and Skip scan sit in a fixed N9 bar so they stay in reach. Then Workbench.
+  - Front page below the fold: a rail of real Live Experience captures, the README statement, three steps, plain answers, the GPU Lab band. Facts only from the README, control tooltips and the recipe catalog.
 - App pages: Workbench (instrument panel; field viewport primary, chrome calm)
+  - The field stays in view (sticky) while the control rail scrolls; Simulation sits beside Results; the shell keeps a 1280px measure.
 - Content pages: Long Document
 
 ## Theme

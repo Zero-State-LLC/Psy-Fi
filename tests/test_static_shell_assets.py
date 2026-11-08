@@ -84,7 +84,7 @@ def test_template_wires_cancel_recovery_and_renderer() -> None:
 
 def test_service_worker_precaches_renderer_assets() -> None:
     sw = (STATIC / "sw.js").read_text(encoding="utf-8")
-    assert "psyfi-shell-v42" in sw
+    assert "psyfi-shell-v43" in sw
     assert "/static/viz/transitionSurface.js" in sw
     assert ".woff2" in sw
     assert "/assets/icons/pf-icon-reset-24.svg" in sw
@@ -126,7 +126,10 @@ def test_homepage_social_preview_uses_the_launch_image() -> None:
     image = "https://psy-fi.space/static/images/psyfi-hero.jpg"
     assert 'property="og:type" content="website"' in html
     assert 'property="og:url" content="https://psy-fi.space/"' in html
-    assert 'property="og:title" content="PsyFi – Consciousness Field Simulator"' in html
+    # The card reuses the page title, so a later title change cannot leave the card behind.
+    title = html.split("<title>", 1)[1].split("</title>", 1)[0]
+    assert f'property="og:title" content="{title}"' in html
+    assert f'name="twitter:title" content="{title}"' in html
     assert 'property="og:description" content="Modular consciousness field simulation engine with ABX-Core v1.3"' in html
     assert f'property="og:image" content="{image}"' in html
     assert 'property="og:image:width" content="1400"' in html
