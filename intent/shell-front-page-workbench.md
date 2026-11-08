@@ -53,9 +53,9 @@ Non-goals:
 
 ## Open questions
 
-- `design.md` says the device scan starts closed on the entry fold. The front page keeps the scan drawer closed in the hero, so this holds; `design.md` gains one line naming the front page sections. Accept that amendment?
+- `design.md` says the device scan starts closed on the entry fold. The front page keeps the scan drawer closed in the hero, so this holds; `design.md` gains one line naming the front page sections. Accept that amendment? Answered: `design.md` carries the front-page line since pull request #44.
 - Settled 2026-11-07: the operator asked for the cache bump in this change. `sw.js` moves to `psyfi-shell-v43`, and the two tests that pin the name (`tests/test_static_shell_assets.py`, `tests/test_jobs_and_cancel.py`) move with it. `context.md` and the root `intent.md` keep v42 until the host is redeployed, because they record the live host.
-- The front-page captures are stills taken from the local app at seed 42. Should they be refreshed when the renderer changes?
+- The front-page captures are stills taken from the local app at seed 42. Should they be refreshed when the renderer changes? Answered for now (2026-11-08): the shell renderer has not changed since the captures, so no refresh; refresh them when `psyfi_api/static/viz/` or `renderer.js` changes.
 
 ## Verified / assumed
 

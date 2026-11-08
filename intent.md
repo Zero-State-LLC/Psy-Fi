@@ -59,6 +59,8 @@ Non-goals:
 
 ## Open questions
 
+Researched 2026-11-08 with a recommendation each: [`docs/specs/OPEN_QUESTIONS.md`](docs/specs/OPEN_QUESTIONS.md).
+
 - Whether a later host should send production vision through an AI Gateway. The live host does not. The Call section of [`docs/specs/cloudflare-nvidia.md`](docs/specs/cloudflare-nvidia.md) records the direct call and leaves the gateway undecided.
 - Whether catalog reload stays, is renamed, or is removed. No ticket.
 - Hardware Ultra evidence (issue #10) and any later hardware-quality scaling. Not this host.
