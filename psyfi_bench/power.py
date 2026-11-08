@@ -4,6 +4,13 @@ The sampler is injectable: tests pass a fake, CI has no GPU. When ``nvidia-smi``
 ``make_power_sampler`` returns ``None`` and no power field is written anywhere; the environment
 keeps its ``unavailable.power`` reason. Energy comes only from the samples taken: trapezoid
 integration between the first and last sample, no extrapolation, no interpolation across gaps.
+
+On Ampere and newer GPUs, ``power.draw`` is the average over the last second, and the board
+sensor updates about every 100 ms (Yang et al., "Part-time Power Measurements: nvidia-smi's Lack
+of Attention", arXiv:2312.02741). So the live sampler reads ``power.draw.instant`` where the
+driver has it, runs one ``nvidia-smi -lms 100`` process instead of spawning one per sample, and
+stamps each reading with nvidia-smi's own timestamp. Per-unit energy needs a stage of at least
+one second.
 """
 
 from __future__ import annotations
@@ -13,20 +20,27 @@ import subprocess
 import threading
 import time
 from collections.abc import Callable
+from datetime import datetime
 from dataclasses import dataclass
 from typing import Protocol
 
 from psyfi_bench.schemas import PowerRecord
 
-NVIDIA_SMI_QUERY = "power.draw,temperature.gpu,clocks.sm"
+# Preferred first: power.draw is a 1 s average on Ampere and newer; power.draw.instant is not.
+POWER_FIELDS = ("power.draw.instant", "power.draw")
+OTHER_FIELDS = "temperature.gpu,clocks.sm"
+NVIDIA_SMI_QUERY = f"power.draw,{OTHER_FIELDS}"  # the query when no live sampler says otherwise
+STREAM_INTERVAL_S = 0.1  # about the board sensor's update period
 DERIVATION = (
-    "energy_j = trapezoid integral of sampled power.draw (W) over the samples taken inside the measured window that "
+    "energy_j = trapezoid integral of sampled board power (W) over the samples taken inside the measured window that "
     "carry a power reading, from the first to the last of them (no extrapolation to the stage edges; readings after "
-    "the stage are dropped); per-unit energy = energy_j / work units completed in the window, reported only when "
-    "those samples span at least 90% of the window; samples are nvidia-smi readings of GPU index 0 (board power, "
-    "whichever backend ran the stage)"
+    "the stage are dropped); per-unit energy = energy_j / work units completed in the window, reported only for a "
+    "window of at least 1 s whose samples span at least 90% of it; samples are nvidia-smi readings of GPU index 0, "
+    "power.draw.instant where the driver has it, else power.draw (a 1 s average on Ampere and newer), whichever "
+    "backend ran the stage; the sensor itself sees part of each update period (arXiv:2312.02741)"
 )
 MIN_SPAN_COVERAGE = 0.9
+MIN_WINDOW_S = 1.0
 
 
 @dataclass(frozen=True)
@@ -55,26 +69,93 @@ def _num(raw: str) -> float | None:
         return None
 
 
-def read_nvidia_smi() -> PowerSample | None:
-    """One ``nvidia-smi`` reading of GPU 0, or None when the call fails."""
+def _query_for(power_field: str) -> str:
+    return f"timestamp,{power_field},{OTHER_FIELDS}"
+
+
+def probe_power_field() -> str | None:
+    """The first power field in ``POWER_FIELDS`` that nvidia-smi answers with a number for GPU 0."""
+    for field in POWER_FIELDS:
+        try:
+            out = subprocess.run(
+                ["nvidia-smi", "-i", "0", f"--query-gpu={field}", "--format=csv,noheader,nounits"],
+                capture_output=True, text=True, timeout=5.0, check=False,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            return None
+        lines = out.stdout.strip().splitlines()
+        if out.returncode == 0 and lines and _num(lines[0]) is not None:
+            return field
+    return None
+
+
+def parse_stream_line(line: str, clock_offset_s: float) -> PowerSample | None:
+    """One ``timestamp, power, temperature, sm clock`` line, stamped on the runner's clock.
+
+    nvidia-smi's timestamp is local wall time with milliseconds; ``clock_offset_s`` is
+    ``perf_counter() - time.time()`` taken when sampling started.
+    """
+    parts = [part.strip() for part in line.split(",")]
+    if len(parts) < 4:
+        return None
     try:
-        out = subprocess.run(
-            ["nvidia-smi", f"--query-gpu={NVIDIA_SMI_QUERY}", "--format=csv,noheader,nounits"],
-            capture_output=True, text=True, timeout=5.0, check=False,
+        wall = datetime.strptime(parts[0], "%Y/%m/%d %H:%M:%S.%f").timestamp()
+    except ValueError:
+        return None
+    return PowerSample(
+        t_s=wall + clock_offset_s, power_w=_num(parts[1]), temperature_c=_num(parts[2]), sm_clock_mhz=_num(parts[3]),
+    )
+
+
+class NvidiaSmiStreamSampler:
+    """One ``nvidia-smi -lms`` process for the whole stage; a reader thread keeps its lines."""
+
+    name = "nvidia-smi"
+
+    def __init__(self, power_field: str, *, interval_s: float = STREAM_INTERVAL_S) -> None:
+        self.power_field = power_field
+        self.query = _query_for(power_field)
+        self.interval_s = interval_s
+        self._samples: list[PowerSample] = []
+        self._proc: subprocess.Popen[str] | None = None
+        self._thread: threading.Thread | None = None
+
+    def _read(self, proc: subprocess.Popen[str], offset: float) -> None:
+        assert proc.stdout is not None
+        for line in proc.stdout:
+            sample = parse_stream_line(line, offset)
+            if sample is not None:
+                self._samples.append(sample)
+
+    def start(self) -> None:
+        self._samples = []
+        offset = time.perf_counter() - time.time()
+        self._proc = subprocess.Popen(
+            ["nvidia-smi", "-i", "0", f"--query-gpu={self.query}", "--format=csv,noheader,nounits",
+             "-lms", str(max(1, round(self.interval_s * 1000)))],
+            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True,
         )
-    except (OSError, subprocess.TimeoutExpired):
-        return None
-    t = time.perf_counter()
-    if out.returncode != 0 or not out.stdout.strip():
-        return None
-    parts = out.stdout.strip().splitlines()[0].split(",")
-    if len(parts) < 3:
-        return None
-    return PowerSample(t_s=t, power_w=_num(parts[0]), temperature_c=_num(parts[1]), sm_clock_mhz=_num(parts[2]))
+        self._thread = threading.Thread(target=self._read, args=(self._proc, offset), name="psyfi-bench-power", daemon=True)
+        self._thread.start()
+
+    def stop(self) -> list[PowerSample]:
+        """End the nvidia-smi process and return its readings. Safe to call twice."""
+        proc, self._proc = self._proc, None
+        if proc is not None:
+            proc.terminate()
+            try:
+                proc.wait(timeout=5.0)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                proc.wait(timeout=5.0)
+        if self._thread is not None:
+            self._thread.join(timeout=5.0)
+            self._thread = None
+        return list(self._samples)
 
 
 class ThreadedSampler:
-    """Polls ``read`` on a daemon thread every ``interval_s`` until ``stop()``."""
+    """Polls ``read`` on a daemon thread every ``interval_s`` until ``stop()`` (for injected readers)."""
 
     def __init__(self, read: Callable[[], PowerSample | None], *, name: str = "nvidia-smi", interval_s: float = 0.2) -> None:
         self._read = read
@@ -107,10 +188,11 @@ class ThreadedSampler:
 
 
 def make_power_sampler() -> PowerSampler | None:
-    """A live ``nvidia-smi`` sampler, or None when the tool is absent or does not answer."""
-    if shutil.which("nvidia-smi") is None or read_nvidia_smi() is None:
+    """A live ``nvidia-smi`` stream sampler, or None when the tool is absent or reports no power."""
+    if shutil.which("nvidia-smi") is None:
         return None
-    return ThreadedSampler(read_nvidia_smi)
+    field = probe_power_field()
+    return NvidiaSmiStreamSampler(field) if field else None
 
 
 def _trapezoid_j(samples: list[PowerSample]) -> float | None:
@@ -123,6 +205,7 @@ def _trapezoid_j(samples: list[PowerSample]) -> float | None:
 def build_power_record(
     samples: list[PowerSample], *, source: str, interval_s: float, window_s: float,
     window_start_s: float | None = None, work_unit: str | None = None, work_units: float | None = None,
+    query: str = NVIDIA_SMI_QUERY,
 ) -> PowerRecord:
     """Summarize samples. Fields that the samples cannot support stay None with a reason.
 
@@ -147,7 +230,12 @@ def build_power_record(
     per_unit = None
     if energy is not None and work_units:
         coverage = span / window_s if window_s > 0 else 0.0
-        if coverage >= MIN_SPAN_COVERAGE:
+        if window_s < MIN_WINDOW_S:
+            reason = (
+                f"stage window {window_s:.3f}s is shorter than {MIN_WINDOW_S:g} s; the board sensor updates about "
+                "every 100 ms, so per-unit energy is not reported"
+            )
+        elif coverage >= MIN_SPAN_COVERAGE:
             per_unit = energy / work_units
         else:
             # The work ran over the whole window but the energy only over the sampled span.
@@ -156,7 +244,7 @@ def build_power_record(
                 f"{MIN_SPAN_COVERAGE:.0%}); per-unit energy not reported"
             )
     return PowerRecord(
-        source=source, query=NVIDIA_SMI_QUERY, interval_s=interval_s, sample_count=len(samples),
+        source=source, query=query, interval_s=interval_s, sample_count=len(samples),
         window_s=window_s, sampled_span_s=span,
         power_w_mean=(sum(watts) / len(watts)) if watts else None, power_w_max=max(watts) if watts else None,
         temperature_c_max=max(temps) if temps else None,

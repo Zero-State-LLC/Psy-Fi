@@ -9,7 +9,7 @@ Issue #50 asks for energy per frame on WebGPU captures scored on the same host. 
 ## Decision
 
 1. **The browser records each stage's measured window on the wall clock.** `CaptureStage` gains an optional `window_epoch_ms: [start, end]`. It runs from the first to the last measured frame, warm-up excluded, as `performance.timeOrigin + performance.now()`. The field is additive; older captures stay valid.
-2. **The host records a power trace while the bench page runs.** `psyfi-bench power-trace --out trace.json [--interval 0.1]` runs the existing `nvidia-smi` sampler until stopped. It writes samples timestamped on the wall clock (`time.time_ns`), not `perf_counter`, so they share a clock with the browser on the same machine. The trace also carries the `nvidia-smi` query, the GPU name and the same `hostname_hash` that `EnvironmentRecord` uses (never the hostname).
+2. **The host records a power trace while the bench page runs.** `psyfi-bench power-trace --out trace.json` runs the existing `nvidia-smi` stream sampler until stopped: one `nvidia-smi -lms 100` process reading `power.draw.instant` where the driver has it. `power.draw` is a 1 s average on Ampere and newer and the board sensor updates about every 100 ms, so 100 ms is the useful interval (Yang et al., arXiv:2312.02741). It writes samples timestamped on the wall clock (`time.time_ns`), not `perf_counter`, so they share a clock with the browser on the same machine. The trace also carries the `nvidia-smi` query, the GPU name and the same `hostname_hash` that `EnvironmentRecord` uses (never the hostname).
 3. **Ingest pairs them per stage.** `psyfi-bench ingest capture.json --power-trace trace.json` applies the field-compute rule to each stage that has a window:
    - keep only the samples inside the window that have a power reading;
    - integrate them with the trapezoid rule;
@@ -34,7 +34,8 @@ Issue #50 asks for energy per frame on WebGPU captures scored on the same host. 
 ## Consequences
 
 - Per-frame energy is board power while the stage rendered. That includes idle draw, the compositor and anything else on the GPU, and the record's `derivation` says so.
-- It exists only on hosts with `nvidia-smi`. Apple and AMD captures stay unavailable, with a reason.
+- It exists only on hosts with `nvidia-smi` and a GPU that reports power. Apple and AMD captures stay unavailable, with a reason, and so do vGPU slices, which do not expose board power.
+- nvidia-smi's sensor sees only part of each update period (about 25% of runtime on A100 and H100, per arXiv:2312.02741), so per-frame energy needs a stage of at least 1 s, the same rule as field compute.
 - Both schema changes are additive: the window on `CaptureStage` and a trace document. A capture without windows scores exactly as today.
 - The operator runs two things at once, the trace command and the bench page. `docs/bench/README.md` would gain a three-line recipe.
 
@@ -51,5 +52,4 @@ The tests use a synthetic capture with windows and a synthetic trace, and never 
 ## Open questions
 
 - Whether the host match is strict (the same `hostname_hash`) or only requires the same GPU name.
-- The default trace interval: 0.1 s gives tighter coverage on short stages but costs more `nvidia-smi` calls.
 - Whether the gated API ingest (`PSYFI_BENCH_INGEST=1`) should accept a trace too, or only the CLI.

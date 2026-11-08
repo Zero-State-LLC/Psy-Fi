@@ -184,12 +184,12 @@ def measure_stage(
         if power_sampler is not None:
             window_s = _time.perf_counter() - started
             samples = power_sampler.stop()
-            from psyfi_bench.power import build_power_record
+            from psyfi_bench.power import NVIDIA_SMI_QUERY, build_power_record
 
             unit, per_repeat = power_work or (None, None)
             stage.power = build_power_record(
                 samples, source=power_sampler.name, interval_s=power_sampler.interval_s, window_s=window_s,
-                window_start_s=started, work_unit=unit, work_units=(per_repeat * repeats_done) if per_repeat is not None else None,
+                window_start_s=started, work_unit=unit, query=getattr(power_sampler, "query", NVIDIA_SMI_QUERY), work_units=(per_repeat * repeats_done) if per_repeat is not None else None,
             )
 
         if protocol.memory_probe:

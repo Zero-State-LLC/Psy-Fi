@@ -2,12 +2,17 @@
 
 from __future__ import annotations
 
+import os
+import stat
+import sys
 import time
+from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
 from psyfi_bench import power as power_mod
-from psyfi_bench.power import PowerSample, ThreadedSampler, build_power_record, make_power_sampler
+from psyfi_bench.power import PowerSample, ThreadedSampler, build_power_record, make_power_sampler, parse_stream_line, probe_power_field
 from psyfi_bench.registry import load_manifest
 from psyfi_bench.runner import RunContext, run_workload
 from psyfi_bench.schemas import BenchResult, Protocol
@@ -72,8 +77,8 @@ def test_field_compute_records_in_window_power_with_fake_sampler() -> None:
     assert p.power_w_max == 100.0
     assert p.energy_j == pytest.approx(100.0 * 1e-6, rel=1e-3)
     assert p.work_units == 8 * 8 * 3 * len(stage.wall_ms)
-    assert p.energy_j_per_work_unit is None  # 1 µs of readings cannot stand for the whole stage
-    assert "%" in (p.unavailable_reason or "")
+    assert p.energy_j_per_work_unit is None  # a millisecond stage is far under the 1 s minimum
+    assert "shorter than 1 s" in (p.unavailable_reason or "")
     assert "power" not in result.environment.unavailable and result.environment.power["source"] == "fake-smi"
     BenchResult.model_validate(result.model_dump(by_alias=True))
 
@@ -158,3 +163,75 @@ def test_in_window_samples_spanning_the_stage_report_per_unit_energy() -> None:
     assert rec.energy_j == pytest.approx(200.0)
     assert rec.energy_j_per_work_unit == pytest.approx(0.5)
     assert rec.unavailable_reason is None
+
+
+def test_per_unit_energy_needs_a_stage_of_at_least_a_second() -> None:
+    samples = [PowerSample(0.0, 100.0), PowerSample(0.25, 100.0), PowerSample(0.5, 100.0)]
+    rec = build_power_record(samples, source="fake", interval_s=0.1, window_s=0.5, window_start_s=0.0, work_unit="cell_step", work_units=10.0)
+    assert rec.energy_j == pytest.approx(50.0)
+    assert rec.energy_j_per_work_unit is None
+    assert "shorter than 1 s" in (rec.unavailable_reason or "")
+
+
+def test_stream_lines_are_stamped_on_the_runner_clock() -> None:
+    wall = time.mktime(time.strptime("2026/11/08 10:00:00", "%Y/%m/%d %H:%M:%S")) + 0.25
+    s = parse_stream_line("2026/11/08 10:00:00.250, 85.21, 54, 1755", clock_offset_s=-wall + 5.0)
+    assert s is not None and s.t_s == pytest.approx(5.0, abs=1e-3)
+    assert (s.power_w, s.temperature_c, s.sm_clock_mhz) == (85.21, 54.0, 1755.0)
+    na = parse_stream_line("2026/11/08 10:00:00.250, [N/A], 54, 1755", clock_offset_s=0.0)
+    assert na is not None and na.power_w is None
+    assert parse_stream_line("not a sample", 0.0) is None
+    assert parse_stream_line("yesterday, 1, 2, 3", 0.0) is None
+
+
+def test_probe_prefers_instant_power_and_falls_back(monkeypatch) -> None:
+    def fake_run(answers):
+        def run(cmd, **_):
+            field = next(a for a in cmd if a.startswith("--query-gpu=")).split("=", 1)[1]
+            out, code = answers[field]
+            return SimpleNamespace(stdout=out, returncode=code)
+        return run
+
+    monkeypatch.setattr(power_mod.subprocess, "run", fake_run({"power.draw.instant": ("71.5\n", 0), "power.draw": ("70.0\n", 0)}))
+    assert probe_power_field() == "power.draw.instant"
+    monkeypatch.setattr(power_mod.subprocess, "run", fake_run({"power.draw.instant": ("[N/A]\n", 0), "power.draw": ("70.0\n", 0)}))
+    assert probe_power_field() == "power.draw"
+    monkeypatch.setattr(power_mod.subprocess, "run", fake_run({"power.draw.instant": ("", 6), "power.draw": ("[Not Supported]\n", 0)}))
+    assert probe_power_field() is None
+
+
+FAKE_SMI = """import sys, time
+args = sys.argv[1:]
+query = next(a for a in args if a.startswith("--query-gpu=")).split("=", 1)[1]
+if "-lms" not in args:
+    print("50.0")
+    sys.exit(0)
+period = int(args[args.index("-lms") + 1]) / 1000.0
+while True:
+    now = time.time()
+    stamp = time.strftime("%Y/%m/%d %H:%M:%S", time.localtime(now)) + ".%03d" % int((now % 1) * 1000)
+    print(f"{{stamp}}, 50.0, 40, 1500", flush=True)
+    time.sleep(period)
+"""
+
+
+def test_live_sampler_streams_one_nvidia_smi_process(tmp_path, monkeypatch) -> None:
+    script = tmp_path / "fake_nvidia_smi.py"
+    script.write_text(FAKE_SMI.format(), encoding="utf-8")
+    smi = tmp_path / "nvidia-smi"  # an sh wrapper: a #! line cannot hold an interpreter path with spaces
+    smi.write_text(f'#!/bin/sh\nexec "{sys.executable}" "{script}" "$@"\n', encoding="utf-8")
+    smi.chmod(smi.stat().st_mode | stat.S_IXUSR)
+    monkeypatch.setenv("PATH", f"{tmp_path}{os.pathsep}{os.environ.get('PATH', '')}")
+
+    sampler = make_power_sampler()
+    assert sampler is not None and sampler.query.startswith("timestamp,power.draw.instant,")
+    before = time.perf_counter()
+    sampler.start()
+    time.sleep(0.6)
+    samples = sampler.stop()
+    after = time.perf_counter()
+    assert sampler.stop() == samples  # safe to call twice
+    assert len(samples) >= 3
+    assert all(s.power_w == 50.0 for s in samples)
+    # nvidia-smi's millisecond wall stamps land on the runner's clock, inside the run
+    assert before - 0.05 <= samples[0].t_s and samples[-1].t_s <= after + 0.05
