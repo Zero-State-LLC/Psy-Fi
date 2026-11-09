@@ -58,7 +58,7 @@ Details: [`docs/WEB_ARCHITECTURE.md`](docs/WEB_ARCHITECTURE.md), [`docs/FRONTEND
 | --- | --- |
 | [`psyfi_core/`](psyfi_core/) | Deterministic simulation authority (ABX runtime, engines, models, presets, viz schemas) |
 | [`psyfi_api/`](psyfi_api/) | FastAPI app, routers, Jinja shell, static PWA assets |
-| [`psyfi_bench/`](psyfi_bench/) | FieldLoop benchmark subsystem (workloads, runner, providers, scoring, `/api/bench` sub-app, CLI) — see [`docs/bench/README.md`](docs/bench/README.md) |
+| [`psyfi_bench/`](psyfi_bench/) | FieldLoop benchmark subsystem (workloads, runner, providers, scoring, `/api/bench` sub-app, CLI) — see [`docs/bench/README.md`](docs/bench/README.md); on a discrete GPU, [`docs/bench/DISCRETE_GPU_HANDOFF.md`](docs/bench/DISCRETE_GPU_HANDOFF.md) |
 | [`packages/psyfi-gpu-renderer/`](packages/psyfi-gpu-renderer/) | Optional Vite + React + R3F WebGPU client → served at `/gpu/` |
 | [`data/phenomenology/`](data/phenomenology/) | Source phenomenology → catalog / overlays (build scripts) |
 | [`docs/`](docs/) | Architecture, contracts, rendering, QA, design |

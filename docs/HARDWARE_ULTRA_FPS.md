@@ -1,7 +1,7 @@
 # Hardware Ultra FPS Capture
 
 Status: **harness ready** — run on a discrete desktop; CI keeps synthetic stand-in until samples are merged  
-Related: [`DESKTOP_GPU.md`](DESKTOP_GPU.md), [`SIMULATED_ULTRA_QA.md`](SIMULATED_ULTRA_QA.md), [`CONTINUATION_PLAN.md`](CONTINUATION_PLAN.md)
+Related: [`bench/DISCRETE_GPU_HANDOFF.md`](bench/DISCRETE_GPU_HANDOFF.md), [`DESKTOP_GPU.md`](DESKTOP_GPU.md), [`SIMULATED_ULTRA_QA.md`](SIMULATED_ULTRA_QA.md), [`CONTINUATION_PLAN.md`](CONTINUATION_PLAN.md)
 
 ## Goal
 

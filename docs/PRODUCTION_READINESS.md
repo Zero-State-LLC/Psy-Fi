@@ -59,7 +59,7 @@ Instrument plan: [`INSTRUMENT_GROUNDING_PLAN.md`](INSTRUMENT_GROUNDING_PLAN.md).
 
 | Priority | Action | Status |
 | --- | --- | --- |
-| **P0** | Ultra auto-tier QA (NVIDIA / AMD / Intel) | **simulated pass** · hardware capture harness ready (`HARDWARE_ULTRA_FPS.md`) |
+| **P0** | Ultra auto-tier QA (NVIDIA / AMD / Intel) | **simulated pass** · hardware capture harness ready (`HARDWARE_ULTRA_FPS.md`, runbook `bench/DISCRETE_GPU_HANDOFF.md`) |
 | **P1** | G0–G4 ship polish (HUD, assets, goldens, PWA route) | **done** |
 | **P1** | Image-seed UX continuum (recommend-before-condition · Seed→journey · export polish · top-N alts) | **done** (A–D) — `CONTINUATION_PLAN.md` |
 | **P1** | Instrument & Spatiotemporal Grounding (I1–I5) | **done** (`#83`–`#84`) |

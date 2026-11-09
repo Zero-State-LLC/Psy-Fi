@@ -1,8 +1,8 @@
 # FieldLoop roadmap and board mapping
 
-Date: 2026-11-07. Board: Zero-State-LLC project #7 (Psy-Fi). Project #16 is Noema; nothing goes there.
+Date: 2026-11-07, updated 2026-11-08. Board: Zero-State-LLC project #7 (Psy-Fi). Project #16 is Noema; nothing goes there.
 
-## Done on `bench/fieldloop-foundation`
+## Done on `main`
 
 | Item | Evidence |
 | --- | --- |
@@ -14,8 +14,14 @@ Date: 2026-11-07. Board: Zero-State-LLC project #7 (Psy-Fi). Project #16 is Noem
 | Scorecards, reports, CLI, mounted `/api/bench`, exported contracts | `tests/bench/test_api_cli_scoring.py`, `test_bench_contracts.py` |
 | Browser runner `/gpu/bench.html` | `src/bench/schedule.test.ts`; live capture pending hardware |
 | Simulation orchestration moved to `psyfi_core.simulation` | parity check in `test_field_compute.py` |
+| `nvidia-smi` power sampling and `score --format` (#59) | `tests/bench/test_power.py`, `test_score_format.py`; fake `nvidia-smi` only |
+| WGSL Kuramoto kernel on the bench page (#60) | `tests/bench/test_webgpu_kernel.py`, `kuramotoKernel.test.ts`; validated live on an Apple GPU |
+| `/bench` results and scorecard page (#65) | `tests/test_bench_page.py` |
+| Energy per frame from a host power trace (#70, ADR 0011) | `tests/bench/test_power_trace.py`; fake `nvidia-smi` only |
 
 ## Shortest path to a first complete FieldLoop result on real hardware
+
+The commands for step 1 are in [`DISCRETE_GPU_HANDOFF.md`](DISCRETE_GPU_HANDOFF.md).
 
 1. A discrete-GPU desktop opens `/gpu/bench.html`, runs, downloads the capture; `psyfi-bench ingest` scores it (hardware task).
 2. A person with an `nvidia/` vision model id and key runs `interpretation.fieldread.smoke --provider nvidia --record` and then the full corpus (provider task).
@@ -26,15 +32,15 @@ Date: 2026-11-07. Board: Zero-State-LLC project #7 (Psy-Fi). Project #16 is Noem
 ### Autonomous backend (agent-ready)
 
 - A `render.soft.scaling` manifest over sizes 64..1024 with raster ms per megapixel fits.
-- Scorecard export to Markdown and CSV from the CLI (`--format`).
 - Receipt-driven regression: a committed replay receipt from a baseline is not evidence, but a CI test could replay a recorded live receipt if a human commits one.
 
 ### Hardware-dependent (needs a machine)
 
+Run these from [`DISCRETE_GPU_HANDOFF.md`](DISCRETE_GPU_HANDOFF.md).
+
 - Discrete NVIDIA, AMD, Intel Arc and Apple Pro/Max captures from `/gpu/bench.html`.
 - A first `power-trace` plus `ingest --power-trace` run on an NVIDIA host. The code is in ([ADR 0011](adr/0011-host-power-trace-for-browser-captures.md)) and tested only against a fake `nvidia-smi`.
 - torch CUDA validation of `field-compute.accelerator` (MPS validated on this Mac when torch is installed).
-- A WGSL Kuramoto compute kernel in the browser validated against a Python reference fixture (designed in RESEARCH.md; not implemented).
 
 ### Provider-dependent (needs a key or a local server)
 
@@ -43,9 +49,7 @@ Date: 2026-11-07. Board: Zero-State-LLC project #7 (Psy-Fi). Project #16 is Noem
 
 ### Frontend integration (Daniel)
 
-- A results view that reads `/api/bench/v1/results` and shows `measurement_class`, `hardware_class` and `unavailable` beside every number.
 - A link to `/gpu/bench.html` from the GPU lab header, if wanted.
-- A scorecard view that refuses to rank when `validity.comparable` is false.
 
 ### Needs an accepted intent
 

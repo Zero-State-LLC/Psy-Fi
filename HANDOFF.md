@@ -14,6 +14,7 @@ Read in this order before changing behavior:
 4. [`docs/specs/AUDIT.md`](docs/specs/AUDIT.md) only after its "Later main" note. The grid under that note is the 2026-10-24 pass. It is not a work order.
 5. [`context.md`](context.md) and [`intent.md`](intent.md) for the public host.
 6. [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md) before any deploy.
+7. [`docs/bench/DISCRETE_GPU_HANDOFF.md`](docs/bench/DISCRETE_GPU_HANDOFF.md) if you are on a machine with a discrete GPU. That is the next work.
 
 Specs are the decision records. They use the Matt Pocock shape: problem, solution, user stories, implementation decisions, testing decisions, out of scope. An implemented spec is not a rebuild order. If `context.md` or `intent.md` disagrees with a spec, the spec wins.
 
@@ -27,6 +28,9 @@ Specs are the decision records. They use the Matt Pocock shape: problem, solutio
 | Shell front page and workbench redesign | Implemented. Intent [`intent/shell-front-page-workbench.md`](intent/shell-front-page-workbench.md) is accepted and done: pull request #44 is merged and live; Worker version `25fdefd7` serves it. It is not an open slice. |
 | FieldLoop benchmark platform | Implemented and live. Pull request #56 (Fable) is merged: `psyfi_bench`, its spec [`docs/specs/benchmark-platform.md`](docs/specs/benchmark-platform.md), the read-only `/api/bench` mount (runs and capture ingest off) and `/gpu/bench.html`. So are #59 (`nvidia-smi` power sampling, `score --format csv|markdown|json`), #60 (the WGSL Kuramoto kernel, issue #51), #65 (the `/bench` results page, issue #52) and #70 (energy per frame for browser captures, ADR 0011, issue #50). Worker version `25fdefd7` serves all of it on psy-fi.space; `/bench` shows the empty state there, since the public host has no results and runs and ingest are off. Issue #47 is the umbrella; its open slices wait on hardware, a person or a decision ([register](docs/specs/OPEN_QUESTIONS.md)). |
 | GPU Lab tier switch | Fixed and live. Pull request #58 is merged (issue #55) and Worker version `25fdefd7` serves it. SSR and motion blur take texture inputs; see the learning in `.trail/learnings/`. |
+| Public site basics | Implemented and live. Intent [`intent/site-basics-checklist.md`](intent/site-basics-checklist.md) is accepted: pull request #61 is merged and Worker version `25fdefd7` serves the privacy page, the branded 404, `robots.txt`, `sitemap.xml`, the favicon and the share image. |
+
+**Next work:** measured evidence on a discrete GPU, issues #48 and #53 and the first real run of the power code from #59 and #70. The commands, the run order and what to bring back are in [`docs/bench/DISCRETE_GPU_HANDOFF.md`](docs/bench/DISCRETE_GPU_HANDOFF.md). None of it has run on real hardware yet.
 
 The older Worker `psyfi` on workers.dev stays. Do not attach `psy-fi.space` to it, and do not delete it.
 
@@ -35,7 +39,7 @@ The older Worker `psyfi` on workers.dev stays. Do not attach `psy-fi.space` to i
 - Do not invent product behavior a spec does not name.
 - Do not add a login, an API-key check, an origin allowlist, a rate limit, or an AI Gateway. The gateway is an open question. The live host calls `https://integrate.api.nvidia.com` directly.
 - Do not decide catalog reload. The route stays as it is.
-- Do not write hardware-quality scaling, and do not record frame times. Issue #10 stays Backlog and is not an agent ticket. This Mac is not Ultra evidence.
+- Do not write hardware-quality scaling, and do not record frame times. Issue #10 stays Backlog and is not an agent ticket. This Mac is not Ultra evidence. On a machine with a discrete GPU, the [runbook](docs/bench/DISCRETE_GPU_HANDOFF.md) says what may be recorded and who runs it; a number comes only from a run on that machine.
 - Do not pin a model id or commit a key, a token, or a vision-bench receipt.
 - Do not change the freeze id, `api_version`, the FastAPI app version, the session engine default, the image-reading medical sentence, or `reasoning_effort: none`.
 - Do not add `www`.
