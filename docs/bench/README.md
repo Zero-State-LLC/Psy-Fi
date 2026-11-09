@@ -68,6 +68,8 @@ python3 -m psyfi_bench power-trace --out trace.json   # start this first; Ctrl-C
 python3 -m psyfi_bench ingest ~/Downloads/psyfi-fieldloop-gpu-capture-*.json --power-trace trace.json
 ```
 
+On a machine with a discrete GPU, follow [`DISCRETE_GPU_HANDOFF.md`](DISCRETE_GPU_HANDOFF.md): setup, the run order and what to bring back.
+
 Results are sealed JSON under `bench_results/` (gitignored). `psyfi-bench validate <file>` checks the seal. `psyfi-bench export-schemas` refreshes the integration package.
 
 ## Evidence rules

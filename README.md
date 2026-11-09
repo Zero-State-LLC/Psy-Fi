@@ -166,6 +166,7 @@ Canonical browser API is **`/api/v1`** (**hard-frozen**). Legacy `/api/*` and `/
 | [`docs/CONTINUATION_PLAN.md`](docs/CONTINUATION_PLAN.md)                           | Web-track next steps                               |
 | [`docs/INSTRUMENT_GROUNDING_PLAN.md`](docs/INSTRUMENT_GROUNDING_PLAN.md)           | Instrument + spatiotemporal grounding plan (I1–I5) |
 | [`docs/bench/README.md`](docs/bench/README.md)                                     | FieldLoop benchmark: GPUs, models, closed loop     |
+| [`docs/bench/DISCRETE_GPU_HANDOFF.md`](docs/bench/DISCRETE_GPU_HANDOFF.md)         | Run order for a machine with a discrete GPU        |
 | [`docs/rendering/ROADMAP.md`](docs/rendering/ROADMAP.md)                           | GPU G0–G5 roadmap                                  |
 | [`docs/rendering/G4_CUTOVER.md`](docs/rendering/G4_CUTOVER.md)                     | G4 cutover checklist                               |
 | [`docs/rendering/PIXEL_GOLDENS.md`](docs/rendering/PIXEL_GOLDENS.md)               | Soft-present pixel goldens                         |

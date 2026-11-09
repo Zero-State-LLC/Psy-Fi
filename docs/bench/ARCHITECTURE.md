@@ -236,11 +236,10 @@ Compute kernel stage (stage kind `webgpu_kernel`). Before the frame stages the p
 
 ## 11. Implementation tasks still open
 
-Hardware-dependent:
+Hardware-dependent, with the commands in [`DISCRETE_GPU_HANDOFF.md`](DISCRETE_GPU_HANDOFF.md):
 
 - Captures from discrete GPUs (NVIDIA, AMD, Intel Arc, Apple Pro/Max) through `/gpu/bench.html`; this machine is integrated-class.
 - Torch backend validation on CUDA and MPS; the port exists and is validated against NumPy, but torch is not installed here.
-- A WGSL Kuramoto compute port in the browser validated against a Python reference field (not implemented).
 - Power and temperature: when `nvidia-smi` exists, `field_compute` stages carry `StageRecord.power` (`psyfi_bench/power.py`): one `nvidia-smi -lms 100` process per stage reading `power.draw.instant` where the driver has it (else `power.draw`, which is a 1 s average on Ampere and newer; arXiv:2312.02741), stamped with nvidia-smi's own timestamps; only readings inside the measured window count, energy is the trapezoid integral of those with a power reading (no extrapolation), and `energy_j_per_work_unit` per cell-step is reported only for a stage of at least 1 s whose readings span at least 90% of it, mean and max watts, and max GPU temperature. With no tool, no power field is written and `environment.unavailable.power` stays. A webgpu capture is taken in a browser outside this process, so energy per frame comes from a host power trace instead ([ADR 0011](adr/0011-host-power-trace-for-browser-captures.md)): `psyfi-bench power-trace` records `psyfi.bench.power_trace.v1` on the wall clock, and `psyfi-bench ingest --power-trace` pairs it with each stage's `window_epoch_ms` under the same in-window, 90% and 1 s rules, giving `StageRecord.power` with `work_unit: "frame"`. It is board power while the stage rendered, so it includes idle draw, the compositor and anything else on the GPU. A trace from another host (strict `hostname_hash` match) or GPU vendor, a stage with no window, and a trace that does not reach the window write no power and say why in `stage.metrics.power_unavailable`. The API ingest does not accept a trace.
 
 Provider-dependent:

@@ -6,6 +6,11 @@ Product versions follow [docs/VERSIONING.md](docs/VERSIONING.md). Tags `v0.1.0` 
 
 - FieldLoop benchmark subsystem (`psyfi_bench`): four workload families, locked references, sealed results, scorecards, CLI, mounted `/api/bench` read API, browser runner `/gpu/bench.html`. Product version unchanged.
 - `run_simulation` moved to `psyfi_core.simulation`; `psyfi_api.simulation_service` re-exports it.
+- FieldLoop slices: `/bench` results and scorecard page; `nvidia-smi` power sampling for field-compute stages; `psyfi-bench score --format csv|markdown|json`; WGSL Kuramoto kernel on `/gpu/bench.html`; energy per frame for browser captures through `psyfi-bench power-trace` and `ingest --power-trace` (ADR 0011).
+- Public site basics: privacy page, branded 404, `robots.txt`, `sitemap.xml`, favicon, share image and loading states. Shell cache `psyfi-shell-v44`.
+- Shell front page and workbench redesign, and the share card.
+- GPU Lab runtime tier switches no longer break the present path (issue #55).
+- The README lint moves from hallmark to `remark-cli`; `npm audit` is clean.
 - Field-compute locks gain a tolerance-checked summary (`reference_within_tolerance`) after CI showed 1e-4 digests differ between Linux x86-64 and Apple arm64; `tolerances.reference_atol` added, so every manifest hash changed. Bench API resolves workload ids from the registry only.
 
 ## 1.4.0 — 2026-11-07

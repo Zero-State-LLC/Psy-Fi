@@ -1,7 +1,7 @@
 # Desktop GPU Integration (WebGPU)
 
 Status: supported for **browser WebGPU** on high-end discrete desktops · Ultra auto-tier live  
-Related: [`NVIDIA_GPU.md`](NVIDIA_GPU.md), [`SIMULATED_ULTRA_QA.md`](SIMULATED_ULTRA_QA.md), [`PRODUCTION_READINESS.md`](PRODUCTION_READINESS.md), [`rendering/GPU_PERFORMANCE_BUDGET.md`](rendering/GPU_PERFORMANCE_BUDGET.md), `/gpu/`
+Related: [`bench/DISCRETE_GPU_HANDOFF.md`](bench/DISCRETE_GPU_HANDOFF.md), [`NVIDIA_GPU.md`](NVIDIA_GPU.md), [`SIMULATED_ULTRA_QA.md`](SIMULATED_ULTRA_QA.md), [`PRODUCTION_READINESS.md`](PRODUCTION_READINESS.md), [`rendering/GPU_PERFORMANCE_BUDGET.md`](rendering/GPU_PERFORMANCE_BUDGET.md), `/gpu/`
 
 ## How PsyFi uses your GPU
 

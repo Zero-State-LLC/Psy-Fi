@@ -1,6 +1,6 @@
 # Open questions — register
 
-Researched: 2026-11-08, against `main` at `d81483f` and pull requests #59, #60, #64, #65 and #66, which were open then and merged the same day (`main` `460e891`). Prices and terms were rechecked the same day against official sources where they exist.
+Researched: 2026-11-08, against `main` at `d81483f` and pull requests #59, #60, #64, #65 and #66, which were open then and merged the same day (`main` `460e891`). Statuses are current through `main` `712ed31`. Prices and terms were rechecked the same day against official sources where they exist.
 
 This register collects every open question from `intent.md`, `intent/*.md`, `HANDOFF.md` §4, ADR 0011 and the tracker in one place. Each entry gives the evidence and a recommendation. A recommendation is not a decision. Where an entry says "Decides: operator", nothing changes until a human says so in an accepted intent or in the issue. When a question is settled, mark it in its source document and here.
 
@@ -13,7 +13,7 @@ This register collects every open question from `intent.md`, `intent/*.md`, `HAN
 | 3 | [Hardware Ultra evidence (#10)](#3-hardware-ultra-evidence-10) | Open. Needs a physical desktop | Operator, with hardware |
 | 4 | [Vision-bench receipt and #49](#4-vision-bench-receipt-and-49) | Open. Needs a person with the key: about 4 posts, then 28 (smoke) or 242 (full) | Operator |
 | 5 | [FieldLoop run endpoint (#54)](#5-fieldloop-run-endpoint-54) | Open. Recommend no | Operator |
-| 6 | [Discrete GPU, CUDA and power evidence (#48, #53, #50)](#6-discrete-gpu-cuda-and-power-evidence-48-53-50) | Open. Needs a cloud account | Operator |
+| 6 | [Discrete GPU, CUDA and power evidence (#48, #53, #50)](#6-discrete-gpu-cuda-and-power-evidence-48-53-50) | Open. Needs a machine with a discrete GPU; [runbook](../bench/DISCRETE_GPU_HANDOFF.md) ready | Operator |
 | 7 | [Per-frame energy (ADR 0011)](#7-per-frame-energy-adr-0011) | Answered. Accepted and built; a real NVIDIA run is entry 6 | — |
 | 8 | [Publishing results on psy-fi.space](#8-publishing-results-on-psy-fispace) | Open. Recommend not yet | Operator |
 | 9 | [Read-only scorecard endpoint](#9-read-only-scorecard-endpoint) | Open. Tied to 8 | Operator, Fable |
@@ -80,7 +80,7 @@ Asked in: `intent.md`, `HANDOFF.md` §4, issue #10 (no activity since 2026-10-06
   - vGPU slices (for example Azure NVadsA10) are time-sliced and are not valid evidence.
 - **Apple results:** never Ultra evidence (`docs/bench/MEASUREMENTS.md`).
 
-**Recommend.** Keep it in Backlog. Close it only on a physical consumer desktop with a high-refresh monitor, such as a borrowed gaming PC. A cloud VM can feed #48, but it can't close #10.
+**Recommend.** Keep it in Backlog. Close it only on a physical consumer desktop with a high-refresh monitor, such as a borrowed gaming PC. A cloud VM can feed #48, but it can't close #10. The steps are in the [runbook](../bench/DISCRETE_GPU_HANDOFF.md), step 3.
 
 ## 4. Vision-bench receipt and #49
 
@@ -103,6 +103,7 @@ Asked in: `intent.md`, `HANDOFF.md` §4, issue #49.
 - Keep each #49 result as a sealed result file.
 - Pace the posts. Users of the hosted API report a default of 1,000 credits and 40 requests per minute; NVIDIA publishes no number and says limits vary per model. At 40 per minute, the full run takes at least 6 minutes.
 - Never print the key or the model id.
+- A machine with a discrete GPU can run the local half of #49 against an OpenAI-compatible vision server ([runbook](../bench/DISCRETE_GPU_HANDOFF.md), step 4).
 
 ## 5. FieldLoop run endpoint (#54)
 
@@ -142,6 +143,8 @@ Asked in: issues #48 and #53, and the first real run of the power code from #50 
   - So #53 plus #50 is well under $1 of GPU time, and #48 is a few dollars of g4dn Windows time, plus setup.
 
 **Recommend.** Run #53 and #50 together on a rented Linux NVIDIA box first, since it is cheap and needs no browser. Run #48 on Windows AWS g4dn or g5 with RDP or DCV. Leave the AMD and Arc rows unmeasured.
+
+**Next step (2026-11-08).** A machine with a discrete GPU is next, and the [runbook](../bench/DISCRETE_GPU_HANDOFF.md) has every command. A physical machine replaces the rented boxes above. Energy per frame (#70) does need the browser, so it runs with #48, not with #53.
 
 ## 7. Per-frame energy (ADR 0011)
 
