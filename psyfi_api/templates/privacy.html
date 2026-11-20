@@ -30,6 +30,7 @@
     <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
     <link rel="stylesheet" href="/static/fonts/fonts.css">
     <link rel="stylesheet" href="/static/style.css?v=44">
+    <script src="/static/ga.js"></script>
 </head>
 <body>
     <div class="launch-splash">
@@ -61,7 +62,7 @@
                         </div>
                         <div>
                             <dt>Do I need an account?</dt>
-                            <dd>No. There is no sign-up and no login, and PsyFi's own code sets no cookies. Cloudflare may set cookies it uses to deliver and protect the site; see <a href="https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/">Cloudflare cookies</a>.</dd>
+                            <dd>No. There is no sign-up and no login, and PsyFi's own code sets no cookies. Google's Analytics tag can set cookies when it loads on psy-fi.space. Cloudflare may set cookies it uses to deliver and protect the site; see <a href="https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/">Cloudflare cookies</a>.</dd>
                         </div>
                         <div>
                             <dt>What does my browser send to the server?</dt>
@@ -81,7 +82,7 @@
                         </div>
                         <div>
                             <dt>Who hosts and measures the site?</dt>
-                            <dd>Cloudflare hosts psy-fi.space and runs the PsyFi server, so every request passes through Cloudflare's network (<a href="https://www.cloudflare.com/privacypolicy/">Cloudflare privacy policy</a>). Cloudflare Web Analytics is on: Cloudflare adds a script from static.cloudflareinsights.com to each page, and the script reports the page address, the referring page, and load and responsiveness timings to Cloudflare through this site's own <code>/cdn-cgi/rum</code> address. Cloudflare says it uses no cookies and stores nothing in your browser. PsyFi adds no other analytics or advertising, and its fonts are served from this site. The API Docs pages (<code>/docs</code> and <code>/redoc</code>), which FastAPI generates, are the exception: they load their viewer from cdn.jsdelivr.net and an icon from fastapi.tiangolo.com, and <code>/redoc</code> also loads fonts from Google Fonts.</dd>
+                            <dd>Cloudflare hosts psy-fi.space and runs the PsyFi server, so every request passes through Cloudflare's network (<a href="https://www.cloudflare.com/privacypolicy/">Cloudflare privacy policy</a>). Cloudflare Web Analytics is on: Cloudflare adds a script from static.cloudflareinsights.com to each page, and the script reports the page address, the referring page, and load and responsiveness timings to Cloudflare through this site's own <code>/cdn-cgi/rum</code> address. Cloudflare says it uses no cookies and stores nothing in your browser. On psy-fi.space, public pages include a script from this site that loads Google Analytics 4 from www.googletagmanager.com and sends page views to Google under measurement ID G-G0PNG1LWG5 (<a href="https://policies.google.com/privacy">Google privacy policy</a>). The tag does not load on any other hostname, and the API docs pages do not include the script. Google's tag can set cookies. PsyFi adds no advertising, and its fonts are served from this site. The API Docs pages (<code>/docs</code> and <code>/redoc</code>), which FastAPI generates, are the exception: they load their viewer from cdn.jsdelivr.net and an icon from fastapi.tiangolo.com, and <code>/redoc</code> also loads fonts from Google Fonts.</dd>
                         </div>
                         <div>
                             <dt>Is this medical advice?</dt>
